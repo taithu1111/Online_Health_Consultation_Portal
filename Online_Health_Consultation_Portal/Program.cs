@@ -1,31 +1,107 @@
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 using Online_Health_Consultation_Portal.Infrastructure;
 using System;
+using Online_Health_Consultation_Portal.Infrastructure.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DBCS")));
-
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+
+// Add Swagger/OpenAPI configuration
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "Online Health Consultation Portal API",
+        Version = "v1",
+        Description = "API for Online Health Consultation Portal",
+        Contact = new OpenApiContact
+        {
+            Name = "Support Team",
+            Email = "support@healthportal.com"
+        }
+    });
+});
+
+// Add CORS policy
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
+
+// Configure Autofac
+builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
+builder.Host.ConfigureContainer<ContainerBuilder>(container =>
+{
+    // Application & infrastructure registrations
+    container.AddGenericHandlers();
+});
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
+    app.UseSwagger();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Online Health Consultation Portal API v1");
+        c.RoutePrefix = string.Empty; // To serve the Swagger UI at the app's root
+    });
+
+    // Enable detailed error information in development
+    app.UseDeveloperExceptionPage();
 }
+else
+{
+    // Use more production-appropriate error handling
+    app.UseExceptionHandler("/Error");
+    app.UseHsts();
+}
+
+// Apply CORS policy - must be before routing
+app.UseCors("AllowAll");
 
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
+app.UseRouting();
+
+app.MapHub<ChatHub>("/chathub");
+
+// Removed authentication and authorization middleware
 
 app.MapControllers();
+
+// Optionally apply migrations automatically in development
+if (app.Environment.IsDevelopment())
+{
+    try
+    {
+        using (var scope = app.Services.CreateScope())
+        {
+            var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+            dbContext.Database.Migrate();
+        }
+    }
+    catch (Exception ex)
+    {
+        // Log the error - replace with your actual logging mechanism
+        var logger = app.Services.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "An error occurred while migrating the database.");
+    }
+}
 
 app.Run();

@@ -14,6 +14,8 @@ namespace Online_Health_Consultation_Portal.Domain
         public Doctor Doctor { get; set; }
         public ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();
         public ICollection<Notification> Notifications { get; set; } = new List<Notification>();
+        public virtual ICollection<Message> SentMessages { get; set; }
+        public virtual ICollection<Message> ReceivedMessages { get; set; }
 
         //2 trường data mới 
         public string ResetPasswordToken { get; set; }

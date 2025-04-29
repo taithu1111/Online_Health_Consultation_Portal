@@ -12,8 +12,8 @@ using Online_Health_Consultation_Portal.Infrastructure;
 namespace Online_Health_Consultation_Portal.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250428083333_init")]
-    partial class init
+    [Migration("20250428175159_test")]
+    partial class test
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -376,7 +376,14 @@ namespace Online_Health_Consultation_Portal.Migrations
 
                     b.Property<string>("Content")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
+
+                    b.Property<bool>("IsRead")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ReadAt")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("ReceiverId")
                         .HasColumnType("int");
@@ -387,7 +394,16 @@ namespace Online_Health_Consultation_Portal.Migrations
                     b.Property<DateTime>("SentAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("ReceiverId");
+
+                    b.HasIndex("SenderId");
+
+                    b.HasIndex("SenderId", "ReceiverId");
 
                     b.ToTable("Messages");
                 });
@@ -928,6 +944,25 @@ namespace Online_Health_Consultation_Portal.Migrations
                     b.Navigation("Prescription");
                 });
 
+            modelBuilder.Entity("Online_Health_Consultation_Portal.Domain.Message", b =>
+                {
+                    b.HasOne("Online_Health_Consultation_Portal.Domain.User", "Receiver")
+                        .WithMany("ReceivedMessages")
+                        .HasForeignKey("ReceiverId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Online_Health_Consultation_Portal.Domain.User", "Sender")
+                        .WithMany("SentMessages")
+                        .HasForeignKey("SenderId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Receiver");
+
+                    b.Navigation("Sender");
+                });
+
             modelBuilder.Entity("Online_Health_Consultation_Portal.Domain.Notification", b =>
                 {
                     b.HasOne("Online_Health_Consultation_Portal.Domain.User", "User")
@@ -1075,6 +1110,10 @@ namespace Online_Health_Consultation_Portal.Migrations
 
                     b.Navigation("Patient")
                         .IsRequired();
+
+                    b.Navigation("ReceivedMessages");
+
+                    b.Navigation("SentMessages");
 
                     b.Navigation("UserRoles");
                 });
