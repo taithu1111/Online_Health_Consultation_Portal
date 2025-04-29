@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Online_Health_Consultation_Portal.Infrastructure;
+using Online_Health_Consultation_Portal.Infrastructure.Repositories;
 using System;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,7 +12,16 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 
 builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
+builder.Services.AddScoped<IDoctorRepository, DoctorRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
+
+// Services
+// builder.Services.AddScoped<DoctorService>();
+
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
