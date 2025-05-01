@@ -397,17 +397,37 @@ namespace Online_Health_Consultation_Portal.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int?>("AppointmentId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<bool>("IsRead")
                         .HasColumnType("bit");
 
                     b.Property<string>("Message")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("PaymentId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("PrescriptionId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AppointmentId");
+
+                    b.HasIndex("PaymentId");
+
+                    b.HasIndex("PrescriptionId");
 
                     b.HasIndex("UserId");
 
@@ -927,11 +947,29 @@ namespace Online_Health_Consultation_Portal.Migrations
 
             modelBuilder.Entity("Online_Health_Consultation_Portal.Domain.Notification", b =>
                 {
+                    b.HasOne("Online_Health_Consultation_Portal.Domain.Appointment", "Appointment")
+                        .WithMany()
+                        .HasForeignKey("AppointmentId");
+
+                    b.HasOne("Online_Health_Consultation_Portal.Domain.Payment", "Payment")
+                        .WithMany()
+                        .HasForeignKey("PaymentId");
+
+                    b.HasOne("Online_Health_Consultation_Portal.Domain.Prescription", "Prescription")
+                        .WithMany()
+                        .HasForeignKey("PrescriptionId");
+
                     b.HasOne("Online_Health_Consultation_Portal.Domain.User", "User")
                         .WithMany("Notifications")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Appointment");
+
+                    b.Navigation("Payment");
+
+                    b.Navigation("Prescription");
 
                     b.Navigation("User");
                 });

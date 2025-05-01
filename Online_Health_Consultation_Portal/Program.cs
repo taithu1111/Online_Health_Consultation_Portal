@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Online_Health_Consultation_Portal.Application.Mappings;
 using Online_Health_Consultation_Portal.Domain;
 using Online_Health_Consultation_Portal.Infrastructure;
 using Online_Health_Consultation_Portal.Infrastructure.Repositories;
@@ -23,6 +24,10 @@ builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
 builder.Services.AddScoped<IDoctorRepository, DoctorRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
+
+builder.Services.AddAutoMapper(typeof(UserProfile).Assembly);
+builder.Services.AddAutoMapper(typeof(NotificationProfile).Assembly);
+builder.Services.AddAutoMapper(typeof(DoctorProfile));
 
 builder.Services.AddOpenApi();
 

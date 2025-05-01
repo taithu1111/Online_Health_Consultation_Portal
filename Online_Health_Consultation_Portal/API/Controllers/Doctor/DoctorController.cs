@@ -2,7 +2,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Online_Health_Consultation_Portal.Application.Queries.Doctors;
 
-namespace Online_Health_Consultation_Portal.API.Controllers
+namespace Online_Health_Consultation_Portal.API.Controllers.Doctor
 {
     [ApiController]
     [Route("api/doctors")]

@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Online_Health_Consultation_Portal.Application.Commands.Notifications;
 using Online_Health_Consultation_Portal.Application.Queries.Notifications;
 
-namespace Online_Health_Consultation_Portal.Controllers
+namespace Online_Health_Consultation_Portal.Controllers.Notification
 {
     [ApiController]
     [Route("api/notifications")]

@@ -1,7 +1,9 @@
+using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Online_Health_Consultation_Portal.Application.Dtos.Doctors;
 using Online_Health_Consultation_Portal.Application.Queries.Doctors;
+using Online_Health_Consultation_Portal.Domain;
 using Online_Health_Consultation_Portal.Infrastructure;
 
 namespace Online_Health_Consultation_Portal.Application.Handlers.Doctors
@@ -9,10 +11,12 @@ namespace Online_Health_Consultation_Portal.Application.Handlers.Doctors
     public class GetDoctorListQueryHandler : IRequestHandler<GetDoctorListQuery, List<DoctorDto>>
     {
         private readonly AppDbContext _context;
+        private readonly IMapper _mapper;
 
-        public GetDoctorListQueryHandler(AppDbContext context)
+        public GetDoctorListQueryHandler(AppDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         public async Task<List<DoctorDto>> Handle(GetDoctorListQuery request, CancellationToken cancellationToken)
@@ -38,22 +42,11 @@ namespace Online_Health_Consultation_Portal.Application.Handlers.Doctors
                 query = query.Where(d => d.Languages.Contains(request.Language));
             }
 
-            var doctors = await query
-                .Select(d => new DoctorDto
-                {
-                    UserId = d.UserId,
-                    FullName = d.User.FullName,
-                    Email = d.User.Email,
-                    Specialization = d.Specialization.Name,
-                    ExperienceYears = d.ExperienceYears,
-                    Languages = d.Languages,
-                    Bio = d.Bio,
-                    ConsultationFee = d.ConsultationFee,
-                    AverageRating = d.AverageRating
-                })
-                .ToListAsync(cancellationToken);
+            var doctors = await query.ToListAsync(cancellationToken);
 
-            return doctors;
+            var doctorDtos = _mapper.Map<List<DoctorDto>>(doctors);
+
+            return doctorDtos;
         }
     }
 }

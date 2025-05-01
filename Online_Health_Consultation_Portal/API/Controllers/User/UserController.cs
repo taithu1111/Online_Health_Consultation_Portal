@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Online_Health_Consultation_Portal.Application.Commands.Users;
 using Online_Health_Consultation_Portal.Application.Queries.Users;
 
-namespace Online_Health_Consultation_Portal.API.Controllers
+namespace Online_Health_Consultation_Portal.API.Controllers.User
 {
     [ApiController]
     [Route("api/users")]

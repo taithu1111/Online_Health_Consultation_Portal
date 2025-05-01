@@ -1,3 +1,4 @@
+using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Online_Health_Consultation_Portal.Application.Dtos.Users;
@@ -9,10 +10,12 @@ namespace Online_Health_Consultation_Portal.Application.Handlers.Users
     public class GetUserProfileQueryHandler : IRequestHandler<GetUserProfileQuery, UserProfileDto>
     {
         private readonly UserManager<User> _userManager;
+        private readonly IMapper _mapper;
 
-        public GetUserProfileQueryHandler(UserManager<User> userManager)
+        public GetUserProfileQueryHandler(UserManager<User> userManager, IMapper mapper)
         {
             _userManager = userManager;
+            _mapper = mapper;
         }
 
         public async Task<UserProfileDto> Handle(GetUserProfileQuery request, CancellationToken cancellationToken)
@@ -26,32 +29,8 @@ namespace Online_Health_Consultation_Portal.Application.Handlers.Users
             var roles = await _userManager.GetRolesAsync(user);
             var role = roles.FirstOrDefault();
 
-            var dto = new UserProfileDto
-            {
-                Email = user.Email,
-                FullName = user.FullName,
-                Gender = user.Gender,
-                Role = role
-            };
-
-            if (role == "Patient" && user.Patient != null)
-            {
-                dto.DateOfBirth = user.Patient.DateOfBirth;
-                dto.Phone = user.Patient.Phone;
-                dto.Address = user.Patient.Address;
-            }
-            else if (role == "Doctor" && user.Doctor != null)
-            {
-                dto.Bio = user.Doctor.Bio;
-                dto.ExperienceYears = user.Doctor.ExperienceYears;
-                dto.Languages = user.Doctor.Languages;
-                dto.ConsultationFee = user.Doctor.ConsultationFee;
-                
-                if (user.Doctor.Specialization != null)
-                {
-                    dto.Specialization = user.Doctor.Specialization.Name;
-                }
-            }
+            var dto = _mapper.Map<UserProfileDto>(user);
+            if (role != null) dto.Role = role;
 
             return dto;
         }
