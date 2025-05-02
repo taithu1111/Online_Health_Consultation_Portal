@@ -18,7 +18,7 @@ namespace Online_Health_Consultation_Portal.API.Controllers.Appointment
         }
         [Authorize(Roles = "Admin, Patient")]
         [HttpPost]
-        public async Task<IActionResult> CreateAppointment(CreateAppointmentDto dto)
+        public async Task<IActionResult> CreateAppointment([FromBody]CreateAppointmentDto dto)
         {
             var id = await _mediator.Send(new CreateAppointmentCommand { Appointment = dto });
             return Ok(id);
@@ -26,12 +26,19 @@ namespace Online_Health_Consultation_Portal.API.Controllers.Appointment
 
         [Authorize(Roles = "Admin, Patient, Doctor")]
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateAppointment(int id, UpdateAppointmentDto dto)
+        public async Task<IActionResult> UpdateAppointment(int id, [FromBody]UpdateAppointmentDto dto)
         {
             try
             {
-                await _mediator.Send(new UpdateAppointmentCommand { AppointmentId = id, Appointment = dto });
-                return NoContent(); // Trả về 204 No Content nếu cập nhật thành công
+                bool result = await _mediator.Send(new UpdateAppointmentCommand { AppointmentId = id, Appointment = dto });
+                if (result)
+                {
+                    return Ok("Appointment updated successfully");
+                }
+                else
+                {
+                    return NotFound("Appointment not found."); // Trả về 404 nếu không tìm thấy cuộc hẹn
+                }
             }
             catch (UnauthorizedAccessException)
             {
@@ -49,8 +56,15 @@ namespace Online_Health_Consultation_Portal.API.Controllers.Appointment
         {
             try
             {
-                await _mediator.Send(new CancelAppointmentCommand { AppointmentId = id });
-                return NoContent();
+                bool result = await _mediator.Send(new CancelAppointmentCommand { AppointmentId = id });
+                if (result)
+                {
+                    return Ok("Appointment deleted successfully");
+                }
+                else
+                {
+                    return NotFound("Appointment not found."); // Trả về 404 nếu không tìm thấy cuộc hẹn
+                }
             }
             catch (UnauthorizedAccessException)
             {

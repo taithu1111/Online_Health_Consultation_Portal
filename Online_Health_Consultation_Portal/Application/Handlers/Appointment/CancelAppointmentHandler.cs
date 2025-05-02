@@ -5,7 +5,7 @@ using Online_Health_Consultation_Portal.Infrastructure;
 
 namespace Online_Health_Consultation_Portal.Application.Handlers.Appointment
 {
-    public class CancelAppointmentHandler : IRequestHandler<CancelAppointmentCommand>
+    public class CancelAppointmentHandler : IRequestHandler<CancelAppointmentCommand, bool>
     {
         private readonly AppDbContext _context;
         private readonly IHttpContextAccessor _httpContextAccessor;
@@ -14,7 +14,7 @@ namespace Online_Health_Consultation_Portal.Application.Handlers.Appointment
             _context = context;
             _httpContextAccessor = httpContextAccessor;
         }
-        public async Task<Unit> Handle(CancelAppointmentCommand request, CancellationToken cancellationToken)
+        public async Task<bool> Handle(CancelAppointmentCommand request, CancellationToken cancellationToken)
         {
             var userRole = _httpContextAccessor.HttpContext.User.FindFirst("role")?.Value;  // Lấy role từ token
             var userId = _httpContextAccessor.HttpContext.User.FindFirst("id")?.Value;  // Lấy ID từ token
@@ -53,7 +53,7 @@ namespace Online_Health_Consultation_Portal.Application.Handlers.Appointment
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            return Unit.Value;
+            return true;
         }
     }
 }
