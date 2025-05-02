@@ -6,11 +6,11 @@ using Online_Health_Consultation_Portal.Infrastructure;
 
 namespace Online_Health_Consultation_Portal.Application.Handlers.HealthRecord
 {
-    public class GetHealthRecordByPatientQueryHandler : IRequestHandler<GetHealthRecordByPatientQuery, List<HealthRecordResponseDto>>
+    public class GetHealthRecordByPatientHandler : IRequestHandler<GetHealthRecordByPatientQuery, List<HealthRecordResponseDto>>
     {
         private readonly AppDbContext _context;
 
-        public GetHealthRecordByPatientQueryHandler(AppDbContext context)
+        public GetHealthRecordByPatientHandler(AppDbContext context)
         {
             _context = context;
         }

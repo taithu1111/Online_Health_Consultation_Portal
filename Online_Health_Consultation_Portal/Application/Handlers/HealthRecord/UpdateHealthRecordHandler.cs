@@ -4,11 +4,11 @@ using Online_Health_Consultation_Portal.Infrastructure;
 
 namespace Online_Health_Consultation_Portal.Application.Handlers.HealthRecord
 {
-    public class UpdateHealthRecordCommandHandler : IRequestHandler<UpdateHealthRecordCommand, bool>
+    public class UpdateHealthRecordHandler : IRequestHandler<UpdateHealthRecordCommand, bool>
     {
         private readonly AppDbContext _context;
 
-        public UpdateHealthRecordCommandHandler(AppDbContext context)
+        public UpdateHealthRecordHandler(AppDbContext context)
         {
             _context = context;
         }

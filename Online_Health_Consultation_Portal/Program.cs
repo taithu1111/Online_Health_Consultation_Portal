@@ -4,8 +4,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Online_Health_Consultation_Portal.Application.Command.Appointment;
+using Online_Health_Consultation_Portal.Application.Commands.HealthRecord;
 using Online_Health_Consultation_Portal.Application.Dtos.Appointment;
+using Online_Health_Consultation_Portal.Application.Dtos.HealthRecord;
 using Online_Health_Consultation_Portal.Application.Queries.Appointment;
+using Online_Health_Consultation_Portal.Application.Queries.HealthRecord;
 using Online_Health_Consultation_Portal.Infrastructure;
 using Online_Health_Consultation_Portal.Infrastructure.Repository;
 using Online_Health_Consultation_Portal.Mappers.AutoMapping;
@@ -50,18 +53,25 @@ builder.Services.AddAuthentication(options =>
         };
     });
 
-// add handler
+//--------- add handler -------
+//appointment
 builder.Services.AddScoped<IRequestHandler<CreateAppointmentCommand, int>, Online_Health_Consultation_Portal.Application.Handlers.Appointment.CreateAppointmentHandler>();
 builder.Services.AddScoped<IRequestHandler<UpdateAppointmentCommand, bool>, Online_Health_Consultation_Portal.Application.Handlers.Appointment.UpdateAppointmentHandler>();
 builder.Services.AddScoped<IRequestHandler<CancelAppointmentCommand, bool>, Online_Health_Consultation_Portal.Application.Handlers.Appointment.CancelAppointmentHandler>();
-
+//health record
+builder.Services.AddScoped<IRequestHandler<CreateHealthRecordCommand, int>, Online_Health_Consultation_Portal.Application.Handlers.HealthRecord.CreateHealthRecordHandler>();
+builder.Services.AddScoped<IRequestHandler<UpdateHealthRecordCommand, bool>, Online_Health_Consultation_Portal.Application.Handlers.HealthRecord.UpdateHealthRecordHandler>();
+builder.Services.AddScoped<IRequestHandler<DeleteHealthRecordCommand, bool>, Online_Health_Consultation_Portal.Application.Handlers.HealthRecord.DeleteHealthRecordHandler>();
 
 // add repository
 
-// add queries
+//------------- add queries------------------
+//appointment
 builder.Services.AddScoped<IRequestHandler<GetAppointmentDetailQuery, AppointmentDto>, Online_Health_Consultation_Portal.Application.Handlers.Appointment.GetAppointmentDetailHandler>();
 builder.Services.AddScoped<IRequestHandler<GetPatientAppointmentsQuery, List<AppointmentDto>>, Online_Health_Consultation_Portal.Application.Handlers.Appointment.GetPatientAppointmentsHandler>();
 builder.Services.AddScoped<IRequestHandler<GetDoctorAppointmentsQuery, List<AppointmentDto>>, Online_Health_Consultation_Portal.Application.Handlers.Appointment.GetDoctorAppointmentsHandler>();
+//health record
+builder.Services.AddScoped<IRequestHandler<GetHealthRecordByPatientQuery, List<HealthRecordResponseDto>>, Online_Health_Consultation_Portal.Application.Handlers.HealthRecord.GetHealthRecordByPatientHandler > ();
 
 // Đăng ký các dịch vụ
 
@@ -78,22 +88,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-// cấu hình swagger
-//builder.Services.AddEndpointsApiExplorer();
-//builder.Services.AddSwaggerGen(c =>
-//{
-//    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Online Health Consultation API", Version = "v1" });
-//});
-
-// Kích hoạt Swagger UI
-//if (app.Environment.IsDevelopment())
-//{
-//    app.UseSwagger();
-//    app.UseSwaggerUI(c =>
-//    {
-//        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Online Health Consultation API v1");
-//    });
-//}
 app.UseAuthentication();
 
 app.UseHttpsRedirection();
