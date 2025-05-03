@@ -53,8 +53,17 @@ namespace Online_Health_Consultation_Portal.Infrastructure
                    .As<IRequestHandler<SendMessageCommand, int>>()
                    .InstancePerLifetimeScope();
             builder.RegisterType<MarkMessageAsReadCommandHandler>()
+<<<<<<< HEAD
+                .As<IRequestHandler<MarkMessageAsReadCommand>>()
+                .InstancePerLifetimeScope();
+            builder.RegisterType<CreatePrescriptionCommandHandler>()
+                .As<IRequestHandler<CreatePrescriptionCommand, Prescription>>()
+                .InstancePerLifetimeScope();
+
+=======
                    .As<IRequestHandler<MarkMessageAsReadCommand>>()
                    .InstancePerLifetimeScope();
+>>>>>>> 738aa228cdb979423fe5ed2525c5e724919a7378
 
             // Explicitly register query handlers
             builder.RegisterType<GetMessagesByConversationIdQueryHandler>()
@@ -63,6 +72,15 @@ namespace Online_Health_Consultation_Portal.Infrastructure
             builder.RegisterType<GetMessageByIdQueryHandler>()
                    .As<IRequestHandler<GetMessageByIdQuery, Message>>()
                    .InstancePerLifetimeScope();
+<<<<<<< HEAD
+            builder.RegisterType<GetPrescriptionByIdQueryHandler>()
+                   .As<IRequestHandler<GetPrescriptionByIdQuery, Prescription>>()
+                   .InstancePerLifetimeScope();
+            builder.RegisterType<GetPrescriptionsByPatientIdQueryHandler>()
+                   .As<IRequestHandler<GetPrescriptionsByPatientIdQuery, List<Prescription>>>()
+                   .InstancePerLifetimeScope();
+=======
+>>>>>>> 738aa228cdb979423fe5ed2525c5e724919a7378
 
             // Register SignalR hub
             builder.RegisterType<ChatHub>()
@@ -77,6 +95,12 @@ namespace Online_Health_Consultation_Portal.Infrastructure
             builder.RegisterType<MessageRepository>()
                    .As<IMessageRepository>()
                    .InstancePerLifetimeScope();
+<<<<<<< HEAD
+            builder.RegisterType<PrescriptionRepository>()
+                   .As<IPrescriptionRepository>()
+                   .InstancePerLifetimeScope();
+=======
+>>>>>>> 738aa228cdb979423fe5ed2525c5e724919a7378
 
             // Register MediatR's request handler delegate factory
             builder.Register<ServiceFactory>(context =>

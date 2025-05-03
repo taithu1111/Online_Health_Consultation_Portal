@@ -13,7 +13,7 @@ namespace Online_Health_Consultation_Portal.Domain
         public string Instructions { get; set; }
 
         public Appointment Appointment { get; set; }
-        //thêm ==
+
         public ICollection<MedicationDetail> MedicationDetails { get; set; } = new List<MedicationDetail>();
 
     }

@@ -1,9 +1,19 @@
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
+<<<<<<< HEAD
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using Online_Health_Consultation_Portal.Infrastructure;
+using System;
+using System.Text;
+=======
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Online_Health_Consultation_Portal.Infrastructure;
 using System;
+>>>>>>> 738aa228cdb979423fe5ed2525c5e724919a7378
 using Online_Health_Consultation_Portal.Infrastructure.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,6 +21,30 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+<<<<<<< HEAD
+
+// Add authentication
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+        ValidAudience = builder.Configuration["Jwt:Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+    };
+});
+=======
+>>>>>>> 738aa228cdb979423fe5ed2525c5e724919a7378
 
 builder.Services.AddControllers();
 
@@ -29,6 +63,34 @@ builder.Services.AddSwaggerGen(c =>
             Email = "support@healthportal.com"
         }
     });
+<<<<<<< HEAD
+
+    // Add JWT authentication to Swagger
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
+        Name = "Authorization",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = "Bearer"
+    });
+
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            new string[] {}
+        }
+    });
+=======
+>>>>>>> 738aa228cdb979423fe5ed2525c5e724919a7378
 });
 
 // Add CORS policy
@@ -79,10 +141,17 @@ app.UseHttpsRedirection();
 
 app.UseRouting();
 
+<<<<<<< HEAD
+// Authentication and authorization middleware must be after UseRouting and before UseEndpoints/MapControllers
+app.UseAuthentication();
+app.UseAuthorization();
+=======
 app.MapHub<ChatHub>("/chathub");
 
 // Removed authentication and authorization middleware
+>>>>>>> 738aa228cdb979423fe5ed2525c5e724919a7378
 
+app.MapHub<ChatHub>("/chathub");
 app.MapControllers();
 
 // Optionally apply migrations automatically in development
