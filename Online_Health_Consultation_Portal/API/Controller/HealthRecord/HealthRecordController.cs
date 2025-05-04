@@ -30,7 +30,11 @@ namespace Online_Health_Consultation_Portal.API.Controller.HealthRecord
         [HttpPost]
         public async Task<IActionResult> CreateHealthRecord([FromBody] HealthRecordDto healthRecordDto)
         {
-            var command = new CreateHealthRecordCommand(healthRecordDto.PatientId, healthRecordDto.RecordType, healthRecordDto.FileUrl, healthRecordDto.CreatedAt);
+            var command = new CreateHealthRecordCommand(
+                healthRecordDto.PatientId, 
+                healthRecordDto.RecordType, 
+                healthRecordDto.FileUrl, 
+                healthRecordDto.CreatedAt);
             var healthRecordId = await _mediator.Send(command);
             return CreatedAtAction(nameof(GetHealthRecords), new { patientId = healthRecordDto.PatientId }, healthRecordId);
         }
@@ -39,7 +43,13 @@ namespace Online_Health_Consultation_Portal.API.Controller.HealthRecord
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateHealthRecord(int id, [FromBody] HealthRecordDto healthRecordDto)
         {
-            var command = new UpdateHealthRecordCommand(id, healthRecordDto.PatientId, healthRecordDto.RecordType, healthRecordDto.FileUrl, healthRecordDto.CreatedAt);
+            var command = new UpdateHealthRecordCommand(
+                id, 
+                healthRecordDto.PatientId, 
+                healthRecordDto.RecordType, 
+                healthRecordDto.FileUrl, 
+                healthRecordDto.CreatedAt
+            );
             var success = await _mediator.Send(command);
             if (success)
             {

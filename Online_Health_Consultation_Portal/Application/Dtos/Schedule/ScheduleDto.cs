@@ -1,6 +1,6 @@
-﻿namespace Online_Health_Consultation_Portal.Domain
+﻿namespace Online_Health_Consultation_Portal.Application.Dtos.Schedule
 {
-    public class Schedule
+    public class ScheduleDto
     {
         public int Id { get; set; }
         public int DoctorId { get; set; }
@@ -8,10 +8,7 @@
         public TimeSpan StartTime { get; set; }
         public TimeSpan EndTime { get; set; }
         public bool IsAvailable { get; set; }
-
-        public Doctor Doctor { get; set; }
-
-        public string? Location { get; set; }    // địa điểm khám
-        public string? Description { get; set; } // mô tả lịch khám
+        public string? Location { get; set; }
+        public string? Description { get; set; }
     }
 }

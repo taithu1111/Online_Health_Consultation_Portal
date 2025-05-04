@@ -29,7 +29,7 @@ namespace Online_Health_Consultation_Portal.API.Controllers.Appointment
         // PUT: api/appointment/{id}
         //[Authorize(Roles = "Admin, Patient, Doctor")]
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateAppointment(int id, [FromBody]UpdateAppointmentDto dto)
+        public async Task<IActionResult> UpdateAppointment(int id, UpdateAppointmentDto dto)
         {
             try
             {
@@ -54,7 +54,7 @@ namespace Online_Health_Consultation_Portal.API.Controllers.Appointment
         }
 
         // DELETE: api/appointment/{id}
-        [Authorize(Roles = "Admin, Patient, Doctor")]
+        //[Authorize(Roles = "Admin, Patient, Doctor")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAppointment(int id)
         {
@@ -81,7 +81,7 @@ namespace Online_Health_Consultation_Portal.API.Controllers.Appointment
         }
 
         // GET: api/appointment/patient/{patientId}
-        [Authorize(Roles = "Patient")]
+        //[Authorize(Roles = "Patient")]
         [HttpGet("patient/{patientId}")]
         public async Task<IActionResult> GetAppointmentsByPatientId(int patientId)
         {
@@ -89,7 +89,7 @@ namespace Online_Health_Consultation_Portal.API.Controllers.Appointment
             return Ok(appointments);
         }
 
-        [Authorize(Roles = "Doctor")]
+        //[Authorize(Roles = "Doctor")]
         [HttpGet("doctor/{doctorId}")]
         public async Task<IActionResult> GetAppointmentsByDoctorId(int doctorId)
         {
@@ -98,7 +98,7 @@ namespace Online_Health_Consultation_Portal.API.Controllers.Appointment
         }
 
         // GET: api/appointment/{id}
-        [Authorize(Roles = "Admin, Patient, Doctor")]
+        //[Authorize(Roles = "Admin, Patient, Doctor")]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetAppointmentById(int id)
         {
