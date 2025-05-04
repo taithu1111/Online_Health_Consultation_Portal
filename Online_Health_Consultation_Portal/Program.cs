@@ -11,6 +11,7 @@ using Online_Health_Consultation_Portal.Application.Dtos.Appointment;
 using Online_Health_Consultation_Portal.Application.Dtos.ConsultationSession;
 using Online_Health_Consultation_Portal.Application.Dtos.HealthRecord;
 using Online_Health_Consultation_Portal.Application.Dtos.Schedule;
+using Online_Health_Consultation_Portal.Application.Handlers.Appointment;
 using Online_Health_Consultation_Portal.Application.Queries.Appointment;
 using Online_Health_Consultation_Portal.Application.Queries.ConsultationSession;
 using Online_Health_Consultation_Portal.Application.Queries.HealthRecord;

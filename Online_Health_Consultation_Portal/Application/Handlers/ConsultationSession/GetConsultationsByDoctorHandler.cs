@@ -18,15 +18,30 @@ namespace Online_Health_Consultation_Portal.Application.Handlers.ConsultationSes
         }
         public async Task<List<ConsultationSessionDto>> Handle(GetConsultationsByDoctorQuery request, CancellationToken cancellationToken)
         {
-            var session = await _context.ConsultationSessions
-                .Include(x => x.Appointment)
-                    .ThenInclude(a => a.Patient)
-                .Include(x => x.Appointment)
-                    .ThenInclude(a => a.Doctor)
-                .Where(x => x.Appointment.DoctorId == request.DoctorId)
-                .ToListAsync(cancellationToken);
+            //var session = await _context.ConsultationSessions
+            //    .Include(x => x.Appointment)
+            //        .ThenInclude(a => a.Patient)
+            //    .Include(x => x.Appointment)
+            //        .ThenInclude(a => a.Doctor)
+            //    .Where(x => x.Appointment.DoctorId == request.DoctorId)
+            //    .ToListAsync(cancellationToken);
 
-            return _mapper.Map<List<ConsultationSessionDto>>(session);
+            //return _mapper.Map<List<ConsultationSessionDto>>(session);
+            var query = await _context.ConsultationSessions
+            .Where(cs => cs.Appointment.DoctorId == request.DoctorId)
+            .Select(cs => new ConsultationSessionDto
+            {
+                Id = cs.Id,
+                AppointmentId = cs.AppointmentId,
+                PatientName = cs.Appointment.Patient.User.FullName,
+                DoctorName = cs.Appointment.Doctor.User.FullName,
+                StartTime = cs.StartTime,
+                EndTime = cs.EndTime,
+                SessionNotes = cs.SessionNotes,
+                MeetingUrl = cs.MeetingUrl,
+            })
+            .ToListAsync(cancellationToken);
+            return query;
         }
     }
 }
