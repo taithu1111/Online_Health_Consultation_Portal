@@ -364,3 +364,6 @@ FodyWeavers.xsd
 
 # Test files
 ProjectName.Tests/
+
+#Local files
+note.txt
