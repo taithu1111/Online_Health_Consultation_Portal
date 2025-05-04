@@ -2,13 +2,14 @@ using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Online_Health_Consultation_Portal.Application.Dtos.Doctors;
+using Online_Health_Consultation_Portal.Application.Dtos.Paginated;
 using Online_Health_Consultation_Portal.Application.Queries.Doctors;
 using Online_Health_Consultation_Portal.Domain;
 using Online_Health_Consultation_Portal.Infrastructure;
 
 namespace Online_Health_Consultation_Portal.Application.Handlers.Doctors
 {
-    public class GetDoctorListQueryHandler : IRequestHandler<GetDoctorListQuery, List<DoctorDto>>
+    public class GetDoctorListQueryHandler : IRequestHandler<GetDoctorListQuery, PaginatedResponse<DoctorDto>>
     {
         private readonly AppDbContext _context;
         private readonly IMapper _mapper;
@@ -19,7 +20,7 @@ namespace Online_Health_Consultation_Portal.Application.Handlers.Doctors
             _mapper = mapper;
         }
 
-        public async Task<List<DoctorDto>> Handle(GetDoctorListQuery request, CancellationToken cancellationToken)
+        public async Task<PaginatedResponse<DoctorDto>> Handle(GetDoctorListQuery request, CancellationToken cancellationToken)
         {
             var query = _context.Doctors
                 .Include(d => d.User)
@@ -42,11 +43,23 @@ namespace Online_Health_Consultation_Portal.Application.Handlers.Doctors
                 query = query.Where(d => d.Languages.Contains(request.Language));
             }
 
-            var doctors = await query.ToListAsync(cancellationToken);
+            var totalCount = await query.CountAsync(cancellationToken);
 
-            var doctorDtos = _mapper.Map<List<DoctorDto>>(doctors);
+            var paginatedDoctors = await query
+                .Skip((request.Page - 1) * request.PageSize)
+                .Take(request.PageSize)
+                .ToListAsync(cancellationToken);
 
-            return doctorDtos;
+            var doctorDtos = _mapper.Map<List<DoctorDto>>(paginatedDoctors);
+
+            return new PaginatedResponse<DoctorDto>
+            {
+                Items = doctorDtos,
+                Page = request.Page,
+                PageSize = request.PageSize,
+                TotalCount = totalCount
+                // TotalPages is calculated automatically by the property
+            };
         }
     }
 }
