@@ -12,7 +12,7 @@ using Online_Health_Consultation_Portal.Infrastructure;
 namespace Online_Health_Consultation_Portal.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250428083333_init")]
+    [Migration("20250504132606_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -239,7 +239,10 @@ namespace Online_Health_Consultation_Portal.Migrations
             modelBuilder.Entity("Online_Health_Consultation_Portal.Domain.Doctor", b =>
                 {
                     b.Property<int>("UserId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserId"));
 
                     b.Property<double>("AverageRating")
                         .HasColumnType("float");
@@ -261,9 +264,14 @@ namespace Online_Health_Consultation_Portal.Migrations
                     b.Property<int>("SpecializationId")
                         .HasColumnType("int");
 
+                    b.Property<int>("UserId1")
+                        .HasColumnType("int");
+
                     b.HasKey("UserId");
 
                     b.HasIndex("SpecializationId");
+
+                    b.HasIndex("UserId1");
 
                     b.ToTable("Doctors");
                 });
@@ -419,8 +427,11 @@ namespace Online_Health_Consultation_Portal.Migrations
 
             modelBuilder.Entity("Online_Health_Consultation_Portal.Domain.Patient", b =>
                 {
-                    b.Property<int>("UserId")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Address")
                         .IsRequired()
@@ -437,7 +448,12 @@ namespace Online_Health_Consultation_Portal.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("UserId");
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Patients");
                 });
@@ -736,9 +752,8 @@ namespace Online_Health_Consultation_Portal.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<byte[]>("PasswordHash")
-                        .IsRequired()
-                        .HasColumnType("varbinary(max)");
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(max)");
@@ -747,7 +762,6 @@ namespace Online_Health_Consultation_Portal.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("ResetPasswordToken")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("ResetPasswordTokenExpiry")
@@ -786,6 +800,9 @@ namespace Online_Health_Consultation_Portal.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("RoleId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Id")
                         .HasColumnType("int");
 
                     b.HasKey("UserId", "RoleId");
@@ -896,9 +913,9 @@ namespace Online_Health_Consultation_Portal.Migrations
                         .IsRequired();
 
                     b.HasOne("Online_Health_Consultation_Portal.Domain.User", "User")
-                        .WithOne("Doctor")
-                        .HasForeignKey("Online_Health_Consultation_Portal.Domain.Doctor", "UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .WithMany()
+                        .HasForeignKey("UserId1")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Specialization");
@@ -931,7 +948,7 @@ namespace Online_Health_Consultation_Portal.Migrations
             modelBuilder.Entity("Online_Health_Consultation_Portal.Domain.Notification", b =>
                 {
                     b.HasOne("Online_Health_Consultation_Portal.Domain.User", "User")
-                        .WithMany("Notifications")
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -942,9 +959,9 @@ namespace Online_Health_Consultation_Portal.Migrations
             modelBuilder.Entity("Online_Health_Consultation_Portal.Domain.Patient", b =>
                 {
                     b.HasOne("Online_Health_Consultation_Portal.Domain.User", "User")
-                        .WithOne("Patient")
-                        .HasForeignKey("Online_Health_Consultation_Portal.Domain.Patient", "UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("User");
@@ -1068,14 +1085,6 @@ namespace Online_Health_Consultation_Portal.Migrations
 
             modelBuilder.Entity("Online_Health_Consultation_Portal.Domain.User", b =>
                 {
-                    b.Navigation("Doctor")
-                        .IsRequired();
-
-                    b.Navigation("Notifications");
-
-                    b.Navigation("Patient")
-                        .IsRequired();
-
                     b.Navigation("UserRoles");
                 });
 #pragma warning restore 612, 618

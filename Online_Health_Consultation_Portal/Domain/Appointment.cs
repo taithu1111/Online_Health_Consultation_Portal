@@ -6,7 +6,6 @@ namespace Online_Health_Consultation_Portal.Domain
     {
         public int Id { get; set; }
 
-        public int PatientId { get; set; }
         public int DoctorId { get; set; }
 
         public DateTime AppointmentDateTime { get; set; }
@@ -16,7 +15,7 @@ namespace Online_Health_Consultation_Portal.Domain
 
         //Thêm mới trường này để lưu chuẩn đoán
         public string? Diagnosis { get; set; }
-
+        public int PatientId { get; set; }
         public Patient Patient { get; set; }
         public Doctor Doctor { get; set; }
         public Prescription Prescription { get; set; }
