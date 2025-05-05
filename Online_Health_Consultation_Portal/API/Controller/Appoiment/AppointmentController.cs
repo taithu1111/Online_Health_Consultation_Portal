@@ -16,17 +16,20 @@ namespace Online_Health_Consultation_Portal.API.Controllers.Appointment
         {
             _mediator = mediator;
         }
-        [Authorize(Roles = "Admin, Patient")]
+
+        // POST: api/appointment
+        //[Authorize(Roles = "Admin, Patient")]
         [HttpPost]
-        public async Task<IActionResult> CreateAppointment([FromBody]CreateAppointmentDto dto)
+        public async Task<IActionResult> CreateAppointment(CreateAppointmentCommand dto)
         {
-            var id = await _mediator.Send(new CreateAppointmentCommand { Appointment = dto });
+            var id = await _mediator.Send(dto);
             return Ok(id);
         }
 
-        [Authorize(Roles = "Admin, Patient, Doctor")]
+        // PUT: api/appointment/{id}
+        //[Authorize(Roles = "Admin, Patient, Doctor")]
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateAppointment(int id, [FromBody]UpdateAppointmentDto dto)
+        public async Task<IActionResult> UpdateAppointment(int id, UpdateAppointmentDto dto)
         {
             try
             {
@@ -50,7 +53,8 @@ namespace Online_Health_Consultation_Portal.API.Controllers.Appointment
             }
         }
 
-        [Authorize(Roles = "Admin, Patient, Doctor")]
+        // DELETE: api/appointment/{id}
+        //[Authorize(Roles = "Admin, Patient, Doctor")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAppointment(int id)
         {
@@ -76,7 +80,8 @@ namespace Online_Health_Consultation_Portal.API.Controllers.Appointment
             }
         }
 
-        [Authorize(Roles = "Patient")]
+        // GET: api/appointment/patient/{patientId}
+        //[Authorize(Roles = "Patient")]
         [HttpGet("patient/{patientId}")]
         public async Task<IActionResult> GetAppointmentsByPatientId(int patientId)
         {
@@ -84,7 +89,7 @@ namespace Online_Health_Consultation_Portal.API.Controllers.Appointment
             return Ok(appointments);
         }
 
-        [Authorize(Roles = "Doctor")]
+        //[Authorize(Roles = "Doctor")]
         [HttpGet("doctor/{doctorId}")]
         public async Task<IActionResult> GetAppointmentsByDoctorId(int doctorId)
         {
@@ -92,7 +97,8 @@ namespace Online_Health_Consultation_Portal.API.Controllers.Appointment
             return Ok(appointments);
         }
 
-        [Authorize(Roles = "Admin, Patient, Doctor")]
+        // GET: api/appointment/{id}
+        //[Authorize(Roles = "Admin, Patient, Doctor")]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetAppointmentById(int id)
         {

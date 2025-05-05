@@ -8,52 +8,22 @@ namespace Online_Health_Consultation_Portal.Application.Handlers.Appointment
     public class CancelAppointmentHandler : IRequestHandler<CancelAppointmentCommand, bool>
     {
         private readonly AppDbContext _context;
-        private readonly IHttpContextAccessor _httpContextAccessor;
         public CancelAppointmentHandler(AppDbContext context, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
-            _httpContextAccessor = httpContextAccessor;
         }
         public async Task<bool> Handle(CancelAppointmentCommand request, CancellationToken cancellationToken)
         {
-            var userRole = _httpContextAccessor.HttpContext.User.FindFirst("role")?.Value;  // Lấy role từ token
-            var userId = _httpContextAccessor.HttpContext.User.FindFirst("id")?.Value;  // Lấy ID từ token
-
             var appointment = await _context.Appointments
-                .FirstOrDefaultAsync(a => a.Id == request.AppointmentId, cancellationToken);
+            .FirstOrDefaultAsync(a => a.Id == request.AppointmentId, cancellationToken);
 
             if (appointment == null)
                 throw new Exception("Appointment not found.");
 
-            if (userRole == "Admin")
-            {
-                // Admin có thể hủy bất kỳ cuộc hẹn nào
-                appointment.Status = "Cancelled";
-            }
-            else if (userRole == "Patient")
-            {
-                // Patient chỉ có thể hủy cuộc hẹn của chính mình
-                if (appointment.PatientId != int.Parse(userId))
-                    throw new UnauthorizedAccessException("You can only cancel your own appointments.");
-
-                appointment.Status = "Cancelled";
-            }
-            else if (userRole == "Doctor")
-            {
-                // Doctor chỉ có thể hủy cuộc hẹn của mình
-                if (appointment.DoctorId != int.Parse(userId))
-                    throw new UnauthorizedAccessException("You can only cancel your own appointments.");
-
-                appointment.Status = "Cancelled";
-            }
-            else
-            {
-                throw new UnauthorizedAccessException("You do not have access to cancel this appointment.");
-            }
-
+            appointment.Status = "Cancelled";
             await _context.SaveChangesAsync(cancellationToken);
 
-            return true;
+            return true;  // Trả về true nếu hủy thành công
         }
     }
 }

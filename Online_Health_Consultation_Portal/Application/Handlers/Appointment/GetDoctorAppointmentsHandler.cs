@@ -11,30 +11,33 @@ namespace Online_Health_Consultation_Portal.Application.Handlers.Appointment
     {
         private readonly AppDbContext _context;
         private readonly IAutoMapper _mapper;
-        private readonly IHttpContextAccessor _httpContextAccessor;
-        public GetDoctorAppointmentsHandler(AppDbContext context, IAutoMapper mapper, IHttpContextAccessor httpContextAccessor)
+        public GetDoctorAppointmentsHandler(AppDbContext context, IAutoMapper mapper)
         {
             _context = context;
             _mapper = mapper;
-            _httpContextAccessor = httpContextAccessor;
         }
         public async Task<List<AppointmentDto>> Handle(GetDoctorAppointmentsQuery request, CancellationToken cancellationToken)
         {
-            var userRole = _httpContextAccessor.HttpContext.User.FindFirst("role")?.Value; // lấy role từ token
-            if (userRole == "Doctor")
-            {
-                var doctorId = _httpContextAccessor.HttpContext.User.FindFirst("id")?.Value; // lấy id từ token
-                // Lấy danh sách lịch hẹn của bác sĩ từ database
-                var appointments = await _context.Appointments
-                    .Where(a => a.DoctorId == int.Parse(doctorId))
-                    .ToListAsync(cancellationToken);
+            //var appointments = await _context.Appointments
+            //.Where(a => a.DoctorId == request.DoctorId)  // Chỉ lấy cuộc hẹn của bác sĩ đã cho
+            //.ToListAsync(cancellationToken);
 
-                return _mapper.Map<List<AppointmentDto>>(appointments);
-            }
-            else
-            {
-                throw new UnauthorizedAccessException("You do not have access!");
-            }
+            //return _mapper.Map<List<AppointmentDto>>(appointments);  // Ánh xạ thành List<AppointmentDTO>
+            var appointments = await _context.Appointments
+                .Where(a => a.DoctorId == request.DoctorId)
+                .Select(a => new AppointmentDto
+                {
+                    Id = a.Id,
+                    PatientId = a.PatientId,
+                    DoctorId = a.DoctorId,
+                    AppointmentDateTime = a.AppointmentDateTime,
+                    Status = a.Status,
+                    Type = a.Type,
+                    Notes = a.Notes
+                })
+                .ToListAsync(cancellationToken);
+
+            return appointments;
         }
     }
 }
