@@ -18,11 +18,24 @@ namespace Online_Health_Consultation_Portal.Application.Handlers.Schedule
         }
         public async Task<List<ScheduleDto>> Handle(GetDoctorSchedulesQuery request, CancellationToken cancellationToken)
         {
+            //var schedules = await _context.Schedules
+            //    .Where(s => s.DoctorId == request.DoctorId)
+            //    .ToListAsync(cancellationToken);
+
+            //return _mapper.Map<List<ScheduleDto>>(schedules);
             var schedules = await _context.Schedules
                 .Where(s => s.DoctorId == request.DoctorId)
+                .Select(s => new ScheduleDto
+                {
+                    Id = s.Id,
+                    DoctorId = s.DoctorId,
+                    DayOfWeek = s.DayOfWeek,
+                    StartTime = s.StartTime,
+                    EndTime = s.EndTime,
+                    IsAvailable = s.IsAvailable
+                })
                 .ToListAsync(cancellationToken);
-
-            return _mapper.Map<List<ScheduleDto>>(schedules);
+            return schedules;
         }
     }
 }
