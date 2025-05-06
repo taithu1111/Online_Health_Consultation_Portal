@@ -5,8 +5,6 @@ using Online_Health_Consultation_Portal.Application.Dtos.Auth.LoginDto;
 using Online_Health_Consultation_Portal.Domain;
 using Online_Health_Consultation_Portal.Infrastructure.Repository;
 using Online_Health_Consultation_Portal.Infrastructure.Service;
-using System.Text;
-
 namespace Online_Health_Consultation_Portal.Application.Handlers.Auth
 {
     public class LoginCommandHandler : IRequestHandler<LoginCommand, LoginResponseDto>
@@ -24,8 +22,8 @@ namespace Online_Health_Consultation_Portal.Application.Handlers.Auth
         {
             var user = await _userRepository.Get();
             var userInclude = await user
-                //.Include(e => e.UserRoles)
-                //.ThenInclude(er => er.Role)
+                .Include(e => e.UserRoles)
+                .ThenInclude(er => er.Role)
                 .FirstOrDefaultAsync(e => e.Email == request.LoginDto.Email);
 
             //var userEmailCheck = await user.FirstOrDefaultAsync(e => e.Email == request.LoginDto.Email);
@@ -36,13 +34,14 @@ namespace Online_Health_Consultation_Portal.Application.Handlers.Auth
                 throw new UnauthorizedAccessException("Invalid email or password.");
             }
 
-            var roles = userInclude.UserRoles.Select(er => er.Role.Name).ToList() ?? new List<string>();
+            /*List<string> roles = userInclude.Role.ToList();*/ /*.UserRoles.Select(er => er.Role.Name).ToList() ?? new List<string>();*/
+            List<string> roles = new List<string> { userInclude.Role.ToString() };
             var token = _jwtService.GenerateToken(userInclude.Id, roles);
 
             return new LoginResponseDto
             {
                 Token = token,
-                Expires = DateTime.UtcNow.AddHours(1), // Token hết hạn sau 1 giờ
+                Expires = DateTime.UtcNow.AddHours(1), 
                 Roles = roles
             };
         }
