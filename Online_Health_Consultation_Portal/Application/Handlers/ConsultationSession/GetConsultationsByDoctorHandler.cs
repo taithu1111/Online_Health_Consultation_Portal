@@ -27,6 +27,7 @@ namespace Online_Health_Consultation_Portal.Application.Handlers.ConsultationSes
             //    .ToListAsync(cancellationToken);
 
             //return _mapper.Map<List<ConsultationSessionDto>>(session);
+
             var query = await _context.ConsultationSessions
             .Where(cs => cs.Appointment.DoctorId == request.DoctorId)
             .Select(cs => new ConsultationSessionDto
