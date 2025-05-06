@@ -21,6 +21,7 @@ namespace Online_Health_Consultation_Portal.Application.Handlers.Appointment
                 throw new Exception("Appointment not found.");
 
             appointment.Status = "Cancelled";
+            _context.Appointments.Remove(appointment);
             await _context.SaveChangesAsync(cancellationToken);
 
             return true;  // Trả về true nếu hủy thành công
