@@ -131,7 +131,7 @@ namespace Online_Health_Consultation_Portal.Infrastructure
             modelBuilder.Entity<AuditLog>()
                 .HasOne(al => al.User)
                 .WithMany()
-                .HasForeignKey(al => al.UserId)
+                .HasForeignKey(al => al.UserId) 
                 .OnDelete(DeleteBehavior.Restrict);
 
             // Config Statistic
