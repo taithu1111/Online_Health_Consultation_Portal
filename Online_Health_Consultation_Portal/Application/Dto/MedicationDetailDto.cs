@@ -2,5 +2,4 @@
 
 public record MedicationDetailDto(string MedicationName, string Dosage , string Instructions)
 {
-    
 }

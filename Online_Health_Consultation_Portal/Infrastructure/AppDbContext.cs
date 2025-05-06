@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using System.Reflection;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Online_Health_Consultation_Portal.Domain;
 
@@ -37,17 +38,17 @@ namespace Online_Health_Consultation_Portal.Infrastructure
 
             // Patient 1 - 1 User
             modelBuilder.Entity<Patient>()
-                .HasOne(p => p.User)
-                .WithOne(u => u.Patient)
-                .HasForeignKey<Patient>(p => p.UserId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .HasOne(p => p.User);
+            //.WithOne(u => u.Patient)
+            //.HasForeignKey<Patient>(p => p.UserId)
+            //.OnDelete(DeleteBehavior.Restrict);
 
             // Doctor 1 - 1 User
             modelBuilder.Entity<Doctor>()
-                .HasOne(d => d.User)
-                .WithOne(u => u.Doctor)
-                .HasForeignKey<Doctor>(d => d.UserId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .HasOne(d => d.User);
+            //.WithOne(u => u.Doctor)
+            //.HasForeignKey<Doctor>(d => d.UserId)
+            //.OnDelete(DeleteBehavior.Restrict);
 
             // Doctor - Specialization
             modelBuilder.Entity<Doctor>()
@@ -86,10 +87,10 @@ namespace Online_Health_Consultation_Portal.Infrastructure
 
             // Notification - User
             modelBuilder.Entity<Notification>()
-                .HasOne(n => n.User)
-                .WithMany(u => u.Notifications)
-                .HasForeignKey(n => n.UserId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .HasOne(n => n.User);
+            //.WithMany(u => u.Notifications)
+            //.HasForeignKey(n => n.UserId)
+            //.OnDelete(DeleteBehavior.Cascade);
 
             // Rating - Doctor
             modelBuilder.Entity<Rating>()
@@ -130,7 +131,7 @@ namespace Online_Health_Consultation_Portal.Infrastructure
             modelBuilder.Entity<AuditLog>()
                 .HasOne(al => al.User)
                 .WithMany()
-                .HasForeignKey(al => al.UserId)
+                .HasForeignKey(al => al.UserId) 
                 .OnDelete(DeleteBehavior.Restrict);
 
             // Config Statistic
@@ -152,18 +153,20 @@ namespace Online_Health_Consultation_Portal.Infrastructure
             modelBuilder.Entity<Message>()
                 .HasIndex(m => new { m.SenderId, m.ReceiverId });
 
+          
             // Message relationships
             modelBuilder.Entity<Message>()
-                .HasOne(m => m.Sender)
-                .WithMany(u => u.SentMessages)
+                .HasOne<User>()
+                .WithMany()
                 .HasForeignKey(m => m.SenderId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Message>()
-                .HasOne(m => m.Receiver)
-                .WithMany(u => u.ReceivedMessages)
+                .HasOne<User>()
+                .WithMany()
                 .HasForeignKey(m => m.ReceiverId)
                 .OnDelete(DeleteBehavior.Restrict);
+
         }
     }
 }
