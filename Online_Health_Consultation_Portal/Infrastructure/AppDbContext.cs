@@ -56,10 +56,10 @@ namespace Online_Health_Consultation_Portal.Infrastructure
 
             // Doctor - Specialization
             modelBuilder.Entity<Doctor>()
-                .HasOne(d => d.Specialization)
-                .WithMany(s => s.Doctors)
-                .HasForeignKey(d => d.SpecializationId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .HasOne(d => d.Specialization);
+            //.WithMany(s => s.Doctors)
+            //.HasForeignKey(d => d.SpecializationId)
+            //.OnDelete(DeleteBehavior.Cascade);
 
             // Appointment - Doctor
             modelBuilder.Entity<Appointment>()

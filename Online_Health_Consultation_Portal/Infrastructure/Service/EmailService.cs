@@ -12,10 +12,15 @@ namespace Online_Health_Consultation_Portal.Infrastructure.Service
 
         public EmailService(IConfiguration configuration)
         {
-            _smtpServer = configuration["EmailSettings:SmtpServer"];
-            _smtpPort = int.Parse(configuration["EmailSettings:SmtpPort"]);
-            _smtpUsername = configuration["EmailSettings:SmtpUsername"];
-            _smtpPassword = configuration["EmailSettings:SmtpPassword"];
+            //_smtpServer = configuration["EmailSettings:SmtpServer"];
+            //_smtpPort = int.Parse(configuration["EmailSettings:SmtpPort"]);
+            //_smtpUsername = configuration["EmailSettings:SmtpUsername"];
+            //_smtpPassword = configuration["EmailSettings:SmtpPassword"];
+
+            _smtpServer = configuration["EmailSettings:Host"]!;
+            _smtpPort = int.Parse(configuration["EmailSettings:Port"]!);
+            _smtpUsername = configuration["EmailSettings:Email"]!;
+            _smtpPassword = configuration["EmailSettings:Password"]!;
         }
 
         public async Task SendEmailAsync(string email, string subject, string message)

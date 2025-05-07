@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Identity;
 using Online_Health_Consultation_Portal.Application.Commands.Auth;
 using Online_Health_Consultation_Portal.Domain;
 using Online_Health_Consultation_Portal.Infrastructure.Repository;
@@ -21,9 +22,12 @@ namespace Online_Health_Consultation_Portal.Application.Handlers.Auth
         public async Task<bool> Handle(ResetPasswordCommand request, CancellationToken cancellationToken)
         {
             var employees = await _userRepository.GetAllAsync();
-            var employee = employees.FirstOrDefault(e => e.Email == request.ResetPasswordDto.Email &&
-                                                         e.ResetPasswordToken == request.ResetPasswordDto.Token &&
+            var employee = employees.FirstOrDefault(e => e.Email == request.ResetPasswordDto.Email ||
+                                                         e.ResetPasswordToken == request.ResetPasswordDto.Token ||
                                                          e.ResetPasswordTokenExpiry > DateTime.UtcNow);
+
+            var pass = new PasswordHasher<User>();
+            var newPassword = pass.HashPassword(employee!, request.ResetPasswordDto.NewPassword);
 
             if (employee == null)
             {
@@ -36,6 +40,7 @@ namespace Online_Health_Consultation_Portal.Application.Handlers.Auth
             //employee.PasswordHash = Encoding.ASCII.GetBytes(BCrypt.Net.BCrypt.HashPassword(request.ResetPasswordDto.NewPassword));
             employee.ResetPasswordToken = null; // Xóa token sau khi reset thành công
             employee.ResetPasswordTokenExpiry = null; // Xóa thời hạn token
+            employee.PasswordHash = newPassword;
 
             await _userRepository.UpdateAsync(employee);
 
