@@ -26,12 +26,8 @@ namespace Online_Health_Consultation_Portal.Infrastructure
         public DbSet<Specialization> Specializations { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<UserRole> UserRoles { get; set; }
-
-        // thêm ============
-
         public DbSet<ConsultationSession> ConsultationSessions { get; set; }
         public DbSet<MedicationDetail> MedicationDetails { get; set; }
-
         public DbSet<AuditLog> AuditLogs { get; set; }
         public DbSet<Statistic> Statistics { get; set; }
         public DbSet<SystemLog> SystemLogs { get; set; }
@@ -117,8 +113,6 @@ namespace Online_Health_Consultation_Portal.Infrastructure
                 .HasForeignKey(s => s.DoctorId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-
-            //=======================================
             // ConsultationSession - Appointment (1-1)
             modelBuilder.Entity<ConsultationSession>()
                 .HasOne(cs => cs.Appointment)
@@ -137,7 +131,7 @@ namespace Online_Health_Consultation_Portal.Infrastructure
             modelBuilder.Entity<AuditLog>()
                 .HasOne(al => al.User)
                 .WithMany()
-                .HasForeignKey(al => al.UserId)
+                .HasForeignKey(al => al.UserId) 
                 .OnDelete(DeleteBehavior.Restrict);
 
             // Config Statistic
@@ -148,14 +142,29 @@ namespace Online_Health_Consultation_Portal.Infrastructure
             modelBuilder.Entity<SystemLog>()
                 .HasIndex(sl => sl.Timestamp);
 
+            // Message configuration
+            // Add indexes for better query performance
+            modelBuilder.Entity<Message>()
+                .HasIndex(m => m.SenderId);
+
+            modelBuilder.Entity<Message>()
+                .HasIndex(m => m.ReceiverId);
+
+            modelBuilder.Entity<Message>()
+                .HasIndex(m => new { m.SenderId, m.ReceiverId });
+
+            // Message relationships
+            modelBuilder.Entity<Message>()
+                .HasOne(m => m.Sender)
+                .WithMany(u => u.SentMessages)
+                .HasForeignKey(m => m.SenderId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Message>()
+                .HasOne(m => m.Receiver)
+                .WithMany(u => u.ReceivedMessages)
+                .HasForeignKey(m => m.ReceiverId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
-
-        //protected override void OnModelCreating(ModelBuilder builder)
-        //{
-        //    base.OnModelCreating(builder);
-
-        //    builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-        //}
-
     }
 }
