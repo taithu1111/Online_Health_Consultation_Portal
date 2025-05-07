@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Online_Health_Consultation_Portal.Migrations
 {
     /// <inheritdoc />
-    public partial class init : Migration
+    public partial class update : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -342,12 +342,12 @@ namespace Online_Health_Consultation_Portal.Migrations
                 columns: table => new
                 {
                     UserId = table.Column<int>(type: "int", nullable: false),
-                    SpecializationId = table.Column<int>(type: "int", nullable: false),
                     ExperienceYears = table.Column<int>(type: "int", nullable: false),
                     Languages = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Bio = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ConsultationFee = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    AverageRating = table.Column<double>(type: "float", nullable: false)
+                    AverageRating = table.Column<double>(type: "float", nullable: false),
+                    SpecializationId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -459,8 +459,8 @@ namespace Online_Health_Consultation_Portal.Migrations
                     StartTime = table.Column<TimeSpan>(type: "time", nullable: false),
                     EndTime = table.Column<TimeSpan>(type: "time", nullable: false),
                     IsAvailable = table.Column<bool>(type: "bit", nullable: false),
-                    Location = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Location = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {

@@ -12,8 +12,8 @@ using Online_Health_Consultation_Portal.Infrastructure;
 namespace Online_Health_Consultation_Portal.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250503094658_updatedatabase")]
-    partial class updatedatabase
+    [Migration("20250507085155_update1")]
+    partial class update1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

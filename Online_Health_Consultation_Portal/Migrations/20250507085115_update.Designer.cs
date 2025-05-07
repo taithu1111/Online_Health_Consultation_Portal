@@ -12,8 +12,8 @@ using Online_Health_Consultation_Portal.Infrastructure;
 namespace Online_Health_Consultation_Portal.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250503094142_createupdate")]
-    partial class createupdate
+    [Migration("20250507085115_update")]
+    partial class update
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -595,7 +595,6 @@ namespace Online_Health_Consultation_Portal.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("Location")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<TimeSpan>("StartTime")
