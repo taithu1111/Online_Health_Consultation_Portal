@@ -20,7 +20,8 @@ namespace Online_Health_Consultation_Portal.Application.Handlers.Users
 
         public async Task<UserProfileDto> Handle(GetUserProfileQuery request, CancellationToken cancellationToken)
         {
-            var user = await _userManager.GetUserAsync(request.User);
+            // var user = await _userManager.GetUserAsync(request.User);
+            var user = await _userManager.FindByIdAsync("10");
             if (user == null)
             {
                 throw new Exception("User not found");

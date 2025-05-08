@@ -16,6 +16,7 @@ namespace Online_Health_Consultation_Portal.Application.Handlers.Users
 
         public async Task<Unit> Handle(UpdateUserProfileCommand request, CancellationToken cancellationToken)
         {
+            if (request.User == null) throw new UnauthorizedAccessException("User context is missing.");
             var user = await _userManager.GetUserAsync(request.User);
             if (user == null)
             {
@@ -23,8 +24,8 @@ namespace Online_Health_Consultation_Portal.Application.Handlers.Users
             }
 
             // Update common user fields
-            user.FullName = request.FullName;
-            user.Gender = request.Gender;
+            if (!string.IsNullOrEmpty(request.FullName) && !string.IsNullOrWhiteSpace(request.FullName)) user.FullName = request.FullName;
+            if (!string.IsNullOrEmpty(request.Gender) && !string.IsNullOrWhiteSpace(request.Gender)) user.Gender = request.Gender;
 
             var roles = await _userManager.GetRolesAsync(user);
             var role = roles.FirstOrDefault();

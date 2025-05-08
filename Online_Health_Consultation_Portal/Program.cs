@@ -1,6 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Online_Health_Consultation_Portal.Application.Commands.Notifications;
 using Online_Health_Consultation_Portal.Application.Mappings;
 using Online_Health_Consultation_Portal.Application.Mappings.Admin;
 using Online_Health_Consultation_Portal.Domain;
@@ -12,7 +13,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddIdentity<User, IdentityRole<int>>()
+builder.Services.AddIdentity<User, Role>()
         .AddEntityFrameworkStores<AppDbContext>()
         .AddDefaultTokenProviders();
 
@@ -36,6 +37,13 @@ builder.Services.AddAutoMapper(typeof(UserProfile).Assembly);
 builder.Services.AddAutoMapper(typeof(NotificationProfile).Assembly);
 builder.Services.AddAutoMapper(typeof(DoctorProfile).Assembly);
 builder.Services.AddAutoMapper(typeof(AdminUserProfile).Assembly);
+builder.Services.AddMediatR(typeof(CreateNotificationCommand).Assembly);
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AdminOnly", policy =>
+        policy.RequireRole("Admin")); // Req
+});
 
 builder.Services.AddOpenApi();
 
@@ -49,6 +57,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

@@ -2,10 +2,10 @@
 {
     public enum AppointmentStatus
     {
-        Pending,
-        Confirmed,
-        Cancelled,
-        Diagnosed,   // <== thêm
-        Completed
+        Pending = 0,
+        Confirmed = 1,
+        Cancelled = 2,
+        Diagnosed = 3,   // <== thêm
+        Completed = 4
     }
 }

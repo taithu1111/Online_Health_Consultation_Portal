@@ -10,6 +10,6 @@ namespace Online_Health_Consultation_Portal.Application.Queries.Doctors
         public int PageSize { get; set; } = 10;
         public int? SpecializationId { get; set; }
         public int? MinExperienceYears { get; set; }
-        public string Language { get; set; }
+        public string? Language { get; set; }
     }
 }

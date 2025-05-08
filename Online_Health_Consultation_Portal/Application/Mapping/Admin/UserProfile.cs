@@ -1,4 +1,5 @@
 using AutoMapper;
+using Online_Health_Consultation_Portal.Application.Dtos.Admin.Users;
 using Online_Health_Consultation_Portal.Domain;
 
 namespace Online_Health_Consultation_Portal.Application.Mappings.Admin

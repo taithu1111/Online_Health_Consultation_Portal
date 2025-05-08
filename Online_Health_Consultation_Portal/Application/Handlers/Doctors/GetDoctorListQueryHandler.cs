@@ -58,7 +58,6 @@ namespace Online_Health_Consultation_Portal.Application.Handlers.Doctors
                 Page = request.Page,
                 PageSize = request.PageSize,
                 TotalCount = totalCount
-                // TotalPages is calculated automatically by the property
             };
         }
     }

@@ -19,7 +19,7 @@ namespace Online_Health_Consultation_Portal.API.Controllers.Doctor
         public async Task<IActionResult> GetDoctors(
             [FromQuery] int? specializationId,
             [FromQuery] int? minExperienceYears,
-            [FromQuery] string language)
+            [FromQuery] string? language)
         {
             var query = new GetDoctorListQuery
             {

@@ -9,6 +9,11 @@ namespace Online_Health_Consultation_Portal.Infrastructure.Services
         private readonly UserManager<User> _userManager;
         private readonly AppDbContext _dbContext;
 
+        public UserManagementService(UserManager<User> userManager, AppDbContext dbContext) {
+            _userManager = userManager;
+            _dbContext = dbContext;
+        }
+
         public async Task PermanentlyDeleteUserAsync(int userId)
         {
             var user = await _userManager.FindByIdAsync(userId.ToString());

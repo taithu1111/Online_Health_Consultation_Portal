@@ -13,6 +13,10 @@ public class AdminUsersController : ControllerBase
 {
     private readonly IMediator _mediator;
 
+    public AdminUsersController(IMediator mediator) {
+        _mediator = mediator;
+    }
+
     [HttpDelete("{userId}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
