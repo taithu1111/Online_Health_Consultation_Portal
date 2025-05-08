@@ -42,15 +42,15 @@ namespace Online_Health_Consultation_Portal.Infrastructure
             // Patient 1 - 1 User
             modelBuilder.Entity<Patient>()
                 .HasOne(p => p.User)
-                .WithOne(u => u.Patient)
-                .HasForeignKey<Patient>(p => p.UserId)
+                .WithMany()
+                .HasForeignKey(p => p.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             // Doctor 1 - 1 User
             modelBuilder.Entity<Doctor>()
                 .HasOne(d => d.User)
-                .WithOne(u => u.Doctor)
-                .HasForeignKey<Doctor>(d => d.UserId)
+                .WithMany()
+                .HasForeignKey(d => d.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             // Doctor - Specialization

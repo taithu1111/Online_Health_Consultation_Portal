@@ -12,8 +12,8 @@ using Online_Health_Consultation_Portal.Infrastructure;
 namespace Online_Health_Consultation_Portal.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250508102642_NotificationFix")]
-    partial class NotificationFix
+    [Migration("20250508141405_UserEntityFix")]
+    partial class UserEntityFix
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -922,8 +922,8 @@ namespace Online_Health_Consultation_Portal.Migrations
                         .IsRequired();
 
                     b.HasOne("Online_Health_Consultation_Portal.Domain.User", "User")
-                        .WithOne("Doctor")
-                        .HasForeignKey("Online_Health_Consultation_Portal.Domain.Doctor", "UserId")
+                        .WithMany()
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -986,8 +986,8 @@ namespace Online_Health_Consultation_Portal.Migrations
             modelBuilder.Entity("Online_Health_Consultation_Portal.Domain.Patient", b =>
                 {
                     b.HasOne("Online_Health_Consultation_Portal.Domain.User", "User")
-                        .WithOne("Patient")
-                        .HasForeignKey("Online_Health_Consultation_Portal.Domain.Patient", "UserId")
+                        .WithMany()
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -1112,12 +1112,6 @@ namespace Online_Health_Consultation_Portal.Migrations
 
             modelBuilder.Entity("Online_Health_Consultation_Portal.Domain.User", b =>
                 {
-                    b.Navigation("Doctor")
-                        .IsRequired();
-
-                    b.Navigation("Patient")
-                        .IsRequired();
-
                     b.Navigation("UserRoles");
                 });
 #pragma warning restore 612, 618

@@ -8,11 +8,26 @@ namespace Online_Health_Consultation_Portal.Infrastructure.Repositories
     public class UserRepository(AppDbContext context, UserManager<User> userManager) : IUserRepository
     {
         public async Task<User?> GetUserWithProfileAsync(int userId)
-            => await context.Users
-                .Include(u => u.Patient)
-                .Include(u => u.Doctor)
-                .ThenInclude(d => d.Specialization)
-                .FirstOrDefaultAsync(u => u.Id == userId);
+        {
+            var user = await context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+
+            if (user == null)
+                return null;
+
+            if (user.Role == "Doctor")
+            {
+                var doctor = await context.Doctors
+                    .Include(d => d.Specialization)
+                    .FirstOrDefaultAsync(d => d.UserId == userId);
+            }
+            else if (user.Role == "Patient")
+            {
+                var patient = await context.Patients
+                    .FirstOrDefaultAsync(p => p.UserId == userId);
+            }
+
+            return user;
+        }
 
         public async Task UpdateUserProfileAsync(User user)
         {

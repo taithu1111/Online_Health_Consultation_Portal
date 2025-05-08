@@ -37,33 +37,26 @@ namespace Online_Health_Consultation_Portal.API.Controllers.User
             }
             catch (Exception ex)
             {
-                // Log the exception if needed
-                Console.WriteLine($"Error: {ex.Message}");
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
 
-        [AllowAnonymous]
         [HttpPut("profile")]
         public async Task<IActionResult> UpdateProfile([FromBody] UpdateUserProfileCommand command)
         {
-            // command.User = User;
-            // await _mediator.Send(command);
-            // return NoContent();
-            var claims = new List<Claim>
+            try
             {
-                new Claim(ClaimTypes.NameIdentifier, "10"), // Your user ID
-                new Claim(ClaimTypes.Email, "example@gmail.com"),
-                new Claim(ClaimTypes.Role, "Patient") // or "Doctor"
-            };
+                if (!ModelState.IsValid)
+                    return BadRequest(ModelState);
 
-            var identity = new ClaimsIdentity(claims, "Test");
-            var user = new ClaimsPrincipal(identity);
-
-            command.User = user;
-
-            await _mediator.Send(command);
-            return NoContent();
+                command.User = User;
+                await _mediator.Send(command);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
     }
 }
