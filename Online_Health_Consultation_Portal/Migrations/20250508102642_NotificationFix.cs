@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Online_Health_Consultation_Portal.Migrations
 {
     /// <inheritdoc />
-    public partial class DB : Migration
+    public partial class NotificationFix : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -117,7 +117,7 @@ namespace Online_Health_Consultation_Portal.Migrations
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     TotalAppointments = table.Column<int>(type: "int", nullable: false),
                     TotalPatients = table.Column<int>(type: "int", nullable: false),
-                    TotalRevenue = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                    TotalRevenue = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -297,7 +297,8 @@ namespace Online_Health_Consultation_Portal.Migrations
                 columns: table => new
                 {
                     UserId = table.Column<int>(type: "int", nullable: false),
-                    RoleId = table.Column<int>(type: "int", nullable: false)
+                    RoleId = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -325,7 +326,7 @@ namespace Online_Health_Consultation_Portal.Migrations
                     ExperienceYears = table.Column<int>(type: "int", nullable: false),
                     Languages = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Bio = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ConsultationFee = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    ConsultationFee = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
                     AverageRating = table.Column<double>(type: "float", nullable: false)
                 },
                 constraints: table =>
@@ -482,7 +483,7 @@ namespace Online_Health_Consultation_Portal.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     AppointmentId = table.Column<int>(type: "int", nullable: false),
-                    Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Amount = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     TransactionId = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },

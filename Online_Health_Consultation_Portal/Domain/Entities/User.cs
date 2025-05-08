@@ -13,7 +13,6 @@ namespace Online_Health_Consultation_Portal.Domain
         public Patient Patient { get; set; }
         public Doctor Doctor { get; set; }
         public ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();
-        public ICollection<Notification> Notifications { get; set; } = new List<Notification>();
 
         //2 trường data mới 
         public string ResetPasswordToken { get; set; }

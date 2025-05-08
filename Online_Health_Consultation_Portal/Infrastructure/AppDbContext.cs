@@ -88,13 +88,6 @@ namespace Online_Health_Consultation_Portal.Infrastructure
                 .HasForeignKey(hr => hr.PatientId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // Notification - User
-            modelBuilder.Entity<Notification>()
-                .HasOne(n => n.User)
-                .WithMany(u => u.Notifications)
-                .HasForeignKey(n => n.UserId)
-                .OnDelete(DeleteBehavior.Cascade);
-
             // Rating - Doctor
             modelBuilder.Entity<Rating>()
                 .HasOne(r => r.Doctor)
@@ -147,6 +140,18 @@ namespace Online_Health_Consultation_Portal.Infrastructure
             modelBuilder.Entity<SystemLog>()
                 .HasIndex(sl => sl.Timestamp);
 
+            // Thêm các cấu hình precision cho decimal
+            modelBuilder.Entity<Doctor>()
+                .Property(d => d.ConsultationFee)
+                .HasPrecision(18, 2);
+
+            modelBuilder.Entity<Payment>()
+                .Property(p => p.Amount)
+                .HasPrecision(18, 2);
+
+            modelBuilder.Entity<Statistic>()
+                .Property(s => s.TotalRevenue)
+                .HasPrecision(18, 2);
         }
 
     }

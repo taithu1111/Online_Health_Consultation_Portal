@@ -246,6 +246,7 @@ namespace Online_Health_Consultation_Portal.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("ConsultationFee")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("ExperienceYears")
@@ -468,6 +469,7 @@ namespace Online_Health_Consultation_Portal.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<decimal>("Amount")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("AppointmentId")
@@ -665,6 +667,7 @@ namespace Online_Health_Consultation_Portal.Migrations
                         .HasColumnType("int");
 
                     b.Property<decimal>("TotalRevenue")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("StatisticId");
@@ -803,6 +806,9 @@ namespace Online_Health_Consultation_Portal.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("RoleId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Id")
                         .HasColumnType("int");
 
                     b.HasKey("UserId", "RoleId");
@@ -960,7 +966,7 @@ namespace Online_Health_Consultation_Portal.Migrations
                         .HasForeignKey("PrescriptionId");
 
                     b.HasOne("Online_Health_Consultation_Portal.Domain.User", "User")
-                        .WithMany("Notifications")
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1105,8 +1111,6 @@ namespace Online_Health_Consultation_Portal.Migrations
                 {
                     b.Navigation("Doctor")
                         .IsRequired();
-
-                    b.Navigation("Notifications");
 
                     b.Navigation("Patient")
                         .IsRequired();
