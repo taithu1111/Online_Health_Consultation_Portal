@@ -1,10 +1,8 @@
-using System.Security.Claims;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Online_Health_Consultation_Portal.Application.Commands.Users;
 using Online_Health_Consultation_Portal.Application.Queries.Users;
-using Online_Health_Consultation_Portal.Domain;
 
 namespace Online_Health_Consultation_Portal.API.Controllers.User
 {

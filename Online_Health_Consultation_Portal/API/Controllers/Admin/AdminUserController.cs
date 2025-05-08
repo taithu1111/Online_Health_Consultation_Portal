@@ -1,4 +1,3 @@
-// Controllers/Admin/AdminUsersController.cs
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -18,8 +17,6 @@ public class AdminUsersController : ControllerBase
     }
 
     [HttpDelete("{userId}")]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteUser(int userId)
     {
         await _mediator.Send(new DeleteUserCommand { UserId = userId });
@@ -27,7 +24,6 @@ public class AdminUsersController : ControllerBase
     }
 
     [HttpGet]
-    [ProducesResponseType(typeof(PaginatedResponse<UserResponse>), 200)]
     public async Task<IActionResult> GetUsers([FromQuery] GetUsersQuery query)
     {
         var result = await _mediator.Send(query);
