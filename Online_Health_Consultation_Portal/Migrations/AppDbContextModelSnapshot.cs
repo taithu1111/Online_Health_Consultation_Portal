@@ -235,8 +235,11 @@ namespace Online_Health_Consultation_Portal.Migrations
 
             modelBuilder.Entity("Online_Health_Consultation_Portal.Domain.Doctor", b =>
                 {
-                    b.Property<int>("UserId")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<double>("AverageRating")
                         .HasColumnType("float");
@@ -259,9 +262,14 @@ namespace Online_Health_Consultation_Portal.Migrations
                     b.Property<int>("SpecializationId")
                         .HasColumnType("int");
 
-                    b.HasKey("UserId");
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
 
                     b.HasIndex("SpecializationId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Doctors");
                 });
@@ -374,7 +382,14 @@ namespace Online_Health_Consultation_Portal.Migrations
 
                     b.Property<string>("Content")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
+
+                    b.Property<bool>("IsRead")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ReadAt")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("ReceiverId")
                         .HasColumnType("int");
@@ -385,7 +400,16 @@ namespace Online_Health_Consultation_Portal.Migrations
                     b.Property<DateTime>("SentAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("ReceiverId");
+
+                    b.HasIndex("SenderId");
+
+                    b.HasIndex("SenderId", "ReceiverId");
 
                     b.ToTable("Messages");
                 });
@@ -437,8 +461,11 @@ namespace Online_Health_Consultation_Portal.Migrations
 
             modelBuilder.Entity("Online_Health_Consultation_Portal.Domain.Patient", b =>
                 {
-                    b.Property<int>("UserId")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Address")
                         .IsRequired()
@@ -455,7 +482,12 @@ namespace Online_Health_Consultation_Portal.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("UserId");
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Patients");
                 });
@@ -602,7 +634,6 @@ namespace Online_Health_Consultation_Portal.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("DoctorId")
@@ -615,7 +646,6 @@ namespace Online_Health_Consultation_Portal.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("Location")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<TimeSpan>("StartTime")
@@ -756,9 +786,8 @@ namespace Online_Health_Consultation_Portal.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<byte[]>("PasswordHash")
-                        .IsRequired()
-                        .HasColumnType("varbinary(max)");
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(max)");
@@ -767,7 +796,6 @@ namespace Online_Health_Consultation_Portal.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("ResetPasswordToken")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("ResetPasswordTokenExpiry")
@@ -913,7 +941,7 @@ namespace Online_Health_Consultation_Portal.Migrations
             modelBuilder.Entity("Online_Health_Consultation_Portal.Domain.Doctor", b =>
                 {
                     b.HasOne("Online_Health_Consultation_Portal.Domain.Specialization", "Specialization")
-                        .WithMany("Doctors")
+                        .WithMany()
                         .HasForeignKey("SpecializationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -921,7 +949,7 @@ namespace Online_Health_Consultation_Portal.Migrations
                     b.HasOne("Online_Health_Consultation_Portal.Domain.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Specialization");
@@ -949,6 +977,25 @@ namespace Online_Health_Consultation_Portal.Migrations
                         .IsRequired();
 
                     b.Navigation("Prescription");
+                });
+
+            modelBuilder.Entity("Online_Health_Consultation_Portal.Domain.Message", b =>
+                {
+                    b.HasOne("Online_Health_Consultation_Portal.Domain.User", "Receiver")
+                        .WithMany("ReceivedMessages")
+                        .HasForeignKey("ReceiverId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Online_Health_Consultation_Portal.Domain.User", "Sender")
+                        .WithMany("SentMessages")
+                        .HasForeignKey("SenderId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Receiver");
+
+                    b.Navigation("Sender");
                 });
 
             modelBuilder.Entity("Online_Health_Consultation_Portal.Domain.Notification", b =>
@@ -985,7 +1032,7 @@ namespace Online_Health_Consultation_Portal.Migrations
                     b.HasOne("Online_Health_Consultation_Portal.Domain.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("User");
@@ -1102,13 +1149,12 @@ namespace Online_Health_Consultation_Portal.Migrations
                     b.Navigation("UserRoles");
                 });
 
-            modelBuilder.Entity("Online_Health_Consultation_Portal.Domain.Specialization", b =>
-                {
-                    b.Navigation("Doctors");
-                });
-
             modelBuilder.Entity("Online_Health_Consultation_Portal.Domain.User", b =>
                 {
+                    b.Navigation("ReceivedMessages");
+
+                    b.Navigation("SentMessages");
+
                     b.Navigation("UserRoles");
                 });
 #pragma warning restore 612, 618

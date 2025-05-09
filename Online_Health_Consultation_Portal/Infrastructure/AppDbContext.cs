@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using System.Reflection;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Online_Health_Consultation_Portal.Domain;
 
@@ -25,12 +26,8 @@ namespace Online_Health_Consultation_Portal.Infrastructure
         public DbSet<Specialization> Specializations { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<UserRole> UserRoles { get; set; }
-
-        // thêm ============
-
         public DbSet<ConsultationSession> ConsultationSessions { get; set; }
         public DbSet<MedicationDetail> MedicationDetails { get; set; }
-
         public DbSet<AuditLog> AuditLogs { get; set; }
         public DbSet<Statistic> Statistics { get; set; }
         public DbSet<SystemLog> SystemLogs { get; set; }
@@ -41,24 +38,24 @@ namespace Online_Health_Consultation_Portal.Infrastructure
 
             // Patient 1 - 1 User
             modelBuilder.Entity<Patient>()
-                .HasOne(p => p.User)
-                .WithMany()
-                .HasForeignKey(p => p.UserId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .HasOne(p => p.User);
+            //.WithOne(u => u.Patient)
+            //.HasForeignKey<Patient>(p => p.UserId)
+            //.OnDelete(DeleteBehavior.Restrict);
 
             // Doctor 1 - 1 User
             modelBuilder.Entity<Doctor>()
-                .HasOne(d => d.User)
-                .WithMany()
-                .HasForeignKey(d => d.UserId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .HasOne(d => d.User);
+            //.WithOne(u => u.Doctor)
+            //.HasForeignKey<Doctor>(d => d.UserId)
+            //.OnDelete(DeleteBehavior.Restrict);
 
             // Doctor - Specialization
             modelBuilder.Entity<Doctor>()
-                .HasOne(d => d.Specialization)
-                .WithMany(s => s.Doctors)
-                .HasForeignKey(d => d.SpecializationId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .HasOne(d => d.Specialization);
+            //.WithMany(s => s.Doctors)
+            //.HasForeignKey(d => d.SpecializationId)
+            //.OnDelete(DeleteBehavior.Cascade);
 
             // Appointment - Doctor
             modelBuilder.Entity<Appointment>()
@@ -88,6 +85,13 @@ namespace Online_Health_Consultation_Portal.Infrastructure
                 .HasForeignKey(hr => hr.PatientId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            // Notification - User
+            modelBuilder.Entity<Notification>()
+                .HasOne(n => n.User);
+            //.WithMany(u => u.Notifications)
+            //.HasForeignKey(n => n.UserId)
+            //.OnDelete(DeleteBehavior.Cascade);
+
             // Rating - Doctor
             modelBuilder.Entity<Rating>()
                 .HasOne(r => r.Doctor)
@@ -109,8 +113,6 @@ namespace Online_Health_Consultation_Portal.Infrastructure
                 .HasForeignKey(s => s.DoctorId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-
-            //=======================================
             // ConsultationSession - Appointment (1-1)
             modelBuilder.Entity<ConsultationSession>()
                 .HasOne(cs => cs.Appointment)
@@ -129,7 +131,7 @@ namespace Online_Health_Consultation_Portal.Infrastructure
             modelBuilder.Entity<AuditLog>()
                 .HasOne(al => al.User)
                 .WithMany()
-                .HasForeignKey(al => al.UserId)
+                .HasForeignKey(al => al.UserId) 
                 .OnDelete(DeleteBehavior.Restrict);
 
             // Config Statistic
@@ -152,7 +154,29 @@ namespace Online_Health_Consultation_Portal.Infrastructure
             modelBuilder.Entity<Statistic>()
                 .Property(s => s.TotalRevenue)
                 .HasPrecision(18, 2);
-        }
+            // Message configuration
+            // Add indexes for better query performance
+            modelBuilder.Entity<Message>()
+                .HasIndex(m => m.SenderId);
 
+            modelBuilder.Entity<Message>()
+                .HasIndex(m => m.ReceiverId);
+
+            modelBuilder.Entity<Message>()
+                .HasIndex(m => new { m.SenderId, m.ReceiverId });
+
+            // Message relationships
+            modelBuilder.Entity<Message>()
+                .HasOne(m => m.Sender)
+                .WithMany(u => u.SentMessages)
+                .HasForeignKey(m => m.SenderId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Message>()  
+                .HasOne(m => m.Receiver)
+                .WithMany(u => u.ReceivedMessages)
+                .HasForeignKey(m => m.ReceiverId)
+                .OnDelete(DeleteBehavior.Restrict);
+        }
     }
 }

@@ -5,8 +5,9 @@ namespace Online_Health_Consultation_Portal.Domain
     public class Doctor
     {
         [Key]
-        public int UserId { get; set; } // FK to User
-
+        public int Id { get; set; } // FK to User
+        
+        public int UserId { get; set; }
         public int SpecializationId { get; set; }
         public int ExperienceYears { get; set; }
         public string Languages { get; set; }

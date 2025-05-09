@@ -11,7 +11,7 @@
 
         public Doctor Doctor { get; set; }
 
-        public string Location { get; set; }     // ??a ?i?m
-        public string Description { get; set; }
+        public string? Location { get; set; }    // địa điểm khám
+        public string? Description { get; set; } // mô tả lịch khám
     }
 }
