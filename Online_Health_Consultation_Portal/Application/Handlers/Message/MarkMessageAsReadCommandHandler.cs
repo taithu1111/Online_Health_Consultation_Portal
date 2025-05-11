@@ -1,13 +1,10 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Online_Health_Consultation_Portal.Application.CQRS.Command;
+using Online_Health_Consultation_Portal.Application.Commands.Message;
 using Online_Health_Consultation_Portal.Domain;
 using Online_Health_Consultation_Portal.Infrastructure;
-using System.Threading.Tasks;
-using System.Threading;
-using System;
 
-namespace Online_Health_Consultation_Portal.Application.CQRS.Handler.Command;
+namespace Online_Health_Consultation_Portal.Application.Handlers.Message;
 
 public class MarkMessageAsReadCommandHandler : IRequestHandler<MarkMessageAsReadCommand>
 {
@@ -18,7 +15,7 @@ public class MarkMessageAsReadCommandHandler : IRequestHandler<MarkMessageAsRead
         _context = context;
     }
 
-    public async Task Handle(MarkMessageAsReadCommand request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(MarkMessageAsReadCommand request, CancellationToken cancellationToken)
     {
         var message = await _context.Messages
             .FirstOrDefaultAsync(m => m.Id == request.MessageId && m.ReceiverId == request.UserId, cancellationToken);
@@ -46,5 +43,7 @@ public class MarkMessageAsReadCommandHandler : IRequestHandler<MarkMessageAsRead
             _context.Logs.Add(log);
             await _context.SaveChangesAsync(cancellationToken);
         }
+
+        return Unit.Value;
     }
 }

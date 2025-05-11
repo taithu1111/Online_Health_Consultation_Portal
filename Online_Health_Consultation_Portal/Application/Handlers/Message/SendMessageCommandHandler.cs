@@ -1,10 +1,10 @@
 ﻿using MediatR;
-using Online_Health_Consultation_Portal.Application.CQRS.Command;
+using Online_Health_Consultation_Portal.Application.Commands.Message;
 using Online_Health_Consultation_Portal.Domain;
 using Online_Health_Consultation_Portal.Domain.Enum;
 using Online_Health_Consultation_Portal.Infrastructure;
 
-namespace Online_Health_Consultation_Portal.Application.CQRS.Handler.Command;
+namespace Online_Health_Consultation_Portal.Application.Handlers.Message;
 
 public class SendMessageCommandHandler : IRequestHandler<SendMessageCommand, int>
 {

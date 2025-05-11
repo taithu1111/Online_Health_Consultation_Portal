@@ -1,9 +1,9 @@
 ﻿using MediatR;
-using Online_Health_Consultation_Portal.Application.CQRS.Command;
+using Online_Health_Consultation_Portal.Application.Commands.Prescription;
 using Online_Health_Consultation_Portal.Domain;
 using Online_Health_Consultation_Portal.Domain.Interface;
 
-namespace Online_Health_Consultation_Portal.Application.CQRS.Handler.Command
+namespace Online_Health_Consultation_Portal.Application.Handlers.Prescription
 {
     public class CreatePrescriptionCommandHandler : IRequestHandler<CreatePrescriptionCommand, Prescription>
     {

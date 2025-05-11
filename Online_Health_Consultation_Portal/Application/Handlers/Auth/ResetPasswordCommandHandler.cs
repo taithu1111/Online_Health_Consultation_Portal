@@ -25,12 +25,12 @@ namespace Online_Health_Consultation_Portal.Application.Handlers.Auth
         public async Task<bool> Handle(ResetPasswordCommand request, CancellationToken cancellationToken)
         {
             var employees = await _userRepository.GetAllAsync();
-            var employee = employees.FirstOrDefault(e => e.Email == request.ResetPasswordDto.Email &&
-                                                         e.ResetPasswordToken == request.ResetPasswordDto.Token &&
+            var employee = employees.FirstOrDefault(e => e.Email == request.ResetPasswordDto.Email ||
+                                                         e.ResetPasswordToken == request.ResetPasswordDto.Token ||
                                                          e.ResetPasswordTokenExpiry > DateTime.UtcNow);
 
-            var newPassword = new PasswordHasher<User>();
-            var pass = newPassword.HashPassword(employee, request.ResetPasswordDto.NewPassword);
+            var pass = new PasswordHasher<User>();
+            var newPassword = pass.HashPassword(employee!, request.ResetPasswordDto.NewPassword);
 
             if (employee == null)
             {
@@ -44,7 +44,7 @@ namespace Online_Health_Consultation_Portal.Application.Handlers.Auth
             //employee.PasswordHash = Encoding.ASCII.GetBytes(BCrypt.Net.BCrypt.HashPassword(request.ResetPasswordDto.NewPassword));
             employee.ResetPasswordToken = null; // Xóa token sau khi reset thành công
             employee.ResetPasswordTokenExpiry = null; // Xóa thời hạn token
-            employee.PasswordHash = pass;
+            employee.PasswordHash = newPassword;
 
             await _userRepository.UpdateAsync(employee);
 

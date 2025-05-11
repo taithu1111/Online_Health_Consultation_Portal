@@ -52,10 +52,10 @@ namespace Online_Health_Consultation_Portal.Infrastructure
 
             // Doctor - Specialization
             modelBuilder.Entity<Doctor>()
-                .HasOne(d => d.Specialization)
-                .WithMany(s => s.Doctors)
-                .HasForeignKey(d => d.SpecializationId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .HasOne(d => d.Specialization);
+            //.WithMany(s => s.Doctors)
+            //.HasForeignKey(d => d.SpecializationId)
+            //.OnDelete(DeleteBehavior.Cascade);
 
             // Appointment - Doctor
             modelBuilder.Entity<Appointment>()
@@ -153,20 +153,18 @@ namespace Online_Health_Consultation_Portal.Infrastructure
             modelBuilder.Entity<Message>()
                 .HasIndex(m => new { m.SenderId, m.ReceiverId });
 
-          
             // Message relationships
             modelBuilder.Entity<Message>()
-                .HasOne<User>()
-                .WithMany()
+                .HasOne(m => m.Sender)
+                .WithMany(u => u.SentMessages)
                 .HasForeignKey(m => m.SenderId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Message>()
-                .HasOne<User>()
-                .WithMany()
+                .HasOne(m => m.Receiver)
+                .WithMany(u => u.ReceivedMessages)
                 .HasForeignKey(m => m.ReceiverId)
                 .OnDelete(DeleteBehavior.Restrict);
-
         }
     }
 }

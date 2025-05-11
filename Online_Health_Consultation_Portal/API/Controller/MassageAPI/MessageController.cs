@@ -30,7 +30,11 @@ namespace Online_Health_Consultation_Portal.API.Controller.MassageAPI
         [HttpGet("conversation/{otherUserId}")]
         public async Task<ActionResult<List<Message>>> GetMessagesByConversation(int otherUserId)
         {
-            int currentUserId = 1; // Hardcoded for testing
+            // Get the current user's ID from claims
+            //dev mode
+            //int currentUserId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            int currentUserId = 1;
             var query = new GetMessagesByConversationIdQuery
             {
                 ConversationId = currentUserId,
@@ -40,15 +44,15 @@ namespace Online_Health_Consultation_Portal.API.Controller.MassageAPI
             };
 
             var messages = await _mediator.Send(query);
-            if (messages == null || !messages.Any())
-            {
-                return Ok(new List<Message>());
-            }
 
+            // Mark unread messages as read since the user is viewing them
             foreach (var message in messages.Where(m => !m.IsRead && m.SenderId == otherUserId))
             {
-                Console.WriteLine($"Marking message {message.Id} as read for user {currentUserId}");
-                await _mediator.Send(new MarkMessageAsReadCommand(message.Id, currentUserId));
+                await _mediator.Send(new MarkMessageAsReadCommand
+                {
+                    MessageId = message.Id,
+                    UserId = currentUserId
+                });
             }
 
             return Ok(messages);
@@ -62,14 +66,15 @@ namespace Online_Health_Consultation_Portal.API.Controller.MassageAPI
         [HttpPost]
         public async Task<ActionResult<int>> SendMessage([FromBody] SendMessageDto messageDto)
         {
-            // Validate DTO
-            if (messageDto == null || string.IsNullOrEmpty(messageDto.Content) || messageDto.ReceiverId <= 0)
+            // Get the current user's ID from claims
+            // var currentUserId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty);
+            int currentUserId = 1;
+            var command = new SendMessageCommand
             {
-                return BadRequest("Invalid message data");
-            }
-
-            int currentUserId = 1; // Hardcoded for testing
-            var command = new SendMessageCommand(currentUserId, messageDto.ReceiverId, messageDto.Content);
+                SenderId = currentUserId,
+                ReceiverId = messageDto.ReceiverId,
+                Content = messageDto.Content
+            };
 
             var messageId = await _mediator.Send(command);
 
@@ -93,11 +98,19 @@ namespace Online_Health_Consultation_Portal.API.Controller.MassageAPI
         [HttpPut("{id}/read")]
         public async Task<ActionResult> MarkMessageAsRead(int id)
         {
-            int currentUserId = 1; // Hardcoded for testing
-            var command = new MarkMessageAsReadCommand(id, currentUserId);
+            // Get the current user's ID from claims
+            // var currentUserId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            int currentUserId = 1;//rn Just ttest wit user Id 1
+
+            var command = new MarkMessageAsReadCommand
+            {
+                MessageId = id,
+                UserId = currentUserId
+            };
 
             await _mediator.Send(command);
 
+            // Get the message to find the sender
             var message = await _mediator.Send(new GetMessageByIdQuery { Id = id });
             await _hubContext.Clients.Group($"User_{message.SenderId}").SendAsync(
                 "MessageRead",

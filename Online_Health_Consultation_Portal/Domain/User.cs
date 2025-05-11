@@ -14,6 +14,7 @@ namespace Online_Health_Consultation_Portal.Domain
         //public ICollection<Notification> Notifications { get; set; } = new List<Notification>();
         //public Patient Patient { get; set; }
         //public Doctor Doctor { get; set; }
+
         //2 trường data mới 
         public string? ResetPasswordToken { get; set; }
         public DateTime? ResetPasswordTokenExpiry { get; set; }
