@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Online_Health_Consultation_Portal.API.DTo
+namespace Online_Health_Consultation_Portal.Application.Dtos.Precription
 {
     public record PrescriptionListItemDto
     {

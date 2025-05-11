@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Online_Health_Consultation_Portal.API.DTo;
 using Online_Health_Consultation_Portal.Application.CQRS.Command;
 using Online_Health_Consultation_Portal.Application.CQRS.Querries;
+using Online_Health_Consultation_Portal.Application.Dtos.Precription;
 using Online_Health_Consultation_Portal.Domain;
 
 namespace Online_Health_Consultation_Portal.API.Controller.PrescriptionAPI

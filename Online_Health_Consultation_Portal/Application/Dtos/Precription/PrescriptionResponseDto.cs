@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using Online_Health_Consultation_Portal.Application.Dtos.Medication;
 
-namespace Online_Health_Consultation_Portal.API.DTo
+namespace Online_Health_Consultation_Portal.Application.Dtos.Precription
 {
     public record PrescriptionResponseDto
     {
