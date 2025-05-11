@@ -136,7 +136,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", policy =>
     {
-        policy.AllowAnyOrigin()
+        policy.WithOrigins("http://localhost:4200")
               .AllowAnyMethod()
               .AllowAnyHeader();
     });
@@ -232,16 +232,6 @@ builder.Services.AddScoped<IRequestHandler<GetAvailableSlotsQuery, List<Availabl
 builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
-// try
-// {
-//     var app = builder.Build();
-// }
-// catch (Exception ex)
-// {
-//     Console.WriteLine("Build app error: ");
-//     Console.WriteLine(ex.ToString());
-//     Log.Logger.Error(ex, "Application failed to start");
-// }
 
 try
 {
