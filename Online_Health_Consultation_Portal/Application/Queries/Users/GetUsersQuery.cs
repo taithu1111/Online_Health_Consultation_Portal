@@ -1,7 +1,7 @@
 using MediatR;
 using Online_Health_Consultation_Portal.Application.Dtos.Paginated;
 
-namespace Online_Health_Consultation_Portal.Application.Dtos.Admin.Users
+namespace Online_Health_Consultation_Portal.Application.Dtos.Users
 {
     public sealed record GetUsersQuery : IRequest<PaginatedResponse<UserResponse>>
     {

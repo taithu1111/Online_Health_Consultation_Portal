@@ -1,4 +1,4 @@
-namespace Online_Health_Consultation_Portal.Application.Dtos.Admin.Users
+namespace Online_Health_Consultation_Portal.Application.Dtos.Users
 {
     public sealed record UserResponse
     {
