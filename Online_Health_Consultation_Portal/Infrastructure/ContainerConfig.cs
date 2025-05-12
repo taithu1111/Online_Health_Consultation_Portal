@@ -4,16 +4,13 @@ using Autofac.Extensions.DependencyInjection;
 using Autofac.Features.Variance;
 using MediatR;
 using MediatR.Pipeline;
-using Online_Health_Consultation_Portal.Application.Commands.Message;
-using Online_Health_Consultation_Portal.Application.Commands.Prescription;
-using Online_Health_Consultation_Portal.Application.Handlers.Message;
-using Online_Health_Consultation_Portal.Application.Handlers.Prescription;
-using Online_Health_Consultation_Portal.Application.Queries.Message;
-using Online_Health_Consultation_Portal.Application.Queries.Prescription;
+using Online_Health_Consultation_Portal.Application.CQRS.Command;
+using Online_Health_Consultation_Portal.Application.CQRS.Handler.Command;
+using Online_Health_Consultation_Portal.Application.CQRS.Handler.Querries;
+using Online_Health_Consultation_Portal.Application.CQRS.Querries;
 using Online_Health_Consultation_Portal.Domain;
-using Online_Health_Consultation_Portal.Domain.Interface;
 using Online_Health_Consultation_Portal.Infrastructure.Hubs;
-using Online_Health_Consultation_Portal.Infrastructure.Repository;
+using Online_Health_Consultation_Portal.Infrastructure.Service;
 
 namespace Online_Health_Consultation_Portal.Infrastructure
 {
@@ -55,12 +52,8 @@ namespace Online_Health_Consultation_Portal.Infrastructure
                    .As<IRequestHandler<SendMessageCommand, int>>()
                    .InstancePerLifetimeScope();
             builder.RegisterType<MarkMessageAsReadCommandHandler>()
-                .As<IRequestHandler<MarkMessageAsReadCommand>>()
-                .InstancePerLifetimeScope();
-            builder.RegisterType<CreatePrescriptionCommandHandler>()
-                .As<IRequestHandler<CreatePrescriptionCommand, Prescription>>()
-                .InstancePerLifetimeScope();
-
+                   .As<IRequestHandler<MarkMessageAsReadCommand>>()
+                   .InstancePerLifetimeScope();
 
             // Explicitly register query handlers
             builder.RegisterType<GetMessagesByConversationIdQueryHandler>()
@@ -68,12 +61,6 @@ namespace Online_Health_Consultation_Portal.Infrastructure
                    .InstancePerLifetimeScope();
             builder.RegisterType<GetMessageByIdQueryHandler>()
                    .As<IRequestHandler<GetMessageByIdQuery, Message>>()
-                   .InstancePerLifetimeScope();
-            builder.RegisterType<GetPrescriptionByIdQueryHandler>()
-                   .As<IRequestHandler<GetPrescriptionByIdQuery, Prescription>>()
-                   .InstancePerLifetimeScope();
-            builder.RegisterType<GetPrescriptionsByPatientIdQueryHandler>()
-                   .As<IRequestHandler<GetPrescriptionsByPatientIdQuery, List<Prescription>>>()
                    .InstancePerLifetimeScope();
 
             // Register SignalR hub
@@ -88,9 +75,6 @@ namespace Online_Health_Consultation_Portal.Infrastructure
 
             builder.RegisterType<MessageRepository>()
                    .As<IMessageRepository>()
-                   .InstancePerLifetimeScope();
-            builder.RegisterType<PrescriptionRepository>()
-                   .As<IPrescriptionRepository>()
                    .InstancePerLifetimeScope();
 
             // Register MediatR's request handler delegate factory
