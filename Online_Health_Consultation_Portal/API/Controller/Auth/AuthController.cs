@@ -41,7 +41,7 @@ namespace Online_Health_Consultation_Portal.API.Controller.Auth
         [HttpPost("forgot-password")]
         public async Task<ActionResult> ForgotPassword(ForgotPasswordDto forgotPasswordDto)
         {
-            var command = new ForgotPasswordCommand { ForgotPasswordDto = forgotPasswordDto };
+            var command = new ForgotPasswordCommand { ForgotPasswordDto = forgotPasswordDto};
             var result = await _mediator.Send(command);
 
             if (!result)

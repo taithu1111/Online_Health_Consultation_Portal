@@ -12,11 +12,10 @@ namespace Online_Health_Consultation_Portal.Infrastructure.Service
 
         public EmailService(IConfiguration configuration)
         {
-            //_smtpServer = configuration["EmailSettings:SmtpServer"]!;
-            //_smtpPort = int.Parse(configuration["EmailSettings:SmtpPort"]!);
-            //_smtpUsername = configuration["EmailSettings:SmtpUsername"]!;
-            //_smtpPassword = configuration["EmailSettings:SmtpPassword"]!;
-
+            //_smtpServer = configuration["EmailSettings:SmtpServer"];
+            //_smtpPort = int.Parse(configuration["EmailSettings:SmtpPort"]);
+            //_smtpUsername = configuration["EmailSettings:SmtpUsername"];
+            //_smtpPassword = configuration["EmailSettings:SmtpPassword"];
 
             _smtpServer = configuration["EmailSettings:Host"]!;
             _smtpPort = int.Parse(configuration["EmailSettings:Port"]!);
