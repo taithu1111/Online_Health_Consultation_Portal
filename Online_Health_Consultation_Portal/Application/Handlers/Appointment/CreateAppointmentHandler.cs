@@ -19,6 +19,7 @@ namespace Online_Health_Consultation_Portal.Application.Handlers.Appointment
         {
             var appointment = _mapper.Map<Domain.Appointment, CreateAppointmentCommand>(request);
             appointment.Status = "Pending";  // Mặc định là Pending
+            appointment.Diagnosis = "no diagnosis"; // Mặc định là no diagnosis
 
             _context.Appointments.Add(appointment);
             await _context.SaveChangesAsync(cancellationToken);
