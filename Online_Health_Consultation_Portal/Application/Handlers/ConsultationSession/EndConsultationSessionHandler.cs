@@ -14,9 +14,7 @@ namespace Online_Health_Consultation_Portal.Application.Handlers.ConsultationSes
             {
                 return false; // Không tìm thấy buổi tư vấn
             }
-
             session.EndTime = DateTime.UtcNow; // Cập nhật thời gian kết thúc
-
             await _context.SaveChangesAsync(cancellationToken);
             return true;
         }

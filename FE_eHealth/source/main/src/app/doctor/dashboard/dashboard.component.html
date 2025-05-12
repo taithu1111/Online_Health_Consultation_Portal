@@ -1,0 +1,138 @@
+<section class="content">
+  <div class="content-block">
+    <div class="block-header">
+      <!-- breadcrumb -->
+      <app-breadcrumb [title]="'Doctor Dashboard'" [items]="[]" [active_item]="'Dashboard'"></app-breadcrumb>
+    </div>
+    <!-- Widgets -->
+    <div class="row">
+      <div class="col-lg-12">
+        <app-doc-welcome-card></app-doc-welcome-card>
+      </div>
+    </div>
+    <!-- #END# Widgets -->
+    <div class="row">
+      <div class="col-xl-8 col-lg-8 col-md-12 col-sm-12">
+        <mat-card>
+          <mat-card-header class="header-style">
+            <mat-card-title>Patients Survay</mat-card-title>
+            <button mat-icon-button [matMenuTriggerFor]="menu" class="header-dropdown">
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu">
+              <button mat-menu-item>
+                <mat-icon>add_circle_outline</mat-icon>
+                <span>Add</span>
+              </button>
+              <button mat-menu-item disabled>
+                <mat-icon>delete_outline</mat-icon>
+                <span>Delete</span>
+              </button>
+              <button mat-menu-item>
+                <mat-icon>refresh</mat-icon>
+                <span>Refresh</span>
+              </button>
+            </mat-menu>
+          </mat-card-header>
+          <mat-card-content>
+            <apx-chart [series]="areaChartOptions.series!" [chart]="areaChartOptions.chart!"
+              [xaxis]="areaChartOptions.xaxis!" [yaxis]="areaChartOptions.yaxis!" [colors]="areaChartOptions.colors!"
+              [stroke]="areaChartOptions.stroke!" [legend]="areaChartOptions.legend!" [grid]="areaChartOptions.grid!"
+              [tooltip]="areaChartOptions.tooltip!" [dataLabels]="areaChartOptions.dataLabels!"></apx-chart>
+          </mat-card-content>
+        </mat-card>
+      </div>
+      <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12">
+        <mat-card>
+          <mat-card-header class="header-style">
+            <mat-card-title>Appointment Review</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <apx-chart [series]="radialChartOptions.series!" [chart]="radialChartOptions.chart!"
+              [plotOptions]="radialChartOptions.plotOptions!" [labels]="radialChartOptions.labels!"></apx-chart>
+            <div class="text-center p-t-20">
+              <div class="chart-note">
+                <span class="dot bg-orange"></span>
+                <span>Face To Face</span>
+              </div>
+              <div class="chart-note">
+                <span class="dot bg-indigo"></span>
+                <span>E-Consult</span>
+              </div>
+              <div class="chart-note msr-0">
+                <span class="dot bg-green"></span>
+                <span>Available</span>
+              </div>
+            </div>
+            <div class="text-center p-t-20">
+              <button mat-stroked-button color="primary">Modify Availability</button>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+    <div class="row clearfix">
+      <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
+        <app-todays-appointment></app-todays-appointment>
+      </div>
+      <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+        <mat-card>
+          <mat-card-header class="header-style">
+            <mat-card-title>Patient Group</mat-card-title>
+            <a mat-button color="primary" href="#" (click)="$event.preventDefault();">View All</a>
+          </mat-card-header>
+          <mat-card-content>
+            <ng-scrollbar style="height: 400px" visibility="hover">
+              <app-patient-group-list [patientGroups]="patientGroups"></app-patient-group-list>
+            </ng-scrollbar>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+        <mat-card>
+          <mat-card-header class="header-style">
+            <mat-card-title>Todo List</mat-card-title>
+            <a mat-button color="primary" href="#" (click)="$event.preventDefault();">View All</a>
+          </mat-card-header>
+          <mat-card-content>
+            <ng-scrollbar style="height: 370px" visibility="hover">
+              <app-todo-widget [todos]="tasks" (todoToggled)="onTodoToggled($event)"
+                (todosUpdated)="onTodosUpdated($event)">
+              </app-todo-widget>
+            </ng-scrollbar>
+          </mat-card-content>
+        </mat-card>
+      </div>
+      <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+        <mat-card>
+          <mat-card-header class="header-style">
+            <mat-card-title>Doctor Status</mat-card-title>
+            <a mat-button color="primary" href="#" (click)="$event.preventDefault();">View All</a>
+          </mat-card-header>
+          <mat-card-content>
+            <ng-scrollbar style="height: 370px" visibility="hover">
+              <app-emp-status></app-emp-status>
+            </ng-scrollbar>
+          </mat-card-content>
+        </mat-card>
+      </div>
+      <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="header">
+            <h2>Number Of Patients</h2>
+          </div>
+          <div class="body">
+            <apx-chart [series]="linechartOptions.series!" [chart]="linechartOptions.chart!"
+              [dataLabels]="linechartOptions.dataLabels!" [plotOptions]="linechartOptions.plotOptions!"
+              [yaxis]="linechartOptions.yaxis!" [legend]="linechartOptions.legend!" [fill]="linechartOptions.fill!"
+              [colors]="linechartOptions.colors!" [stroke]="linechartOptions.stroke!"
+              [tooltip]="linechartOptions.tooltip!" [xaxis]="linechartOptions.xaxis!" [grid]="linechartOptions.grid!">
+            </apx-chart>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
