@@ -12,8 +12,13 @@ using Online_Health_Consultation_Portal.Infrastructure;
 namespace Online_Health_Consultation_Portal.Migrations
 {
     [DbContext(typeof(AppDbContext))]
+<<<<<<<< HEAD:Online_Health_Consultation_Portal/Migrations/20250504132606_init.Designer.cs
     [Migration("20250504132606_init")]
     partial class init
+========
+    [Migration("20250507085115_update")]
+    partial class update
+>>>>>>>> truongdv:Online_Health_Consultation_Portal/Migrations/20250507085115_update.Designer.cs
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -599,7 +604,6 @@ namespace Online_Health_Consultation_Portal.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("DoctorId")
@@ -612,7 +616,6 @@ namespace Online_Health_Consultation_Portal.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("Location")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<TimeSpan>("StartTime")
