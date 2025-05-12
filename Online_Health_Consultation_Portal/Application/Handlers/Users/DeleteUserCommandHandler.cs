@@ -1,5 +1,5 @@
 using MediatR;
-using Online_Health_Consultation_Portal.Application.Commands.Admin.Users;
+using Online_Health_Consultation_Portal.Application.Commands.Users;
 using Online_Health_Consultation_Portal.Infrastructure.Services;
 
 public sealed class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand>

@@ -24,7 +24,6 @@ using Online_Health_Consultation_Portal.Application.Handlers.ConsultationSession
 using Online_Health_Consultation_Portal.Application.Handlers.HealthRecord;
 using Online_Health_Consultation_Portal.Application.Handlers.Schedule;
 using Online_Health_Consultation_Portal.Application.Mappings;
-using Online_Health_Consultation_Portal.Application.Mappings.Admin;
 using Online_Health_Consultation_Portal.Application.Queries.Appointment;
 using Online_Health_Consultation_Portal.Application.Queries.ConsultationSession;
 using Online_Health_Consultation_Portal.Application.Queries.HealthRecord;
@@ -159,7 +158,6 @@ builder.Host.ConfigureContainer<ContainerBuilder>(container =>
 builder.Services.AddAutoMapper(typeof(UserProfile).Assembly);
 builder.Services.AddAutoMapper(typeof(NotificationProfile).Assembly);
 builder.Services.AddAutoMapper(typeof(DoctorProfile).Assembly);
-builder.Services.AddAutoMapper(typeof(AdminUserProfile).Assembly);
 builder.Services.AddSingleton<IAutoMapper, AutoMapperProfile>();
 
 // MediatR Configuration

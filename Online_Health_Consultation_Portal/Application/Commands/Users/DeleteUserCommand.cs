@@ -1,6 +1,6 @@
 using MediatR;
 
-namespace Online_Health_Consultation_Portal.Application.Commands.Admin.Users
+namespace Online_Health_Consultation_Portal.Application.Commands.Users
 {
     public sealed record DeleteUserCommand : IRequest // Single purpose
     {
