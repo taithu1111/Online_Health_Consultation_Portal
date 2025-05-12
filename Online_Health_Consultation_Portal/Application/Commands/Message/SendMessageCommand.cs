@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Online_Health_Consultation_Portal.Application.CQRS.Command
+namespace Online_Health_Consultation_Portal.Application.Commands.Message
 {
     // Command as a record
     public record SendMessageCommand : IRequest<int>

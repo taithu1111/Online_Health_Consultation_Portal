@@ -1,9 +1,9 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
-using Online_Health_Consultation_Portal.API.DTo;
 using Online_Health_Consultation_Portal.Application.CQRS.Command;
 using Online_Health_Consultation_Portal.Application.CQRS.Querries;
+using Online_Health_Consultation_Portal.Application.Dtos.Massage;
 using Online_Health_Consultation_Portal.Domain;
 using Online_Health_Consultation_Portal.Infrastructure.Hubs;
 

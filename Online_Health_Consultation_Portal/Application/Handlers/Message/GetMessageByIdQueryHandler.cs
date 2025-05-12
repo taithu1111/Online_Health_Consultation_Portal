@@ -4,9 +4,9 @@ using Online_Health_Consultation_Portal.Domain;
 using Online_Health_Consultation_Portal.Infrastructure;
 using System.Threading;
 using System.Threading.Tasks;
-using Online_Health_Consultation_Portal.Application.CQRS.Querries;
+using Online_Health_Consultation_Portal.Application.Queries.Message;
 
-namespace Online_Health_Consultation_Portal.Application.CQRS.Handler.Querries
+namespace Online_Health_Consultation_Portal.Application.Handlers.Message
 {
     public class GetMessageByIdQueryHandler : IRequestHandler<GetMessageByIdQuery, Message>
     {

@@ -1,10 +1,10 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Online_Health_Consultation_Portal.Application.CQRS.Command;
+using Online_Health_Consultation_Portal.Application.Commands.Message;
 using Online_Health_Consultation_Portal.Domain;
 using Online_Health_Consultation_Portal.Infrastructure;
 
-namespace Online_Health_Consultation_Portal.Application.CQRS.Handler.Command;
+namespace Online_Health_Consultation_Portal.Application.Handlers.Message;
 
 public class MarkMessageAsReadCommandHandler : IRequestHandler<MarkMessageAsReadCommand>
 {

@@ -1,8 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Online_Health_Consultation_Portal.Domain;
-using Online_Health_Consultation_Portal.Domain.Interface;
 
-namespace Online_Health_Consultation_Portal.Infrastructure.Repository
+namespace Online_Health_Consultation_Portal.Infrastructure.Service
 {
     public class PrescriptionRepository : IPrescriptionRepository
     {

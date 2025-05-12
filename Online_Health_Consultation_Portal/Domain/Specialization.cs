@@ -9,6 +9,6 @@ namespace Online_Health_Consultation_Portal.Domain
         public string Name { get; set; }
         public string Description { get; set; }
 
-        public ICollection<Doctor> Doctors { get; set; }
+        //public ICollection<Doctor> Doctors { get; set; }
     }
 }

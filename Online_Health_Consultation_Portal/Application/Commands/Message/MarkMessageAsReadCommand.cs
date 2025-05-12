@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Online_Health_Consultation_Portal.Application.CQRS.Command;
+namespace Online_Health_Consultation_Portal.Application.Commands.Message;
 
 public record MarkMessageAsReadCommand : IRequest
 {

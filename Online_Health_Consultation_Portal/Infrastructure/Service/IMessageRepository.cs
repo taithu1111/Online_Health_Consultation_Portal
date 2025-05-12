@@ -1,4 +1,6 @@
-﻿namespace Online_Health_Consultation_Portal.Domain.Interface
+﻿using Online_Health_Consultation_Portal.Domain;
+
+namespace Online_Health_Consultation_Portal.Infrastructure.Service
 {
     public interface IMessageRepository
     {

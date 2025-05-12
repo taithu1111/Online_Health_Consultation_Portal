@@ -1,9 +1,9 @@
 ﻿using MediatR;
-using Online_Health_Consultation_Portal.Application.CQRS.Querries;
+using Online_Health_Consultation_Portal.Application.Queries.Prescription;
 using Online_Health_Consultation_Portal.Domain;
-using Online_Health_Consultation_Portal.Domain.Interface;
+using Online_Health_Consultation_Portal.Infrastructure.Service;
 
-namespace Online_Health_Consultation_Portal.Application.CQRS.Handler.Querries
+namespace Online_Health_Consultation_Portal.Application.Handlers.Prescription
 {
     public class GetPrescriptionsByPatientIdQueryHandler : IRequestHandler<GetPrescriptionsByPatientIdQuery, List<Prescription>>
     {
