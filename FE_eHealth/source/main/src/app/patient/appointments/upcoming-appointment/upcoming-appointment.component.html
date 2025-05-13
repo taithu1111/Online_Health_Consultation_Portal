@@ -56,13 +56,13 @@
                     </button>
                   </div>
                 </li>
-                <li>
+                <!-- <li>
                   <div class="export-button m-l-10">
                     <button mat-icon-button (click)="exportExcel()" class="col-blue" matTooltip="Xlsx Download">
                       <mat-icon class="material-icons-outlined">file_download</mat-icon>
                     </button>
                   </div>
-                </li>
+                </li> -->
               </ul>
             </div>
           </div>
@@ -125,8 +125,8 @@
                         <mat-header-cell *matHeaderCellDef mat-sort-header>{{ column.label }}</mat-header-cell>
                         <mat-cell *matCellDef="let row">
                           <ng-container [ngSwitch]="row.status">
-                            <span *ngSwitchCase="'Upcoming'" class="badge badge-solid-green">{{ row.status }}</span>
-                            <span *ngSwitchCase="'Completed'" class="badge badge-solid-purple">{{ row.status }}</span>
+                            <span *ngSwitchCase="'Pending'" class="badge badge-solid-green">{{ row.status }}</span>
+                            <span *ngSwitchCase="'Confirmed'" class="badge badge-solid-purple">{{ row.status }}</span>
                             <span *ngSwitchCase="'Cancelled'" class="badge badge-solid-orange">{{ row.status }}</span>
                           </ng-container>
                         </mat-cell>

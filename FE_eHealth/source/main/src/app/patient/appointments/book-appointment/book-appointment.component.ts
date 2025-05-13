@@ -1,67 +1,3 @@
-// import { Component } from '@angular/core';
-// import { UntypedFormBuilder, UntypedFormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
-// import { MatButtonModule } from '@angular/material/button';
-// import { FileUploadComponent } from '@shared/components/file-upload/file-upload.component';
-// import { MatButtonToggleModule } from '@angular/material/button-toggle';
-// import { MatDatepickerModule } from '@angular/material/datepicker';
-// import { MatOptionModule } from '@angular/material/core';
-// import { MatSelectModule } from '@angular/material/select';
-// import { MatInputModule } from '@angular/material/input';
-// import { MatFormFieldModule } from '@angular/material/form-field';
-// import { BreadcrumbComponent } from '@shared/components/breadcrumb/breadcrumb.component';
-// @Component({
-//     selector: 'app-book-appointment',
-//     templateUrl: './book-appointment.component.html',
-//     styleUrls: ['./book-appointment.component.scss'],
-//     imports: [
-//         BreadcrumbComponent,
-//         FormsModule,
-//         ReactiveFormsModule,
-//         MatFormFieldModule,
-//         MatInputModule,
-//         MatSelectModule,
-//         MatOptionModule,
-//         MatDatepickerModule,
-//         MatButtonToggleModule,
-//         FileUploadComponent,
-//         MatButtonModule,
-//     ]
-// })
-// export class BookAppointmentComponent {
-//   bookingForm: UntypedFormGroup;
-//   hide3 = true;
-//   agree3 = false;
-//   isDisabled = true;
-//   constructor(private fb: UntypedFormBuilder) {
-//     this.bookingForm = this.fb.group({
-//       first: ['', [Validators.required, Validators.pattern('[a-zA-Z]+')]],
-//       last: [''],
-//       gender: ['', [Validators.required]],
-//       mobile: ['', [Validators.required]],
-//       address: [''],
-//       email: [
-//         '',
-//         [Validators.required, Validators.email, Validators.minLength(5)],
-//       ],
-//       dob: ['', [Validators.required]],
-//       doctor: ['', [Validators.required]],
-//       doa: ['', [Validators.required]],
-//       timeSlot: ['', [Validators.required]],
-//       injury: [''],
-//       note: [''],
-//       uploadFile: [''],
-//     });
-//   }
-//   onSubmit() {
-//     console.log('Form Value', this.bookingForm.value);
-//   }
-
-//   get f() {
-//     return this.bookingForm.controls;
-//   }
-// }
-
-
 import { Component } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -74,12 +10,13 @@ import { MatButtonModule } from '@angular/material/button';
 import { BreadcrumbComponent } from '@shared/components/breadcrumb/breadcrumb.component';
 import { FileUploadComponent } from '@shared/components/file-upload/file-upload.component';
 import { AppointmentService } from '../appointment-v1.service';
-import { formatDate } from '@angular/common';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-book-appointment',
   standalone: true,
   imports: [
+    CommonModule,
     BreadcrumbComponent,
     FormsModule,
     ReactiveFormsModule,
@@ -89,7 +26,7 @@ import { formatDate } from '@angular/common';
     MatOptionModule,
     MatDatepickerModule,
     MatButtonToggleModule,
-    FileUploadComponent,
+    // FileUploadComponent,
     MatButtonModule,
   ],
   templateUrl: './book-appointment.component.html',
@@ -98,17 +35,18 @@ import { formatDate } from '@angular/common';
 export class BookAppointmentComponent {
   bookingForm: UntypedFormGroup;
   isSubmitting = false;
+  // Removed duplicate 'get f()' accessor
 
   constructor(
     private fb: UntypedFormBuilder,
     private appointmentService: AppointmentService
   ) {
     this.bookingForm = this.fb.group({
-      patientId: [7, [Validators.required]],   // bạn sẽ lấy từ auth/user context
+      patientId: [7, [Validators.required]],   // lấy từ auth/user context
       doctorId: ['', [Validators.required]],
       doa: ['', [Validators.required]],        // Date
-      timeSlot: ['', [Validators.required]],   // e.g. "08:00:00"
-      type: ['', [Validators.required]],       // e.g. "video" or "in-person"
+      timeSlot: ['', [Validators.required]],   // "08:00:00"
+      type: ['', [Validators.required]],       // "online" or "in-person"
       notes: [''],
       uploadFile: ['']
     });

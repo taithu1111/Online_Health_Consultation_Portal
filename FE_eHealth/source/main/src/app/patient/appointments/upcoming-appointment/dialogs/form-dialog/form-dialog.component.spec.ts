@@ -9,8 +9,8 @@ describe("FormDialogComponent", () => {
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
-    imports: [FormDialogComponent],
-}).compileComponents();
+        imports: [FormDialogComponent],
+      }).compileComponents();
     })
   );
 

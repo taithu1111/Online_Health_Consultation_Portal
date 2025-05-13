@@ -17,8 +17,8 @@ export class AppointmentService {
     }
 
     // PUT: Cập nhật cuộc hẹn
-    updateAppointment(id: number, payload: any): Observable<string> {
-        return this.http.put<string>(`${this.apiUrl}/${id}`, payload);
+    updateAppointment(id: number, payload: any, p0: { responseType: string; }): Observable<string> {
+        return this.http.put<string>(`${this.apiUrl}/${id}`, payload, { responseType: 'text' as 'json' });
     }
 
     // DELETE: Hủy cuộc hẹn

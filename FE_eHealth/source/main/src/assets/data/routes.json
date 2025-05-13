@@ -9,7 +9,9 @@
       "groupTitle": true,
       "badge": "",
       "badgeClass": "",
-      "role": ["All"],
+      "role": [
+        "All"
+      ],
       "submenu": []
     },
     {
@@ -21,7 +23,9 @@
       "groupTitle": false,
       "badge": "",
       "badgeClass": "",
-      "role": ["Admin"],
+      "role": [
+        "Admin"
+      ],
       "submenu": [
         {
           "path": "/admin/dashboard/main",
@@ -32,7 +36,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         },
         {
@@ -44,7 +50,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         },
         {
@@ -56,7 +64,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         },
         {
@@ -68,7 +78,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         }
       ]
@@ -82,7 +94,9 @@
       "groupTitle": false,
       "badge": "",
       "badgeClass": "",
-      "role": ["Admin"],
+      "role": [
+        "Admin"
+      ],
       "submenu": [
         {
           "path": "/admin/appointment/appointment-calendar",
@@ -93,7 +107,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         },
         {
@@ -105,7 +121,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         },
         {
@@ -117,7 +135,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         },
         {
@@ -129,7 +149,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         }
       ]
@@ -143,7 +165,9 @@
       "groupTitle": false,
       "badge": "",
       "badgeClass": "",
-      "role": ["Admin"],
+      "role": [
+        "Admin"
+      ],
       "submenu": [
         {
           "path": "/admin/doctors/allDoctors",
@@ -154,7 +178,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         },
         {
@@ -166,7 +192,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         },
         {
@@ -178,7 +206,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         },
         {
@@ -190,7 +220,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         },
         {
@@ -202,7 +234,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         },
         {
@@ -214,7 +248,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         }
       ]
@@ -228,7 +264,9 @@
       "groupTitle": false,
       "badge": "",
       "badgeClass": "",
-      "role": ["Admin"],
+      "role": [
+        "Admin"
+      ],
       "submenu": [
         {
           "path": "/admin/staff/all-staff",
@@ -239,7 +277,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         },
         {
@@ -251,7 +291,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         },
         {
@@ -263,7 +305,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         },
         {
@@ -275,7 +319,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         }
       ]
@@ -289,7 +335,9 @@
       "groupTitle": false,
       "badge": "",
       "badgeClass": "",
-      "role": ["Admin"],
+      "role": [
+        "Admin"
+      ],
       "submenu": [
         {
           "path": "/admin/patients/all-patients",
@@ -300,7 +348,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         },
         {
@@ -312,7 +362,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         },
         {
@@ -324,7 +376,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         },
         {
@@ -336,7 +390,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         },
         {
@@ -348,7 +404,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         }
       ]
@@ -362,7 +420,9 @@
       "groupTitle": false,
       "badge": "",
       "badgeClass": "",
-      "role": ["Admin"],
+      "role": [
+        "Admin"
+      ],
       "submenu": [
         {
           "path": "/admin/room/all-rooms",
@@ -373,7 +433,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         },
         {
@@ -385,7 +447,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         },
         {
@@ -397,7 +461,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         },
         {
@@ -409,7 +475,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         },
         {
@@ -421,7 +489,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         }
       ]
@@ -435,7 +505,9 @@
       "groupTitle": false,
       "badge": "",
       "badgeClass": "",
-      "role": ["Admin"],
+      "role": [
+        "Admin"
+      ],
       "submenu": [
         {
           "path": "/admin/records/birth",
@@ -446,7 +518,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         },
         {
@@ -458,7 +532,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         }
       ]
@@ -472,7 +548,9 @@
       "groupTitle": false,
       "badge": "",
       "badgeClass": "",
-      "role": ["Admin"],
+      "role": [
+        "Admin"
+      ],
       "submenu": [
         {
           "path": "/admin/ambulance/call-list",
@@ -483,7 +561,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         },
         {
@@ -495,7 +575,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         }
       ]
@@ -509,7 +591,9 @@
       "groupTitle": false,
       "badge": "",
       "badgeClass": "",
-      "role": ["Admin"],
+      "role": [
+        "Admin"
+      ],
       "submenu": [
         {
           "path": "/admin/pharmacy/medicine-list",
@@ -520,7 +604,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         },
         {
@@ -532,7 +618,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         }
       ]
@@ -546,7 +634,9 @@
       "groupTitle": false,
       "badge": "",
       "badgeClass": "",
-      "role": ["Admin"],
+      "role": [
+        "Admin"
+      ],
       "submenu": [
         {
           "path": "/admin/blood-bank/blood-stock",
@@ -557,7 +647,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         },
         {
@@ -569,7 +661,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         },
         {
@@ -581,7 +675,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         }
       ]
@@ -595,7 +691,9 @@
       "groupTitle": false,
       "badge": "",
       "badgeClass": "",
-      "role": ["Admin"],
+      "role": [
+        "Admin"
+      ],
       "submenu": [
         {
           "path": "/admin/accounts/bill-list",
@@ -606,7 +704,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         },
         {
@@ -618,7 +718,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         },
         {
@@ -630,7 +732,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         },
         {
@@ -642,7 +746,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         },
         {
@@ -654,7 +760,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         },
         {
@@ -666,7 +774,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         }
       ]
@@ -680,7 +790,9 @@
       "groupTitle": false,
       "badge": "",
       "badgeClass": "",
-      "role": ["Admin"],
+      "role": [
+        "Admin"
+      ],
       "submenu": [
         {
           "path": "/admin/departments/department-list",
@@ -691,7 +803,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         },
         {
@@ -703,7 +817,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         }
       ]
@@ -717,7 +833,9 @@
       "groupTitle": false,
       "badge": "",
       "badgeClass": "",
-      "role": ["Admin"],
+      "role": [
+        "Admin"
+      ],
       "submenu": [
         {
           "path": "/admin/inventory/item-stock-list",
@@ -728,7 +846,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         },
         {
@@ -740,12 +860,13 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         }
       ]
     },
-
     {
       "path": "",
       "title": "MENUITEMS.HR.TEXT",
@@ -755,7 +876,9 @@
       "groupTitle": false,
       "badge": "",
       "badgeClass": "",
-      "role": ["Admin"],
+      "role": [
+        "Admin"
+      ],
       "submenu": [
         {
           "path": "/admin/human-resources/leave-requests",
@@ -766,7 +889,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         },
         {
@@ -778,7 +903,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         },
         {
@@ -790,7 +917,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         },
         {
@@ -802,7 +931,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         },
         {
@@ -814,7 +945,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         },
         {
@@ -826,7 +959,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         },
         {
@@ -838,7 +973,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         },
         {
@@ -850,7 +987,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         },
         {
@@ -862,12 +1001,13 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         }
       ]
     },
-
     {
       "path": "",
       "title": "MENUITEMS.INSURANCE.TEXT",
@@ -877,7 +1017,9 @@
       "groupTitle": false,
       "badge": "",
       "badgeClass": "",
-      "role": ["Admin"],
+      "role": [
+        "Admin"
+      ],
       "submenu": [
         {
           "path": "/admin/insurance/patient-insurance",
@@ -888,7 +1030,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         },
         {
@@ -900,7 +1044,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         },
         {
@@ -912,7 +1058,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         },
         {
@@ -924,12 +1072,13 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         }
       ]
     },
-
     {
       "path": "/doctor/dashboard",
       "title": "MENUITEMS.DOCTOR.DASHBOARD",
@@ -939,7 +1088,9 @@
       "groupTitle": false,
       "badge": "",
       "badgeClass": "",
-      "role": ["Doctor"],
+      "role": [
+        "Doctor"
+      ],
       "submenu": []
     },
     {
@@ -951,7 +1102,9 @@
       "groupTitle": false,
       "badge": "",
       "badgeClass": "",
-      "role": ["Doctor"],
+      "role": [
+        "Doctor"
+      ],
       "submenu": []
     },
     {
@@ -963,7 +1116,9 @@
       "groupTitle": false,
       "badge": "",
       "badgeClass": "",
-      "role": ["Doctor"],
+      "role": [
+        "Doctor"
+      ],
       "submenu": []
     },
     {
@@ -975,7 +1130,9 @@
       "groupTitle": false,
       "badge": "",
       "badgeClass": "",
-      "role": ["Doctor"],
+      "role": [
+        "Doctor"
+      ],
       "submenu": []
     },
     {
@@ -987,7 +1144,9 @@
       "groupTitle": false,
       "badge": "",
       "badgeClass": "",
-      "role": ["Doctor"],
+      "role": [
+        "Doctor"
+      ],
       "submenu": []
     },
     {
@@ -999,7 +1158,9 @@
       "groupTitle": false,
       "badge": "",
       "badgeClass": "",
-      "role": ["Doctor"],
+      "role": [
+        "Doctor"
+      ],
       "submenu": []
     },
     {
@@ -1011,7 +1172,9 @@
       "groupTitle": false,
       "badge": "",
       "badgeClass": "",
-      "role": ["Patient"],
+      "role": [
+        "Patient"
+      ],
       "submenu": []
     },
     {
@@ -1023,7 +1186,9 @@
       "groupTitle": false,
       "badge": "",
       "badgeClass": "",
-      "role": ["Patient"],
+      "role": [
+        "Patient"
+      ],
       "submenu": [
         {
           "path": "/patient/appointments/book",
@@ -1034,7 +1199,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         },
         {
@@ -1046,7 +1213,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         },
         {
@@ -1058,19 +1227,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
-          "submenu": []
-        },
-        {
-          "path": "/patient/appointments/past",
-          "title": "MENUITEMS.PATIENT.APPOINTMENTS.LIST.PAST",
-          "iconType": "",
-          "icon": "",
-          "class": "ml-menu",
-          "groupTitle": false,
-          "badge": "",
-          "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         }
       ]
@@ -1084,7 +1243,9 @@
       "groupTitle": false,
       "badge": "",
       "badgeClass": "",
-      "role": ["Patient"],
+      "role": [
+        "Patient"
+      ],
       "submenu": []
     },
     {
@@ -1096,7 +1257,9 @@
       "groupTitle": false,
       "badge": "",
       "badgeClass": "",
-      "role": ["Patient"],
+      "role": [
+        "Patient"
+      ],
       "submenu": []
     },
     {
@@ -1108,7 +1271,9 @@
       "groupTitle": false,
       "badge": "",
       "badgeClass": "",
-      "role": ["Patient"],
+      "role": [
+        "Patient"
+      ],
       "submenu": []
     },
     {
@@ -1120,7 +1285,9 @@
       "groupTitle": false,
       "badge": "",
       "badgeClass": "",
-      "role": ["Patient"],
+      "role": [
+        "Patient"
+      ],
       "submenu": []
     },
     {
@@ -1132,10 +1299,11 @@
       "groupTitle": false,
       "badge": "",
       "badgeClass": "",
-      "role": ["Patient"],
+      "role": [
+        "Patient"
+      ],
       "submenu": []
     },
-
     {
       "path": "",
       "title": "Apps",
@@ -1145,7 +1313,10 @@
       "groupTitle": true,
       "badge": "",
       "badgeClass": "",
-      "role": ["Admin", "Doctor"],
+      "role": [
+        "Admin",
+        "Doctor"
+      ],
       "submenu": []
     },
     {
@@ -1157,7 +1328,10 @@
       "groupTitle": false,
       "badge": "New",
       "badgeClass": "badge bg-blue sidebar-badge float-end",
-      "role": ["Admin", "Doctor"],
+      "role": [
+        "Admin",
+        "Doctor"
+      ],
       "submenu": []
     },
     {
@@ -1169,7 +1343,10 @@
       "groupTitle": false,
       "badge": "",
       "badgeClass": "",
-      "role": ["Admin", "Doctor"],
+      "role": [
+        "Admin",
+        "Doctor"
+      ],
       "submenu": []
     },
     {
@@ -1181,7 +1358,10 @@
       "groupTitle": false,
       "badge": "",
       "badgeClass": "",
-      "role": ["Admin", "Doctor"],
+      "role": [
+        "Admin",
+        "Doctor"
+      ],
       "submenu": []
     },
     {
@@ -1193,7 +1373,10 @@
       "groupTitle": false,
       "badge": "",
       "badgeClass": "",
-      "role": ["Admin", "Doctor"],
+      "role": [
+        "Admin",
+        "Doctor"
+      ],
       "submenu": [
         {
           "path": "/email/inbox",
@@ -1204,7 +1387,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         },
         {
@@ -1216,7 +1401,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         },
         {
@@ -1228,7 +1415,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         }
       ]
@@ -1242,7 +1431,9 @@
       "groupTitle": false,
       "badge": "4",
       "badgeClass": "badge bg-orange sidebar-badge float-end",
-      "role": ["Admin"],
+      "role": [
+        "Admin"
+      ],
       "submenu": [
         {
           "path": "/apps/chat",
@@ -1253,7 +1444,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         },
         {
@@ -1265,7 +1458,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         },
         {
@@ -1277,7 +1472,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         },
         {
@@ -1289,7 +1486,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         }
       ]
@@ -1303,7 +1502,9 @@
       "groupTitle": false,
       "badge": "",
       "badgeClass": "",
-      "role": ["Admin"],
+      "role": [
+        "Admin"
+      ],
       "submenu": [
         {
           "path": "/widget/chart-widget",
@@ -1314,7 +1515,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         },
         {
@@ -1326,7 +1529,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         }
       ]
@@ -1340,7 +1545,9 @@
       "groupTitle": true,
       "badge": "",
       "badgeClass": "",
-      "role": ["Admin"],
+      "role": [
+        "Admin"
+      ],
       "submenu": []
     },
     {
@@ -1352,7 +1559,9 @@
       "groupTitle": false,
       "badge": "",
       "badgeClass": "",
-      "role": ["Admin"],
+      "role": [
+        "Admin"
+      ],
       "submenu": [
         {
           "path": "/ui/alerts",
@@ -1363,7 +1572,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         },
         {
@@ -1375,7 +1586,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         },
         {
@@ -1387,7 +1600,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         },
         {
@@ -1399,7 +1614,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         },
         {
@@ -1411,7 +1628,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         },
         {
@@ -1423,7 +1642,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         },
         {
@@ -1435,7 +1656,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         },
         {
@@ -1447,7 +1670,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         },
         {
@@ -1459,7 +1684,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         },
         {
@@ -1471,7 +1698,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         },
         {
@@ -1483,7 +1712,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         },
         {
@@ -1495,7 +1726,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         },
         {
@@ -1507,7 +1740,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         },
         {
@@ -1519,7 +1754,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         },
         {
@@ -1531,7 +1768,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         },
         {
@@ -1543,7 +1782,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         },
         {
@@ -1555,7 +1796,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         }
       ]
@@ -1569,7 +1812,9 @@
       "groupTitle": false,
       "badge": "",
       "badgeClass": "",
-      "role": ["Admin"],
+      "role": [
+        "Admin"
+      ],
       "submenu": [
         {
           "path": "/forms/form-controls",
@@ -1580,7 +1825,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         },
         {
@@ -1592,7 +1839,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         },
         {
@@ -1604,7 +1853,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         },
         {
@@ -1616,7 +1867,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         },
         {
@@ -1628,7 +1881,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         },
         {
@@ -1640,7 +1895,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         }
       ]
@@ -1654,7 +1911,9 @@
       "groupTitle": false,
       "badge": "",
       "badgeClass": "",
-      "role": ["Admin"],
+      "role": [
+        "Admin"
+      ],
       "submenu": [
         {
           "path": "/tables/basic-tables",
@@ -1665,7 +1924,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         },
         {
@@ -1677,7 +1938,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         },
         {
@@ -1689,7 +1952,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         }
       ]
@@ -1703,7 +1968,9 @@
       "groupTitle": false,
       "badge": "7",
       "badgeClass": "badge bg-green sidebar-badge float-end",
-      "role": ["Admin"],
+      "role": [
+        "Admin"
+      ],
       "submenu": [
         {
           "path": "/charts/echart",
@@ -1714,7 +1981,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         },
         {
@@ -1726,7 +1995,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         },
         {
@@ -1738,7 +2009,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         },
         {
@@ -1750,7 +2023,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         },
         {
@@ -1762,7 +2037,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         }
       ]
@@ -1776,7 +2053,9 @@
       "groupTitle": false,
       "badge": "",
       "badgeClass": "",
-      "role": ["Admin"],
+      "role": [
+        "Admin"
+      ],
       "submenu": [
         {
           "path": "/timeline/timeline1",
@@ -1787,7 +2066,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         },
         {
@@ -1799,7 +2080,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         }
       ]
@@ -1813,7 +2096,9 @@
       "groupTitle": false,
       "badge": "",
       "badgeClass": "",
-      "role": ["Admin"],
+      "role": [
+        "Admin"
+      ],
       "submenu": [
         {
           "path": "/icons/material",
@@ -1824,7 +2109,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         },
         {
@@ -1836,7 +2123,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         }
       ]
@@ -1850,7 +2139,9 @@
       "groupTitle": false,
       "badge": "",
       "badgeClass": "",
-      "role": ["Admin"],
+      "role": [
+        "Admin"
+      ],
       "submenu": [
         {
           "path": "/authentication/signin",
@@ -1861,7 +2152,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         },
         {
@@ -1873,7 +2166,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         },
         {
@@ -1885,7 +2180,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         },
         {
@@ -1897,7 +2194,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         },
         {
@@ -1909,7 +2208,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         },
         {
@@ -1921,7 +2222,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         }
       ]
@@ -1935,7 +2238,9 @@
       "groupTitle": false,
       "badge": "",
       "badgeClass": "",
-      "role": ["Admin"],
+      "role": [
+        "Admin"
+      ],
       "submenu": [
         {
           "path": "/extra-pages/profile",
@@ -1946,7 +2251,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         },
         {
@@ -1958,7 +2265,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         },
         {
@@ -1970,7 +2279,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         },
         {
@@ -1982,7 +2293,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         },
         {
@@ -1994,7 +2307,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         }
       ]
@@ -2008,7 +2323,9 @@
       "groupTitle": false,
       "badge": "",
       "badgeClass": "",
-      "role": ["Admin"],
+      "role": [
+        "Admin"
+      ],
       "submenu": [
         {
           "path": "/maps/google",
@@ -2019,7 +2336,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         }
       ]
@@ -2033,7 +2352,9 @@
       "groupTitle": false,
       "badge": "",
       "badgeClass": "",
-      "role": ["Admin"],
+      "role": [
+        "Admin"
+      ],
       "submenu": [
         {
           "path": "/multilevel/first1",
@@ -2044,7 +2365,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         },
         {
@@ -2056,7 +2379,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": [
             {
               "path": "/multilevel/secondlevel/second1",
@@ -2067,7 +2392,9 @@
               "groupTitle": false,
               "badge": "",
               "badgeClass": "",
-              "role": [""],
+              "role": [
+                ""
+              ],
               "submenu": []
             },
             {
@@ -2079,7 +2406,9 @@
               "groupTitle": false,
               "badge": "",
               "badgeClass": "",
-              "role": [""],
+              "role": [
+                ""
+              ],
               "submenu": [
                 {
                   "path": "/multilevel/thirdlevel/third1",
@@ -2090,7 +2419,9 @@
                   "groupTitle": false,
                   "badge": "",
                   "badgeClass": "",
-                  "role": [""],
+                  "role": [
+                    ""
+                  ],
                   "submenu": []
                 }
               ]
@@ -2106,7 +2437,9 @@
           "groupTitle": false,
           "badge": "",
           "badgeClass": "",
-          "role": [""],
+          "role": [
+            ""
+          ],
           "submenu": []
         }
       ]

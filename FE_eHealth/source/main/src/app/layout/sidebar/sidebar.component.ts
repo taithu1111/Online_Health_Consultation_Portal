@@ -22,21 +22,20 @@ import { NgScrollbar } from 'ngx-scrollbar';
 import { UnsubscribeOnDestroyAdapter } from '@shared';
 import { SidebarService } from './sidebar.service';
 @Component({
-    selector: 'app-sidebar',
-    templateUrl: './sidebar.component.html',
-    styleUrls: ['./sidebar.component.scss'],
-    imports: [
-        NgScrollbar,
-        RouterLinkActive,
-        RouterLink,
-        NgClass,
-        TranslateModule,
-    ]
+  selector: 'app-sidebar',
+  templateUrl: './sidebar.component.html',
+  styleUrls: ['./sidebar.component.scss'],
+  imports: [
+    NgScrollbar,
+    RouterLinkActive,
+    RouterLink,
+    NgClass,
+    TranslateModule,
+  ]
 })
 export class SidebarComponent
   extends UnsubscribeOnDestroyAdapter
-  implements OnInit, OnDestroy
-{
+  implements OnInit, OnDestroy {
   public sidebarItems!: RouteInfo[];
   public innerHeight?: number;
   public bodyTag!: HTMLElement;

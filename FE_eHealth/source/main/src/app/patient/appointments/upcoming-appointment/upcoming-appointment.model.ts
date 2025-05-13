@@ -1,4 +1,6 @@
+// src/app/patient/appointments/upcoming-appointment/upcoming-appointment.model.ts
 import { formatDate } from '@angular/common';
+
 export class UpcomingAppointment {
   id: number;
   doctor: string;
@@ -8,22 +10,24 @@ export class UpcomingAppointment {
   type: string;
   status: string;
   notes: string;
-  constructor(appointment: UpcomingAppointment) {
-    {
-      this.id = appointment.id || this.getRandomID();
-      this.doctor = appointment.doctor || '';
-      this.date = formatDate(new Date(), 'yyyy-MM-dd', 'en') || '';
-      this.time = appointment.time || '';
-      this.diagnosis = appointment.diagnosis || '';
-      this.type = appointment.type || '';
-      this.status = appointment.status || '';
-      this.notes = appointment.notes || '';
-    }
+
+  constructor(init?: Partial<UpcomingAppointment>) {
+    // init có thể undefined => gán về {}
+    const appt = init ?? {};
+
+    this.id = appt.id ?? this.getRandomID();
+    this.doctor = appt.doctor ?? '';
+    // Nếu appt.date đã có thì dùng, nếu chưa (add mới) thì lấy ngày hôm nay
+    this.date = appt.date ?? formatDate(new Date(), 'yyyy-MM-dd', 'en');
+    this.time = appt.time ?? '';
+    this.diagnosis = appt.diagnosis ?? 'no diagnosis';
+    this.type = appt.type ?? 'video';
+    this.status = appt.status ?? 'awaiting';
+    this.notes = appt.notes ?? '';
   }
-  public getRandomID(): number {
-    const S4 = () => {
-      return ((1 + Math.random()) * 0x10000) | 0;
-    };
-    return S4() + S4();
+
+  private getRandomID(): number {
+    const S4 = () => (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+    return parseInt(S4() + S4(), 16);
   }
 }

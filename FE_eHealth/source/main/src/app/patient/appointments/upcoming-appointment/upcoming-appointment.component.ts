@@ -21,7 +21,6 @@ import {
   MatOptionModule,
   MatRippleModule,
 } from '@angular/material/core';
-import { UpcomingAppointmentService } from './upcoming-appointment.service';
 import { UpcomingAppointment } from './upcoming-appointment.model';
 import { formatDate, DatePipe, CommonModule, NgClass } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
@@ -39,7 +38,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { rowsAnimation, TableExportUtil } from '@shared';
 import { FeatherIconsComponent } from '@shared/components/feather-icons/feather-icons.component';
-import { UpcommingAppointmentFormComponent } from './dialogs/form-dialog/form-dialog.component';
+import { FormDialogComponent } from './dialogs/form-dialog/form-dialog.component';
 import { UpcomingAppointmentDeleteComponent } from './dialogs/delete/delete.component';
 import { Direction } from '@angular/cdk/bidi';
 import { AppointmentService } from '../appointment-v1.service';
@@ -142,10 +141,10 @@ export class UpcomingAppointmentComponent implements OnInit, OnDestroy {
             doctorName: item.doctorName,
             appointmentDate: this.datePipe.transform(dt, 'yyyy-MM-dd')!,
             appointmentTime: this.datePipe.transform(dt, 'HH:mm:ss')!,
-            status: item.status,
+            status: item.status ?? 'Pending',
             type: item.type,
             notes: item.notes,
-            diagnosis: item.diagnosis,
+            diagnosis: item.diagnosis ?? 'No Diagnosis',
             doctor: item.doctor || null,
             date: this.datePipe.transform(dt, 'yyyy-MM-dd')!,
             time: this.datePipe.transform(dt, 'HH:mm:ss')!,
@@ -176,11 +175,15 @@ export class UpcomingAppointmentComponent implements OnInit, OnDestroy {
   editCall(row: UpcomingAppointment) { this.openDialog('edit', row); }
 
   openDialog(action: 'add' | 'edit', data?: UpcomingAppointment) {
-    const dialogRef = this.dialog.open(UpcommingAppointmentFormComponent, {
+    const dialogRef = this.dialog.open(FormDialogComponent, {
       width: '60vw',
       data: { upcomingAppointment: data, action },
     });
-    dialogRef.afterClosed().subscribe(result => { /* cập nhật UI nếu cần */ });
+    dialogRef.afterClosed().subscribe(success => {
+      if (success) {
+        this.loadData();
+      }
+    });
   }
 
   deleteItem(row: UpcomingAppointment) {

@@ -23,11 +23,11 @@
                   <mat-form-field class="example-full-width" appearance="outline">
                     <mat-label>Consulting Doctor</mat-label>
                     <mat-select formControlName="doctorId" required>
-                      <mat-option [value]="7">Nguyen Van A</mat-option>
-                      <mat-option [value]="9">Nguyen Van B</mat-option>
+                      <mat-option [value]="7">Nguyễn Văn A</mat-option>
+                      <mat-option [value]="9">Nguyễn Văn B</mat-option>
                       <mat-option value="other">Other</mat-option>
                     </mat-select>
-                    <mat-error *ngIf="f.doctorId.invalid && f.doctorId.touched">
+                    <mat-error *ngIf="f['doctorId'].invalid && f['doctorId'].touched">
                       Please select a doctor
                     </mat-error>
                   </mat-form-field>
@@ -40,7 +40,7 @@
                     <input matInput [matDatepicker]="picker1" formControlName="doa" required>
                     <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
                     <mat-datepicker #picker1></mat-datepicker>
-                    <mat-error *ngIf="f.doa.invalid && f.doa.touched">
+                    <mat-error *ngIf="f['doa'].invalid && f['doa'].touched">
                       Please select a date
                     </mat-error>
                   </mat-form-field>
@@ -49,27 +49,28 @@
 
               <!-- Chọn khung giờ -->
               <div class="row mb-3">
-                <label class="me-3">Time Of Appointment:</label>
-                <mat-button-toggle-group formControlName="timeSlot" name="timeSlot">
-                  <mat-button-toggle value="slot1">10:30-11:00</mat-button-toggle>
-                  <mat-button-toggle value="slot2">11:00-11:30</mat-button-toggle>
-                  <mat-button-toggle value="slot3">11:30-12:00</mat-button-toggle>
-                  <mat-button-toggle value="slot4">12:00-12:30</mat-button-toggle>
-                  <mat-button-toggle value="slot5">12:30-01:00</mat-button-toggle>
-                  <mat-button-toggle value="slot6">03:30-04:00</mat-button-toggle>
-                  <mat-button-toggle value="slot7">04:00-04:30</mat-button-toggle>
-                  <mat-button-toggle value="slot8">04:30-05:00</mat-button-toggle>
-                  <mat-button-toggle value="slot9">05:00-05:30</mat-button-toggle>
-                  <mat-button-toggle value="slot10">05:30-06:00</mat-button-toggle>
-                  <!-- thêm các slot khác nếu cần -->
-                </mat-button-toggle-group>
-                <mat-error *ngIf="f.timeSlot.invalid && f.timeSlot.touched">
-                  Please choose a time slot
-                </mat-error>
-              </div>
+                <div class="col-md-6 mb-3">
+                  <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label>Time Of Appointment*</mat-label>
+                    <mat-select formControlName="timeSlot" required>
+                      <mat-option value="10:30:00">10:30 - 11:00</mat-option>
+                      <mat-option value="11:00:00">11:00 - 11:30</mat-option>
+                      <mat-option value="11:30:00">11:30 - 12:00</mat-option>
+                      <mat-option value="12:00:00">12:00 - 12:30</mat-option>
+                      <mat-option value="12:30:00">12:30 - 13:00</mat-option>
+                      <mat-option value="15:30:00">15:30 - 16:00</mat-option>
+                      <mat-option value="16:00:00">16:00 - 16:30</mat-option>
+                      <mat-option value="16:30:00">16:30 - 17:00</mat-option>
+                      <mat-option value="17:00:00">17:00 - 17:30</mat-option>
+                      <mat-option value="17:30:00">17:30 - 18:00</mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="f['timeSlot'].invalid && f['timeSlot'].touched">
+                      Please select a time
+                    </mat-error>
+                  </mat-form-field>
+                </div>
 
-              <!-- Chọn loại appointment -->
-              <div class="row mb-3">
+                <!-- Chọn loại appointment -->
                 <div class="col-md-6">
                   <mat-form-field class="example-full-width" appearance="outline">
                     <mat-label>Appointment Type</mat-label>
@@ -77,14 +78,16 @@
                       <mat-option value="video">Online</mat-option>
                       <mat-option value="in-person">In-person</mat-option>
                     </mat-select>
-                    <mat-error *ngIf="f.type.invalid && f.type.touched">
+                    <mat-error *ngIf="f['type'].invalid && f['type'].touched">
                       Please select a type
                     </mat-error>
                   </mat-form-field>
                 </div>
+              </div>
 
-                <!-- Ghi chú -->
-                <div class="col-md-6">
+              <!-- Ghi chú -->
+              <div class="row mb-4">
+                <div class="col-12">
                   <mat-form-field class="example-full-width" appearance="outline">
                     <mat-label>Note</mat-label>
                     <textarea matInput formControlName="notes"></textarea>
@@ -92,13 +95,13 @@
                 </div>
               </div>
 
-              <!-- Tải file -->
+              <!-- Tải file
               <div class="row mb-4">
                 <div class="col-12">
                   <label>Upload Reports</label>
                   <app-file-upload formControlName="uploadFile"></app-file-upload>
                 </div>
-              </div>
+              </div> -->
 
               <!-- Nút submit/ cancel -->
               <div class="row">

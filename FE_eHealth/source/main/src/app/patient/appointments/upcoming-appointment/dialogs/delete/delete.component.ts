@@ -1,52 +1,57 @@
-import { UpcomingAppointment } from './../../upcoming-appointment.model';
+import { Component, Inject } from '@angular/core';
 import {
-  MAT_DIALOG_DATA,
-  MatDialogRef,
   MatDialogTitle,
   MatDialogContent,
   MatDialogActions,
   MatDialogClose,
 } from '@angular/material/dialog';
-import { Component, Inject } from '@angular/core';
-import { UpcomingAppointmentService } from '../../upcoming-appointment.service';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { AppointmentService } from '../../../appointment-v1.service';
 
 export interface DialogData {
   id: number;
-  doctor: string;
+  doctorName: string;
   date: string;
-  location: string;
+  type: string;
 }
 
 @Component({
-    selector: 'app-upcomming-appointment-delete',
-    templateUrl: './delete.component.html',
-    styleUrls: ['./delete.component.scss'],
-    imports: [
-        MatDialogTitle,
-        MatDialogContent,
-        MatDialogActions,
-        MatButtonModule,
-        MatDialogClose,
-    ]
+  selector: 'app-upcoming-appointment-delete',
+  standalone: true,
+  imports: [
+    MatDialogTitle,
+    MatDialogContent,
+    MatDialogActions,
+    MatButtonModule,
+    MatDialogClose
+  ],
+  templateUrl: './delete.component.html',
+  styleUrls: ['./delete.component.scss']
 })
 export class UpcomingAppointmentDeleteComponent {
   constructor(
-    public dialogRef: MatDialogRef<UpcomingAppointmentDeleteComponent>,
+    private dialogRef: MatDialogRef<UpcomingAppointmentDeleteComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
-    public appointmentService: UpcomingAppointmentService
-  ) {}
+    private appointmentService: AppointmentService
+  ) { }
+
   confirmDelete(): void {
-    this.appointmentService.deleteUpcomingAppointment(this.data.id).subscribe({
-      next: (response) => {
-        // console.log('Delete Response:', response);
-        this.dialogRef.close(response); // Close with the response data
-        // Handle successful deletion, e.g., refresh the table or show a notification
+    // gọi thẳng vào API deleteAppointment trong appointment-v1.service.ts
+    this.appointmentService.deleteAppointment(this.data.id).subscribe({
+      next: () => {
+        // truyền về true để parent biết đã xóa thành công
+        this.dialogRef.close(true);
       },
-      error: (error) => {
-        console.error('Delete Error:', error);
-        // Handle the error appropriately
-      },
+      error: err => {
+        console.error('Delete Error:', err);
+        // bạn có thể show toast hoặc snackbar báo lỗi ở đây
+      }
     });
+  }
+
+  cancel(): void {
+    // đóng dialog mà không truyền gì (hoặc truyền false)
+    this.dialogRef.close(false);
   }
 }
