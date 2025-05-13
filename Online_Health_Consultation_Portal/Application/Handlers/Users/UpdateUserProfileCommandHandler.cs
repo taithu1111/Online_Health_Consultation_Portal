@@ -27,12 +27,14 @@ namespace Online_Health_Consultation_Portal.Application.Handlers.Users
             if (user == null)
                 throw new Exception("User not found");
 
-            // Update common user fields
-            if (!string.IsNullOrWhiteSpace(request.FullName))
-                user.FullName = request.FullName;
+            var profile = request.Profile;
 
-            if (!string.IsNullOrWhiteSpace(request.Gender))
-                user.Gender = request.Gender;
+            // Update common user fields
+            if (!string.IsNullOrWhiteSpace(profile.FullName))
+                user.FullName = profile.FullName;
+
+            if (!string.IsNullOrWhiteSpace(profile.Gender))
+                user.Gender = profile.Gender;
 
             var roles = await _userManager.GetRolesAsync(user);
             var role = roles.FirstOrDefault();
@@ -42,9 +44,9 @@ namespace Online_Health_Consultation_Portal.Application.Handlers.Users
                 var patient = await _context.Patients.FirstOrDefaultAsync(p => p.UserId == user.Id, cancellationToken);
                 if (patient != null)
                 {
-                    patient.DateOfBirth = request.DateOfBirth ?? patient.DateOfBirth;
-                    patient.Phone = request.Phone ?? patient.Phone;
-                    patient.Address = request.Address ?? patient.Address;
+                    patient.DateOfBirth = profile.DateOfBirth ?? patient.DateOfBirth;
+                    patient.Phone = profile.Phone ?? patient.Phone;
+                    patient.Address = profile.Address ?? patient.Address;
                 }
             }
             else if (role == "Doctor")
@@ -52,8 +54,8 @@ namespace Online_Health_Consultation_Portal.Application.Handlers.Users
                 var doctor = await _context.Doctors.FirstOrDefaultAsync(d => d.UserId == user.Id, cancellationToken);
                 if (doctor != null)
                 {
-                    doctor.Bio = request.Bio ?? doctor.Bio;
-                    doctor.Languages = request.Languages ?? doctor.Languages;
+                    doctor.Bio = profile.Bio ?? doctor.Bio;
+                    doctor.Languages = profile.Languages ?? doctor.Languages;
                 }
             }
 
