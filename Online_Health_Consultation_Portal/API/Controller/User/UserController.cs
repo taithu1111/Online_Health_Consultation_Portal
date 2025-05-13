@@ -41,14 +41,19 @@ namespace Online_Health_Consultation_Portal.API.Controllers.User
         }
 
         [HttpPut("profile")]
-        public async Task<IActionResult> UpdateProfile([FromBody] UpdateUserProfileCommand command)
+        public async Task<IActionResult> UpdateProfile([FromBody] UpdateUserProfileDto profile)
         {
             try
             {
                 if (!ModelState.IsValid)
                     return BadRequest(ModelState);
 
-                command.User = User;
+                var command = new UpdateUserProfileCommand
+                {
+                    User = User,
+                    Profile = profile
+                };
+
                 await _mediator.Send(command);
                 return NoContent();
             }
