@@ -1,6 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Online_Health_Consultation_Portal.Application.Commands.Notifications;
+using Online_Health_Consultation_Portal.Application.Dtos.Notifications;
 using Online_Health_Consultation_Portal.Application.Queries.Notifications;
 
 namespace Online_Health_Consultation_Portal.Controllers.Notification
@@ -17,10 +18,11 @@ namespace Online_Health_Consultation_Portal.Controllers.Notification
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateNotification([FromBody] CreateNotificationCommand command)
+        public async Task<IActionResult> CreateNotification([FromBody] CreateNotificationDto notificationDto)
         {
+            var command = new CreateNotificationCommand(notificationDto);
             var notificationId = await _mediator.Send(command);
-            return CreatedAtAction(nameof(GetUserNotifications), new { userId = command.UserId }, new { id = notificationId });
+            return CreatedAtAction(nameof(GetUserNotifications), new { userId = notificationDto.UserId }, new { id = notificationId });
         }
 
         [HttpGet("user/{userId}")]

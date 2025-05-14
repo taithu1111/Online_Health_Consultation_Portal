@@ -63,6 +63,9 @@ if (string.IsNullOrEmpty(jwtKey) && !AppDomain.CurrentDomain.FriendlyName.Contai
 }
 
 // Authentication Configuration
+// 1. First, update your package references as shown previously
+// 2. Then modify your authentication setup:
+
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -77,9 +80,28 @@ builder.Services.AddAuthentication(options =>
         ValidateAudience = true,
         ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
-        ValidIssuer = builder.Configuration["Jwt:Issuer"],
-        ValidAudience = builder.Configuration["Jwt:Audience"],
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey ?? "7e0b85fc2c7e86a65f646d2549814df5710ad967dbc5bd8761f2309d06550d5b"))
+        ValidIssuer = builder.Configuration["Jwt:Issuer"] ?? throw new InvalidOperationException("JWT Issuer is not configured"),
+        ValidAudience = builder.Configuration["Jwt:Audience"] ?? throw new InvalidOperationException("JWT Audience is not configured"),
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey)),
+        // Add these additional parameters for better stability
+        ClockSkew = TimeSpan.Zero, // Remove default 5-minute tolerance
+        NameClaimType = "name",    // Standard claim type mapping
+        RoleClaimType = "role"     // Standard claim type mapping
+    };
+
+    // Add debugging events
+    options.Events = new JwtBearerEvents
+    {
+        OnAuthenticationFailed = context =>
+        {
+            Console.WriteLine($"Authentication failed: {context.Exception}");
+            return Task.CompletedTask;
+        },
+        OnTokenValidated = context =>
+        {
+            Console.WriteLine("Token successfully validated");
+            return Task.CompletedTask;
+        }
     };
 });
 

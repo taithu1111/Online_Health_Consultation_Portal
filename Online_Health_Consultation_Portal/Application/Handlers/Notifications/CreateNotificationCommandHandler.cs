@@ -1,5 +1,7 @@
+// CreateNotificationCommandHandler.cs
 using MediatR;
 using Online_Health_Consultation_Portal.Application.Commands.Notifications;
+using Online_Health_Consultation_Portal.Application.Dtos.Notifications;
 using Online_Health_Consultation_Portal.Domain;
 using Online_Health_Consultation_Portal.Infrastructure.Repositories;
 
@@ -18,13 +20,13 @@ namespace Online_Health_Consultation_Portal.Application.Handlers.Notifications
         {
             var notification = new Notification
             {
-                UserId = request.UserId,
-                Message = request.Message,
+                UserId = request.NotificationDto.UserId,
+                Message = request.NotificationDto.Message,
                 IsRead = false,
-                Type = request.Type,
-                AppointmentId = request.AppointmentId,
-                PrescriptionId = request.PrescriptionId,
-                PaymentId = request.PaymentId,
+                Type = request.NotificationDto.Type,
+                AppointmentId = request.NotificationDto.AppointmentId,
+                PrescriptionId = request.NotificationDto.PrescriptionId,
+                PaymentId = request.NotificationDto.PaymentId,
                 CreatedAt = DateTime.UtcNow
             };
 

@@ -8,50 +8,60 @@ namespace Online_Health_Consultation_Portal.Infrastructure.Service
     public class JwtService : IJwtService
     {
         private readonly IConfiguration _configuration;
+        private readonly SymmetricSecurityKey _signingKey;
+        private readonly JwtSecurityTokenHandler _tokenHandler;
 
         public JwtService(IConfiguration configuration)
         {
-            _configuration = configuration;
+            _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+
+            var secret = _configuration["Jwt:Key"]
+                ?? throw new ArgumentNullException("Jwt:Key is not configured");
+
+            _signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret))
+            {
+                KeyId = "main-key" // Add KeyId to avoid IDX10517 error
+            };
+
+            _tokenHandler = new JwtSecurityTokenHandler();
         }
 
         public string GenerateToken(int userId, List<string> roles)
         {
-            //roles ??= new List<string>();
-
-
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Secret"]!));
-            var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            if (roles == null)
+                throw new ArgumentNullException(nameof(roles));
 
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.NameIdentifier, userId.ToString())
+                new Claim(JwtRegisteredClaimNames.Sub, userId.ToString()),
+                new Claim(ClaimTypes.NameIdentifier, userId.ToString()), // ✅ Needed for ValidateToken
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(JwtRegisteredClaimNames.Iat, DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64)
             };
 
-            // Thêm các roles vào claims
-            foreach (var role in roles)
+            claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
+
+            var tokenDescriptor = new SecurityTokenDescriptor
             {
-                claims.Add(new Claim(ClaimTypes.Role, role));
-            }
+                Subject = new ClaimsIdentity(claims),
+                Expires = DateTime.UtcNow.AddHours(1),
+                Issuer = _configuration["Jwt:Issuer"],
+                Audience = _configuration["Jwt:Audience"],
+                SigningCredentials = new SigningCredentials(_signingKey, SecurityAlgorithms.HmacSha256)
+            };
 
-            var token = new JwtSecurityToken(
-                issuer: _configuration["Jwt:Issuer"],
-                audience: _configuration["Jwt:Audience"],
-                claims: claims,
-                expires: DateTime.UtcNow.AddHours(1), 
-                signingCredentials: credentials
-            );
-
-            return new JwtSecurityTokenHandler().WriteToken(token);
+            var token = _tokenHandler.CreateToken(tokenDescriptor);
+            return _tokenHandler.WriteToken(token);
         }
 
         public int? ValidateToken(string token)
         {
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.UTF8.GetBytes(_configuration["Jwt:Secret"]!);
+            if (string.IsNullOrWhiteSpace(token))
+                return null;
 
             try
             {
-                tokenHandler.ValidateToken(token, new TokenValidationParameters
+                var principal = _tokenHandler.ValidateToken(token, new TokenValidationParameters
                 {
                     ValidateIssuer = true,
                     ValidateAudience = true,
@@ -59,17 +69,20 @@ namespace Online_Health_Consultation_Portal.Infrastructure.Service
                     ValidateIssuerSigningKey = true,
                     ValidIssuer = _configuration["Jwt:Issuer"],
                     ValidAudience = _configuration["Jwt:Audience"],
-                    IssuerSigningKey = new SymmetricSecurityKey(key)
+                    IssuerSigningKey = _signingKey,
+                    ClockSkew = TimeSpan.Zero
                 }, out SecurityToken validatedToken);
 
-                var jwtToken = (JwtSecurityToken)validatedToken;
-                var userId = int.Parse(jwtToken.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value);
+                var userIdClaim = principal.FindFirst(ClaimTypes.NameIdentifier)
+                    ?? principal.FindFirst(JwtRegisteredClaimNames.Sub);
 
-                return userId;
+                if (userIdClaim != null && int.TryParse(userIdClaim.Value, out var userId))
+                    return userId;
+
+                return null;
             }
-            catch
+            catch (SecurityTokenException)
             {
-                // Token không hợp lệ
                 return null;
             }
         }

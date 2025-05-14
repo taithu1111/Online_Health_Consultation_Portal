@@ -20,9 +20,10 @@ namespace Online_Health_Consultation_Portal.Application.Handlers.Doctors
             _mapper = mapper;
         }
 
-        public async Task<PaginatedResponse<DoctorDto>> Handle(GetDoctorListQuery request, CancellationToken cancellationToken)
+        public async Task<PaginatedResponse<DoctorDto>> Handle(GetDoctorListQuery query, CancellationToken cancellationToken)
         {
-            var query = _context.Doctors
+            var request = query.Request;
+            var dbQuery = _context.Doctors
                 .Include(d => d.User)
                 .Include(d => d.Specialization)
                 .AsQueryable();
@@ -30,22 +31,22 @@ namespace Online_Health_Consultation_Portal.Application.Handlers.Doctors
             // Apply filters
             if (request.SpecializationId.HasValue)
             {
-                query = query.Where(d => d.SpecializationId == request.SpecializationId);
+                dbQuery = dbQuery.Where(d => d.SpecializationId == request.SpecializationId);
             }
 
             if (request.MinExperienceYears.HasValue)
             {
-                query = query.Where(d => d.ExperienceYears >= request.MinExperienceYears);
+                dbQuery = dbQuery.Where(d => d.ExperienceYears >= request.MinExperienceYears);
             }
 
             if (!string.IsNullOrEmpty(request.Language))
             {
-                query = query.Where(d => d.Languages.Contains(request.Language));
+                dbQuery = dbQuery.Where(d => d.Languages.Contains(request.Language));
             }
 
-            var totalCount = await query.CountAsync(cancellationToken);
+            var totalCount = await dbQuery.CountAsync(cancellationToken);
 
-            var paginatedDoctors = await query
+            var paginatedDoctors = await dbQuery
                 .Skip((request.Page - 1) * request.PageSize)
                 .Take(request.PageSize)
                 .ToListAsync(cancellationToken);

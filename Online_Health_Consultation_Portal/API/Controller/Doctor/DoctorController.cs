@@ -1,5 +1,7 @@
+// DoctorController.cs
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Online_Health_Consultation_Portal.Application.Dtos.Doctors;
 using Online_Health_Consultation_Portal.Application.Queries.Doctors;
 
 namespace Online_Health_Consultation_Portal.API.Controllers.Doctor
@@ -21,13 +23,14 @@ namespace Online_Health_Consultation_Portal.API.Controllers.Doctor
             [FromQuery] int? minExperienceYears,
             [FromQuery] string? language)
         {
-            var query = new GetDoctorListQuery
+            var request = new DoctorListRequestDto
             {
                 SpecializationId = specializationId,
                 MinExperienceYears = minExperienceYears,
                 Language = language
             };
 
+            var query = new GetDoctorListQuery { Request = request };
             var result = await _mediator.Send(query);
             return Ok(result);
         }
