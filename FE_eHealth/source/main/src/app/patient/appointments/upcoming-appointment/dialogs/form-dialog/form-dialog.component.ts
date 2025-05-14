@@ -72,7 +72,7 @@ export class FormDialogComponent {
         : '');
 
     this.appointmentForm = this.fb.group({
-      patientId: [appt?.patientId ?? 7, Validators.required],
+      patientId: [appt?.patientId ?? 1, Validators.required],
       doctorId: [appt?.doctorId ?? '', Validators.required],
       doa: [initialDate, Validators.required],
       timeSlot: [initialTime, Validators.required],
@@ -122,22 +122,22 @@ export class FormDialogComponent {
       }
       this.apptSvc.updateAppointment(id, dto, { responseType: 'text' }).subscribe({
         next: () => {
-          this.snackBar.open('Cập nhật thành công', 'Đóng', { duration: 2000 });
+          this.snackBar.open('Updated successfully', 'Close', { duration: 2000 });
           this.dialogRef.close(true);
         },
         error: err => {
-          this.snackBar.open('Cập nhật thất bại', 'Đóng', { duration: 2000 });
+          this.snackBar.open('Update failed', 'Close', { duration: 2000 });
           console.error(err);
         },
       });
     } else {
       this.apptSvc.createAppointment(dto).subscribe({
         next: () => {
-          this.snackBar.open('Tạo mới thành công', 'Đóng', { duration: 2000 });
+          this.snackBar.open('Created successfully', 'Close', { duration: 2000 });
           this.dialogRef.close(true);
         },
         error: err => {
-          this.snackBar.open('Tạo mới thất bại', 'Đóng', { duration: 2000 });
+          this.snackBar.open('Create failed', 'Close', { duration: 2000 });
           console.error(err);
         },
       });

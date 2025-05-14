@@ -1,6 +1,25 @@
 :host ::ng-deep .column-filter .mat-mdc-select-arrow {
   display: none;
 }
+
 :host ::ng-deep .advance-table .mat-mdc-header-cell {
   font-weight: 500;
+}
+
+.email-cell {
+  /* cho phép xuống dòng bình thường */
+  white-space: normal !important;
+
+  /* nếu không có khoảng trắng, cho phép ngắt giữa chuỗi */
+  word-break: break-all !important;
+}
+
+.advance-table .mat-header-cell,
+.advance-table .mat-cell {
+  vertical-align: top !important;
+}
+
+.advance-table {
+  width: 100%;
+  table-layout: fixed;
 }

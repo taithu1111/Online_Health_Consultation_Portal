@@ -33,6 +33,7 @@ namespace Online_Health_Consultation_Portal.Application.Handlers.Appointment
                         Id = a.Id,
                         //PatientId = a.PatientId,
                         //DoctorId = a.DoctorId,
+                        PatientName = a.Patient.User.FullName,
                         DoctorName = a.Doctor.User.FullName,
                         AppointmentDateTime = a.AppointmentDateTime,
                         Status = a.Status,

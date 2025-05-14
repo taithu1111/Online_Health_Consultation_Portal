@@ -127,7 +127,7 @@ export class UpcomingAppointmentComponent implements OnInit, OnDestroy {
   }
 
   loadData() {
-    const patientId = 7; // hoặc dynamic
+    const patientId = 1; // hoặc dynamic
     this.isLoading = true;
     this.appointmentService.getAppointmentsByPatientId(patientId).subscribe({
       next: apiData => {
@@ -136,8 +136,6 @@ export class UpcomingAppointmentComponent implements OnInit, OnDestroy {
           const dt = new Date(item.appointmentDateTime);
           return {
             id: item.id,
-            // patientId: item.patientId,
-            // doctorId: item.doctorId,
             doctorName: item.doctorName,
             appointmentDate: this.datePipe.transform(dt, 'yyyy-MM-dd')!,
             appointmentTime: this.datePipe.transform(dt, 'HH:mm:ss')!,

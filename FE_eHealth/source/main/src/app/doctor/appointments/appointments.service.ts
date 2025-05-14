@@ -1,62 +1,43 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { Appointments } from './appointments.model';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { UserEnviroment } from 'environments/environment';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
-export class AppointmentsService {
-  private readonly API_URL = 'assets/data/doc-appointments.json';
-  private isTblLoading = true;
-  private dataChange: BehaviorSubject<Appointments[]> = new BehaviorSubject<
-    Appointments[]
-  >([]);
-  private dialogData!: Appointments;
+export class AppointmentService {
+  private apiUrl = `${UserEnviroment.apiUrl}/appointment`;
 
-  constructor(private httpClient: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
-  get data(): Appointments[] {
-    return this.dataChange.value;
+  // POST: Tạo cuộc hẹn
+  createAppointment(payload: any): Observable<number> {
+    return this.http.post<number>(`${this.apiUrl}`, payload);
   }
 
-  getDialogData(): Appointments {
-    return this.dialogData;
+  // PUT: Cập nhật cuộc hẹn
+  updateAppointment(id: number, payload: any): Observable<string> {
+    return this.http.put<string>(`${this.apiUrl}/${id}`, payload, { responseType: 'text' as 'json' });
   }
 
-  /** CRUD METHODS */
-  getAllAppointments(): Observable<Appointments[]> {
-    this.isTblLoading = true;
-    return this.httpClient
-      .get<Appointments[]>(this.API_URL)
-      .pipe(catchError(this.handleError));
+  // DELETE: Hủy cuộc hẹn
+  deleteAppointment(id: number): Observable<string> {
+    return this.http.delete<string>(`${this.apiUrl}/${id}`);
   }
 
-  addAppointments(appointments: Appointments): Observable<Appointments> {
-    return this.httpClient
-      .post<Appointments>(this.API_URL, appointments)
-      .pipe(catchError(this.handleError));
+  // GET: Lấy danh sách lịch hẹn theo bệnh nhân
+  getAppointmentsByPatientId(patientId: number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/patient/${patientId}`);
   }
 
-  updateAppointments(appointments: Appointments): Observable<Appointments> {
-    return this.httpClient
-      .put<Appointments>(`${this.API_URL}`, appointments)
-      .pipe(catchError(this.handleError));
+  // GET: Lấy danh sách lịch hẹn theo bác sĩ
+  getAppointmentsByDoctorId(doctorId: number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/doctor/${doctorId}`);
   }
 
-  deleteAppointments(id: number): Observable<void> {
-    return this.httpClient
-      .delete<void>(`${this.API_URL}`)
-      .pipe(catchError(this.handleError));
-  }
-
-  /** Handle Http operation that failed */
-  private handleError(error: HttpErrorResponse): Observable<never> {
-    console.error('An error occurred:', error.message);
-    return throwError(
-      () => new Error('Something went wrong; please try again later.')
-    );
+  // GET: Lấy chi tiết lịch hẹn theo ID
+  getAppointmentById(id: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/${id}`);
   }
 }

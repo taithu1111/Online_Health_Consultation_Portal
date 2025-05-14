@@ -1,11 +1,11 @@
 import { formatDate } from '@angular/common';
 
 export class Appointments {
-  id: string;
+  id: number;
   img: string;
   patientName: string;
   email: string;
-  mobile: string;
+  phoneNumber: string;
   appointmentDate: string;
   appointmentTime: string;
   gender: string;
@@ -19,7 +19,7 @@ export class Appointments {
     this.img = appointments.img || 'assets/images/user/usrbig1.jpg';
     this.patientName = appointments.patientName || '';
     this.email = appointments.email || '';
-    this.mobile = appointments.mobile || '';
+    this.phoneNumber = appointments.phoneNumber || '';
     this.appointmentDate =
       appointments.appointmentDate ||
       formatDate(new Date(), 'yyyy-MM-ddTHH:mm:ssZ', 'en');
@@ -33,10 +33,8 @@ export class Appointments {
       formatDate(new Date(), 'yyyy-MM-ddTHH:mm:ssZ', 'en'); // Default to current date
   }
 
-  public getRandomID(): string {
-    const S4 = () => {
-      return ((1 + Math.random()) * 0x10000) | 0;
-    };
-    return S4().toString() + S4().toString();
+  private getRandomID(): number {
+    const S4 = () => (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+    return parseInt(S4() + S4(), 16);
   }
 }

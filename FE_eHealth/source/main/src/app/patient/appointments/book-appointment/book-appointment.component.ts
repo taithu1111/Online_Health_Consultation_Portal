@@ -26,7 +26,7 @@ import { CommonModule } from '@angular/common';
     MatOptionModule,
     MatDatepickerModule,
     MatButtonToggleModule,
-    // FileUploadComponent,
+    // FileUploadComponent, hết lỗi 500k => stk:0373172624 mbbank
     MatButtonModule,
   ],
   templateUrl: './book-appointment.component.html',
@@ -42,7 +42,7 @@ export class BookAppointmentComponent {
     private appointmentService: AppointmentService
   ) {
     this.bookingForm = this.fb.group({
-      patientId: [7, [Validators.required]],   // lấy từ auth/user context
+      patientId: [1, [Validators.required]],   // lấy từ auth/user context
       doctorId: ['', [Validators.required]],
       doa: ['', [Validators.required]],        // Date
       timeSlot: ['', [Validators.required]],   // "08:00:00"

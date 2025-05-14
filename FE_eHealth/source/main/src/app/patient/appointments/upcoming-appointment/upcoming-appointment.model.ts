@@ -3,6 +3,7 @@ import { formatDate } from '@angular/common';
 
 export class UpcomingAppointment {
   id: number;
+  doctorid: number;
   doctor: string;
   date: string;
   time: string;
@@ -16,13 +17,14 @@ export class UpcomingAppointment {
     const appt = init ?? {};
 
     this.id = appt.id ?? this.getRandomID();
+    this.doctorid = appt.doctorid ?? 0;
     this.doctor = appt.doctor ?? '';
     // Nếu appt.date đã có thì dùng, nếu chưa (add mới) thì lấy ngày hôm nay
     this.date = appt.date ?? formatDate(new Date(), 'yyyy-MM-dd', 'en');
     this.time = appt.time ?? '';
     this.diagnosis = appt.diagnosis ?? 'no diagnosis';
     this.type = appt.type ?? 'video';
-    this.status = appt.status ?? 'awaiting';
+    this.status = appt.status ?? 'pending';
     this.notes = appt.notes ?? '';
   }
 

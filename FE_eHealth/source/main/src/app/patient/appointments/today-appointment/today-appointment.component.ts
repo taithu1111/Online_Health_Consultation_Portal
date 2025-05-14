@@ -55,7 +55,7 @@ export class TodayAppointmentComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    const patientId = 7; // hoặc lấy dynamic từ context
+    const patientId = 1; // hoặc lấy dynamic từ context
     this.svc.getAppointmentsByPatientId(patientId).subscribe(arr => {
       // Map dữ liệu trả về về UiAppointment
       this.allAppointments = arr.map((item: any) => {

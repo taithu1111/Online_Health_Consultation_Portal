@@ -30,8 +30,12 @@ namespace Online_Health_Consultation_Portal.Application.Handlers.Appointment
                     Id = a.Id,
                     //PatientId = a.PatientId,
                     //DoctorId = a.DoctorId,
-                    DoctorName = a.Doctor.User.FullName,
+                    PatientName = a.Patient.User.FullName,
                     AppointmentDateTime = a.AppointmentDateTime,
+                    Gender = a.Patient.Gender,
+                    Email = a.Patient.User.Email,
+                    PhoneNumber = a.Patient.Phone,
+                    Address = a.Patient.Address,
                     Status = a.Status,
                     Type = a.Type,
                     Notes = a.Notes
