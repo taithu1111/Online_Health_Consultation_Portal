@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 
-import { MedicalRecordsComponent } from "./medical-records.component";
+import { MedicalRecordsComponent } from "./health-records.component";
 
 describe("MedicalRecordsComponent", () => {
   let component: MedicalRecordsComponent;
@@ -9,8 +9,8 @@ describe("MedicalRecordsComponent", () => {
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
-    imports: [MedicalRecordsComponent],
-}).compileComponents();
+        imports: [MedicalRecordsComponent],
+      }).compileComponents();
     })
   );
 

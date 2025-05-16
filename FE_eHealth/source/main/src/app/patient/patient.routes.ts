@@ -2,7 +2,7 @@ import { Page404Component } from "../authentication/page404/page404.component";
 import { Route } from "@angular/router";
 import { DashboardComponent } from "./dashboard/dashboard.component";
 import { PrescriptionsComponent } from "./prescriptions/prescriptions.component";
-import { MedicalRecordsComponent } from "./medical-records/medical-records.component";
+import { MedicalRecordsComponent } from "./health-records/health-records.component";
 import { BillingComponent } from "./billing/billing.component";
 import { SettingsComponent } from "./settings/settings.component";
 export const PATIENT_ROUTE: Route[] = [

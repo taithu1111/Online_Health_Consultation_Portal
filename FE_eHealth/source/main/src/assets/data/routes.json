@@ -1250,7 +1250,7 @@
     },
     {
       "path": "/patient/records",
-      "title": "MENUITEMS.PATIENT.MEDICAL-RECORD",
+      "title": "MENUITEMS.PATIENT.HEALTH-RECORD",
       "iconType": "material-icons-outlined",
       "icon": "restore_page",
       "class": "",

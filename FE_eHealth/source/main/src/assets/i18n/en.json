@@ -154,12 +154,12 @@
         "LIST": {
           "BOOK-APPOINTMENT": "Book Appointment",
           "TODAY": "Today Appointments",
-          "UPCOMING": "Upcoming Appointments",
+          "UPCOMING": "Update Appointments",
           "PAST": "Past Appointments"
         }
       },
       "PRESCRIPTIONS": "Prescriptions",
-      "MEDICAL-RECORD": "Medical Record",
+      "HEALTH-RECORD": "Health Record",
       "BILLING": "Billing",
       "CHAT": "Chat",
       "SETTINGS": "Settings"

@@ -134,27 +134,47 @@ export class AppointmentsComponent implements OnInit, OnDestroy {
       width: '400px',
     });
 
+    // ref.afterClosed().subscribe((result: Appointments | undefined) => {
+    //   if (result) {
+    //     this.appointmentService.updateAppointment(result.id, result)
+    //       .subscribe({
+    //         next: () => {
+    //           this.snackBar.open('Cập nhật thành công', '', { duration: 2000 });
+    //           this.loadData();
+    //         },
+    //         error: () => this.snackBar.open('Cập nhật thất bại', '', { duration: 2000 })
+    //       });
+    //   }
+    // });
     ref.afterClosed().subscribe((result: Appointments | undefined) => {
-      if (result) {
-        this.appointmentService.updateAppointment(result.id, result)
-          .subscribe({
-            next: () => {
-              this.snackBar.open('Cập nhật thành công', '', { duration: 2000 });
-              this.loadData();
-            },
-            error: () => this.snackBar.open('Cập nhật thất bại', '', { duration: 2000 })
-          });
-      }
+      if (!result) return;
+
+      const updateDto = {
+        patientId: result.patientID,
+        doctorId: result.doctorID,
+        appointmentDateTime: result.appointmentDateTime,
+        status: result.status
+      };
+
+      this.appointmentService
+        .updateAppointment(result.id, updateDto)
+        .subscribe({
+          next: () => {
+            this.snackBar.open('Cập nhật thành công', '', { duration: 2000 });
+            this.loadData();
+          },
+          error: err => {
+            console.error('Update failed', err);
+            this.snackBar.open('Cập nhật thất bại', '', { duration: 2000 });
+          }
+        });
     });
   }
   detailsCall(appointment: Appointments): void {
     // ví dụ: điều hướng tới trang chi tiết
     this.snackBar.open(`Chi tiết cuộc hẹn ID: ${appointment.id}`, '', { duration: 2000 });
   }
-  // deleteAppointment(row: Appointments): void {
-  //   this.appointmentService.deleteAppointment(row.id)
-  //     .subscribe(() => this.loadData());
-  // }
+
   deleteAppointment(row: Appointments) {
     const dialogRef = this.dialog.open(AppointmentDelete, { data: row });
     dialogRef.afterClosed().subscribe(removed => {
@@ -184,7 +204,7 @@ export class AppointmentsComponent implements OnInit, OnDestroy {
       ID: x.id,
       'Patient Name': x.patientName,
       Status: x.status,
-      'Date & Time': `${x.appointmentDate} ${x.appointmentTime}`,
+      'Date & Time': `${x.appointmentDateTime}`,
     }));
     this.exportCsv(exportData, 'appointments.csv');
   }
