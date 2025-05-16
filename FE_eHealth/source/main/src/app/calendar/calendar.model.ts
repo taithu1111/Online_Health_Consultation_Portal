@@ -28,3 +28,38 @@ export class Calendar {
     return (S4() + S4()).toString(); // Convert to string
   }
 }
+export interface ScheduleDto {
+  id: number;
+  doctorId: number;
+  dayOfWeek: number;       // 0 = Sunday … 6 = Saturday
+  startTime: string;       // "HH:mm:ss"
+  endTime: string;         // "HH:mm:ss"
+  isAvailable: boolean;
+  location: string;
+  description: string;
+}
+
+export interface AvailableSlotDto {
+  slotStart: string;
+  slotEnd: string;
+}
+
+// Payload cho POST api/schedules
+export interface CreateScheduleCommand {
+  doctorId: number;
+  dayOfWeek: number;       // 0 = Sunday … 6 = Saturday
+  startTime: string;       // "HH:mm:ss"
+  endTime: string;         // "HH:mm:ss"
+  location?: string;
+  description?: string;
+}
+
+// Payload cho PUT api/schedules/{id}
+export interface UpdateScheduleCommand {
+  id: number;
+  dayOfWeek: number;
+  startTime: string;
+  endTime: string;
+  location?: string;
+  description?: string;
+}

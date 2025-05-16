@@ -141,8 +141,8 @@
     "DOCTOR": {
       "DASHBOARD": "Dashboard",
       "APPOINTMENTS": "Appointments",
-      "DOCTORS": "Doctors",
       "PATIENTS": "Patients",
+      "DOCTORS": "Profile",
       "SETTINGS": "Settings",
       "CHAT": "Chat"
     },

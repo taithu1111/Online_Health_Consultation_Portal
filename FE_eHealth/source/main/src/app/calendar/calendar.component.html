@@ -2,32 +2,38 @@
   <div class="content-block">
     <div class="block-header">
       <!-- breadcrumb -->
-      <app-breadcrumb [title]="'Calendar'" [items]="[]" [active_item]="'Calendar'"></app-breadcrumb>
+      <app-breadcrumb [title]="'Calendar'" [items]="[]" [active_item]="'Calendar'">
+      </app-breadcrumb>
     </div>
+
     <mat-card>
       <mat-card-content>
         <div class="row">
+          <!-- sidebar: nút Add Event + filter -->
           <div class="col-md-2 col-sm-12 p-l-30">
             <div class="m-b-25">
-              <button mat-flat-button color="primary" (click)="addNewEvent()">Add Event</button>
+              <button mat-flat-button color="primary" (click)="addNewEvent()">
+                Add Event
+              </button>
             </div>
+
             <p>My Calendars</p>
             <div class="filter-container">
               <ul>
-                @for (filter of filters; track filter) {
-                <li>
+                <li *ngFor="let filter of filters; trackBy: trackByFilter">
                   <mat-checkbox [checked]="filter.checked" [value]="filter.value" color="primary"
                     (change)="changeCategory($event, filter)">
-                    {{filter.value}}
+                    {{ filter.value }}
                   </mat-checkbox>
                 </li>
-                }
               </ul>
             </div>
           </div>
+
+          <!-- calendar chính -->
           <div class="col-md-10 col-sm-12">
             <div class="panel-body">
-              <full-calendar [options]='calendarOptions'>
+              <full-calendar [options]="calendarOptions">
               </full-calendar>
             </div>
           </div>

@@ -1,161 +1,159 @@
-import {
-  MAT_DIALOG_DATA,
-  MatDialogRef,
-  MatDialogContent,
-  MatDialogClose,
-} from '@angular/material/dialog';
 import { Component, Inject } from '@angular/core';
-import { CalendarService } from '../../calendar.service';
+import { CommonModule } from '@angular/common';
+import { AbstractControl } from '@angular/forms';
 import {
-  UntypedFormControl,
-  Validators,
-  UntypedFormGroup,
-  UntypedFormBuilder,
-  FormsModule,
   ReactiveFormsModule,
+  UntypedFormBuilder,
+  UntypedFormGroup,
+  UntypedFormControl,
+  Validators
 } from '@angular/forms';
-import { Calendar } from '../../calendar.model';
 import {
-  OwlDateTimeModule,
-  OwlNativeDateTimeModule,
-} from '@danielmoncada/angular-datetime-picker';
-import { MatOptionModule } from '@angular/material/core';
-import { MatSelectModule } from '@angular/material/select';
-import { MatInputModule } from '@angular/material/input';
+  MatDialogModule,
+  MatDialogRef,
+  MAT_DIALOG_DATA
+} from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatOptionModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import {
+  OwlDateTimeModule,
+  OwlNativeDateTimeModule
+} from '@danielmoncada/angular-datetime-picker';
+
+import { CalendarService } from '../../calendar.service';
+import {
+  ScheduleDto,
+  CreateScheduleCommand,
+  UpdateScheduleCommand
+} from '../../calendar.model';
 
 export interface DialogData {
-  id: number;
-  action: string;
-  calendar: Calendar;
+  action: 'create' | 'edit';
+  calendar?: ScheduleDto;
 }
 
 @Component({
-    selector: 'app-form-dialog',
-    templateUrl: './form-dialog.component.html',
-    styleUrls: ['./form-dialog.component.scss'],
-    imports: [
-        MatButtonModule,
-        MatIconModule,
-        MatDialogContent,
-        FormsModule,
-        ReactiveFormsModule,
-        MatFormFieldModule,
-        MatInputModule,
-        MatSelectModule,
-        MatOptionModule,
-        OwlDateTimeModule,
-        OwlNativeDateTimeModule,
-        MatDialogClose,
-    ]
+  selector: 'app-form-dialog',
+  standalone: true,
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    MatDialogModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatOptionModule,
+    MatIconModule,
+    MatButtonModule,
+    OwlDateTimeModule,
+    OwlNativeDateTimeModule
+  ],
+  templateUrl: './form-dialog.component.html',
+  styleUrls: ['./form-dialog.component.scss']
 })
 export class FormDialogComponent {
-  action: string;
+  action: 'create' | 'edit';
   dialogTitle: string;
   calendarForm: UntypedFormGroup;
-  calendar: Calendar;
   showDeleteBtn: boolean;
+  private calendar: ScheduleDto;
 
   constructor(
+    private fb: UntypedFormBuilder,
     public dialogRef: MatDialogRef<FormDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
-    public calendarService: CalendarService,
-    private fb: UntypedFormBuilder
+    private calendarService: CalendarService
   ) {
-    // Set action and dialog title
     this.action = data.action;
-    this.dialogTitle =
-      this.action === 'edit' ? data.calendar.title : 'New Event';
-
-    // Set the calendar object (either from existing data or a blank one)
-    this.calendar =
-      this.action === 'edit' ? data.calendar : new Calendar({} as Calendar);
-
-    // Determine if the delete button should be shown
+    this.calendar = data.calendar ?? ({} as ScheduleDto);
+    this.dialogTitle = this.action === 'edit' ? 'Edit Event' : 'New Event';
     this.showDeleteBtn = this.action === 'edit';
 
-    // Initialize the form
-    this.calendarForm = this.createCalendarForm();
-  }
-
-  createCalendarForm(): UntypedFormGroup {
-    return this.fb.group({
+    // Khởi tạo form, map các field theo template
+    this.calendarForm = this.fb.group({
       id: [this.calendar.id],
-      title: [this.calendar.title, [Validators.required]],
-      category: [this.calendar.category],
-      startDate: [this.calendar.startDate, [Validators.required]],
-      endDate: [this.calendar.endDate, [Validators.required]],
-      details: [this.calendar.details],
+      title: [this.calendar.location ?? '', [Validators.required]],
+      category: [this.calendar.description ?? ''],
+      startDate: [
+        this.calendar.startTime
+          ? new Date(`1970-01-01T${this.calendar.startTime}`)
+          : null,
+        [Validators.required]
+      ],
+      endDate: [
+        this.calendar.endTime
+          ? new Date(`1970-01-01T${this.calendar.endTime}`)
+          : null,
+        [Validators.required]
+      ],
+      details: ['']
     });
   }
-
-  getErrorMessage(control: UntypedFormControl): string {
-    if (control.hasError('required')) {
+  // getErrorMessage(ctrl: UntypedFormControl): string {
+  //   if (!ctrl) return '';
+  //   if (ctrl.hasError('required')) {
+  //     return 'This field is required';
+  //   }
+  //   return '';
+  // }
+  getErrorMessage(ctrl: AbstractControl | null): string {
+    if (!ctrl) return '';
+    if (ctrl.hasError('required')) {
       return 'This field is required';
     }
     return '';
   }
 
   submit() {
-    if (this.calendarForm.valid) {
-      if (this.action === 'edit') {
-        // Update existing calendar event
-        this.calendarService
-          .updateCalendar(this.calendarForm.getRawValue())
-          .subscribe({
-            next: (response) => {
-              const updatedResponse = {
-                data: response,
-                action: 'edit',
-              };
-              this.dialogRef.close(updatedResponse);
-            },
-            error: (error) => {
-              console.error('Update Error:', error);
-              // Optionally display an error message to the user
-            },
-          });
-      } else {
-        // Add new calendar event
-        this.calendarService
-          .addCalendar(this.calendarForm.getRawValue())
-          .subscribe({
-            next: (response) => {
-              this.dialogRef.close(response); // Close dialog and return newly added doctor data
-            },
-            error: (error) => {
-              console.error('Add Error:', error);
-              // Optionally display an error message to the user
-            },
-          });
-      }
+    if (this.calendarForm.invalid) {
+      return;
+    }
+    const f = this.calendarForm.value;
+    if (this.action === 'edit') {
+      const cmd: UpdateScheduleCommand = {
+        id: f.id,
+        dayOfWeek: f.startDate.getDay(),
+        startTime: this.formatTime(f.startDate),
+        endTime: this.formatTime(f.endDate),
+        location: f.title,
+        description: f.category
+      };
+      this.calendarService
+        .updateSchedule(cmd.id, cmd)
+        .subscribe(() => this.dialogRef.close({ action: 'edit', data: cmd }));
+    } else {
+      const date: Date = f.startDate;
+      const cmd: CreateScheduleCommand = {
+        doctorId: this.calendar.doctorId || 1,  // hoặc truyền doctorId qua data
+        dayOfWeek: date.getDay(),
+        startTime: this.formatTime(f.startDate),
+        endTime: this.formatTime(f.endDate),
+        location: f.title,
+        description: f.category
+      };
+      this.calendarService
+        .createSchedule(cmd)
+        .subscribe((newId) => this.dialogRef.close({ action: 'create', data: { ...cmd, id: newId } }));
     }
   }
 
   deleteEvent() {
-    if (this.calendarForm.valid) {
-      this.calendarService
-        .deleteCalendar(this.calendarForm.getRawValue())
-        .subscribe({
-          next: (response) => {
-            const updatedResponse = {
-              data: response,
-              action: 'delete',
-            };
-            // Close dialog and pass the updated response with the extra message
-            this.dialogRef.close(updatedResponse);
-          },
-          error: (error) => {
-            console.error('Update Error:', error);
-            // Optionally display an error message to the user
-          },
-        });
-    }
+    const id = this.calendarForm.get('id')!.value;
+    this.calendarService
+      .deleteSchedule(id)
+      .subscribe(() => this.dialogRef.close({ action: 'delete', id }));
   }
 
-  onNoClick(): void {
-    this.dialogRef.close(); // Close dialog without any action
+  cancel() {
+    this.dialogRef.close();
+  }
+
+  private formatTime(d: Date): string {
+    // trả về "HH:mm:ss"
+    return d.toTimeString().slice(0, 8);
   }
 }

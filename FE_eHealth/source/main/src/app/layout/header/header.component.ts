@@ -31,24 +31,23 @@ interface Notifications {
 }
 
 @Component({
-    selector: 'app-header',
-    templateUrl: './header.component.html',
-    styleUrls: ['./header.component.scss'],
-    imports: [
-        RouterLink,
-        NgClass,
-        MatButtonModule,
-        MatMenuModule,
-        NgScrollbar,
-        FeatherIconsComponent,
-        MatIconModule,
-        MatToolbarModule,
-    ]
+  selector: 'app-header',
+  templateUrl: './header.component.html',
+  styleUrls: ['./header.component.scss'],
+  imports: [
+    RouterLink,
+    NgClass,
+    MatButtonModule,
+    MatMenuModule,
+    NgScrollbar,
+    FeatherIconsComponent,
+    MatIconModule,
+    MatToolbarModule,
+  ]
 })
 export class HeaderComponent
   extends UnsubscribeOnDestroyAdapter
-  implements OnInit
-{
+  implements OnInit {
   public config!: InConfiguration;
   userImg?: string;
   homePage?: string;
@@ -73,63 +72,8 @@ export class HeaderComponent
   ) {
     super();
   }
-
-  listLang = [
-    { text: 'English', flag: 'assets/images/flags/us.svg', lang: 'en' },
-    { text: 'Spanish', flag: 'assets/images/flags/spain.svg', lang: 'es' },
-    { text: 'German', flag: 'assets/images/flags/germany.svg', lang: 'de' },
-  ];
-  notifications: Notifications[] = [
-    {
-      message: 'Please check your mail',
-      time: '14 mins ago',
-      icon: 'mail',
-      color: 'nfc-green',
-      status: 'msg-unread',
-    },
-    {
-      message: 'New Patient Added..',
-      time: '22 mins ago',
-      icon: 'person_add',
-      color: 'nfc-blue',
-      status: 'msg-read',
-    },
-    {
-      message: 'Your leave is approved!! ',
-      time: '3 hours ago',
-      icon: 'event_available',
-      color: 'nfc-orange',
-      status: 'msg-read',
-    },
-    {
-      message: 'Lets break for lunch...',
-      time: '5 hours ago',
-      icon: 'lunch_dining',
-      color: 'nfc-blue',
-      status: 'msg-read',
-    },
-    {
-      message: 'Patient report generated',
-      time: '14 mins ago',
-      icon: 'description',
-      color: 'nfc-green',
-      status: 'msg-read',
-    },
-    {
-      message: 'Please check your mail',
-      time: '22 mins ago',
-      icon: 'mail',
-      color: 'nfc-red',
-      status: 'msg-read',
-    },
-    {
-      message: 'Salary credited...',
-      time: '3 hours ago',
-      icon: 'paid',
-      color: 'nfc-purple',
-      status: 'msg-read',
-    },
-  ];
+  public settingLink = '';
+  notifications: Notifications[] = [];
   ngOnInit() {
     this.config = this.configService.configData;
     const userRole = this.authService.currentUserValue.role;
@@ -141,21 +85,12 @@ export class HeaderComponent
       this.homePage = 'admin/dashboard/main';
     } else if (userRole === 'Patient') {
       this.homePage = 'patient/dashboard';
+      this.settingLink = 'patient/settings';
     } else if (userRole === 'Doctor') {
       this.homePage = 'doctor/dashboard';
+      this.settingLink = 'doctor/settings';
     } else {
       this.homePage = 'admin/dashboard/main';
-    }
-
-    this.langStoreValue = localStorage.getItem('lang') as string;
-    const val = this.listLang.filter((x) => x.lang === this.langStoreValue);
-    this.countryName = val.map((element) => element.text);
-    if (val.length === 0) {
-      if (this.flagvalue === undefined) {
-        this.defaultFlag = 'assets/images/flags/us.svg';
-      }
-    } else {
-      this.flagvalue = val.map((element) => element.flag);
     }
   }
 
@@ -168,12 +103,6 @@ export class HeaderComponent
       document.exitFullscreen();
     }
     this.isFullScreen = !this.isFullScreen;
-  }
-  setLanguage(text: string, lang: string, flag: string) {
-    this.countryName = text;
-    this.flagvalue = flag;
-    this.langStoreValue = lang;
-    this.languageService.setLanguage(lang);
   }
   mobileMenuSidebarOpen(event: Event, className: string) {
     const hasClass = (event.target as HTMLInputElement).classList.contains(
