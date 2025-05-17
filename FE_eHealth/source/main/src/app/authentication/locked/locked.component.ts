@@ -7,18 +7,18 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 @Component({
-    selector: 'app-locked',
-    templateUrl: './locked.component.html',
-    styleUrls: ['./locked.component.scss'],
-    imports: [
-        FormsModule,
-        ReactiveFormsModule,
-        MatFormFieldModule,
-        MatInputModule,
-        MatIconModule,
-        MatButtonModule,
-        RouterLink,
-    ]
+  selector: 'app-locked',
+  templateUrl: './locked.component.html',
+  styleUrls: ['./locked.component.scss'],
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatIconModule,
+    MatButtonModule,
+    RouterLink,
+  ]
 })
 export class LockedComponent implements OnInit {
   authForm!: UntypedFormGroup;
@@ -37,11 +37,11 @@ export class LockedComponent implements OnInit {
     this.authForm = this.formBuilder.group({
       password: ['', Validators.required],
     });
-    this.userImg = this.authService.currentUserValue.img;
-    this.userFullName =
-      this.authService.currentUserValue.firstName +
-      ' ' +
-      this.authService.currentUserValue.lastName;
+    // this.userImg = this.authService.currentUserValue.img;
+    // this.userFullName =
+    //   this.authService.currentUserValue.firstName +
+    //   ' ' +
+    //   this.authService.currentUserValue.lastName;
   }
   get f() {
     return this.authForm.controls;
@@ -51,17 +51,25 @@ export class LockedComponent implements OnInit {
     // stop here if form is invalid
     if (this.authForm.invalid) {
       return;
-    } else {
-      const role = this.authService.currentUserValue.role;
-      if (role === Role.All || role === Role.Admin) {
-        this.router.navigate(['/admin/dashboard/main']);
-      } else if (role === Role.Doctor) {
-        this.router.navigate(['/doctor/dashboard']);
-      } else if (role === Role.Patient) {
-        this.router.navigate(['/patient/dashboard']);
-      } else {
-        this.router.navigate(['/authentication/signin']);
-      }
     }
+
+    const currentUser = this.authService.currentUserValue;
+
+    if (!currentUser?.roles) {
+      this.router.navigate(['/authentication/signin']);
+      return;
+    }
+    // const role = this.authService.currentUserValue.role;
+    const role = currentUser.roles[0];
+    if (role === Role.Admin || role === Role.Admin) {
+      this.router.navigate(['/admin/dashboard/main']);
+    } else if (role === Role.Doctor) {
+      this.router.navigate(['/doctor/dashboard']);
+    } else if (role === Role.Patient) {
+      this.router.navigate(['/patient/dashboard']);
+    } else {
+      this.router.navigate(['/authentication/signin']);
+    }
+
   }
 }

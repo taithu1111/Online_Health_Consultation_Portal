@@ -7,8 +7,8 @@
     <div class="col-sm-6 auth-form-section">
       <div class="form-section">
         <div class="auth-wrapper">
-          <h6 class="welcome-msg"> Sign Up </h6>
-          <p class="auth-signup-text text-muted">Enter details to create your account</p>
+          <h6 class="welcome-msg"> Patient Sign Up </h6>
+          <p class="auth-signup-text text-muted">Enter details to create your patient account</p>
           <form class="validate-form" [formGroup]="authForm" (ngSubmit)="onSubmit()">
             <div class="row">
               <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
@@ -25,7 +25,7 @@
               </div>
             </div>
             <div class="row">
-              <div class="col-xl-12col-lg-12 col-md-12 col-sm-12 mb-2">
+              <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
                 <mat-form-field class="example-full-width" appearance="outline">
                   <mat-label>Email</mat-label>
                   <input matInput formControlName="email" required>
@@ -39,12 +39,13 @@
               </div>
             </div>
             <div class="row">
-              <div class="col-xl-12col-lg-12 col-md-12 col-sm-12 mb-2">
+              <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
                 <mat-form-field class="example-full-width" appearance="outline">
                   <mat-label>Password</mat-label>
                   <input matInput formControlName="password" [type]="hide ? 'password' : 'text'" required>
                   <mat-icon class="material-icons-outlined pwd-toggle p-3" matSuffix (click)="hide = !hide">
-                    {{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                    {{hide ? 'visibility_off' : 'visibility'}}
+                  </mat-icon>
                   @if (authForm.get('password')!.hasError('required')) {
                   <mat-error>
                     Password is required
@@ -54,12 +55,13 @@
               </div>
             </div>
             <div class="row">
-              <div class="col-xl-12col-lg-12 col-md-12 col-sm-12 mb-2">
+              <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
                 <mat-form-field class="example-full-width" appearance="outline">
                   <mat-label>Confirm Password</mat-label>
                   <input matInput formControlName="cpassword" [type]="chide ? 'password' : 'text'" required>
                   <mat-icon class="material-icons-outlined pwd-toggle p-3" matSuffix (click)="chide = !chide">
-                    {{chide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                    {{chide ? 'visibility_off' : 'visibility'}}
+                  </mat-icon>
                   @if (authForm.get('cpassword')!.hasError('required')) {
                   <mat-error>
                     Confirm Password is required
@@ -68,37 +70,45 @@
                 </mat-form-field>
               </div>
             </div>
+
+            <!-- New Gender Field -->
+            <div class="row">
+              <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                <mat-form-field class="example-full-width" appearance="outline">
+                  <mat-label>Gender</mat-label>
+                  <mat-select formControlName="gender" required>
+                    <mat-option value="Male">Male</mat-option>
+                    <mat-option value="Female">Female</mat-option>
+                    <mat-option value="Other">Other</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </div>
+
             <div class="flex-sb-m w-full  p-b-20">
               <div>
-                <span>Already Registered? <a routerLink="/authentication/signin">
-                    Login
-                  </a></span>
+                <span>Already Registered? <a routerLink="/authentication/signin">Login</a></span>
               </div>
             </div>
             <div class="container-auth-form-btn">
-              <button mat-flat-button color="accent" class="auth-form-btn" [disabled]="!authForm.valid " type="submit">
+              <button mat-flat-button color="accent" class="auth-form-btn" [disabled]="!authForm.valid" type="submit">
                 Register
               </button>
             </div>
           </form>
           <h6 class="social-login-title">OR</h6>
           <ul class="list-unstyled social-icon mb-0 mt-3">
-            <li class="list-inline-item"><a href="javascript:void(0)" class="rounded">
-                <i class="fab fa-google"></i>
-              </a></li>
-            <li class="list-inline-item"><a href="javascript:void(0)" class="rounded flex-c-m">
-                <i class="fab fa-facebook-f"></i>
-              </a></li>
-            <li class="list-inline-item"><a href="javascript:void(0)" class="rounded">
-                <i class="fab fa-twitter"></i>
-              </a></li>
-            <li class="list-inline-item"><a href="javascript:void(0)" class="rounded">
-                <i class="fab fa-linkedin-in"></i>
-              </a></li>
+            <li class="list-inline-item"><a href="javascript:void(0)" class="rounded"><i class="fab fa-google"></i></a>
+            </li>
+            <li class="list-inline-item"><a href="javascript:void(0)" class="rounded flex-c-m"><i
+                  class="fab fa-facebook-f"></i></a></li>
+            <li class="list-inline-item"><a href="javascript:void(0)" class="rounded"><i class="fab fa-twitter"></i></a>
+            </li>
+            <li class="list-inline-item"><a href="javascript:void(0)" class="rounded"><i
+                  class="fab fa-linkedin-in"></i></a></li>
           </ul>
         </div>
       </div>
     </div>
-
   </div>
 </div>

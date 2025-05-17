@@ -89,36 +89,63 @@ export class SidebarComponent
     }
   }
   ngOnInit() {
-    if (this.authService.currentUserValue) {
-      const userRole = this.authService.currentUserValue.role;
-      this.userFullName =
-        this.authService.currentUserValue.firstName +
-        ' ' +
-        this.authService.currentUserValue.lastName;
-      this.userImg = this.authService.currentUserValue.img;
-
-      // this.sidebarItems = ROUTES.filter(
-      //   (x) => x.role.indexOf(userRole) !== -1 || x.role.indexOf('All') !== -1
-      // );
-
-      this.subs.sink = this.sidebarService
-        .getRouteInfo()
-        .subscribe((routes: RouteInfo[]) => {
-          this.sidebarItems = routes.filter(
-            (x) =>
-              x.role.indexOf(userRole) !== -1 || x.role.indexOf('All') !== -1
-          );
-        });
-      if (userRole === Role.Admin) {
-        this.userType = Role.Admin;
-      } else if (userRole === Role.Patient) {
-        this.userType = Role.Patient;
-      } else if (userRole === Role.Doctor) {
-        this.userType = Role.Doctor;
-      } else {
-        this.userType = Role.Admin;
-      }
+    const currentUser = this.authService.currentUserValue;
+    if (!currentUser) {
+      this.router.navigate(['/authentication/signin']);
+      return;
     }
+
+    const userRole = currentUser.roles[0] ?? '';
+    this.userFullName = `${currentUser.firstName ?? ''} ${currentUser.lastName ?? ''}`;
+    this.userImg = currentUser.img;
+
+    // lọc các route theo role
+    this.subs.sink = this.sidebarService.getRouteInfo().subscribe((routes) => {
+      this.sidebarItems = routes.filter(
+        (x) => x.role.indexOf(userRole) !== -1 || x.role.indexOf('All') !== -1
+      );
+    });
+
+    // set userType
+    if (userRole === 'Admin') {
+      this.userType = 'Admin';
+    } else if (userRole === 'Patient') {
+      this.userType = 'Patient';
+    } else if (userRole === 'Doctor') {
+      this.userType = 'Doctor';
+    } else {
+      this.userType = 'Admin';
+    }
+    // if (this.authService.currentUserValue) {
+    //   const userRole = this.authService.currentUserValue.role;
+    //   this.userFullName =
+    //     this.authService.currentUserValue.firstName +
+    //     ' ' +
+    //     this.authService.currentUserValue.lastName;
+    //   this.userImg = this.authService.currentUserValue.img;
+
+    //   // this.sidebarItems = ROUTES.filter(
+    //   //   (x) => x.role.indexOf(userRole) !== -1 || x.role.indexOf('All') !== -1
+    //   // );
+
+    //   this.subs.sink = this.sidebarService
+    //     .getRouteInfo()
+    //     .subscribe((routes: RouteInfo[]) => {
+    //       this.sidebarItems = routes.filter(
+    //         (x) =>
+    //           x.role.indexOf(userRole) !== -1 || x.role.indexOf('All') !== -1
+    //       );
+    //     });
+    //   if (userRole === Role.Admin) {
+    //     this.userType = Role.Admin;
+    //   } else if (userRole === Role.Patient) {
+    //     this.userType = Role.Patient;
+    //   } else if (userRole === Role.Doctor) {
+    //     this.userType = Role.Doctor;
+    //   } else {
+    //     this.userType = Role.Admin;
+    //   }
+    // }
 
     // this.sidebarItems = ROUTES.filter((sidebarItem) => sidebarItem);
     this.initLeftSidebar();

@@ -1,27 +1,57 @@
 import { Injectable } from '@angular/core';
-import { EventInput } from '@fullcalendar/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { UserEnviroment } from 'environments/environment';
+
+export interface Appointment {
+  id: number;
+  doctorId: number;
+  doctorName?: string;
+  diagnosis?: string;
+  appointmentDateTime?: string;
+}
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
+
 export class AppointmentCalendarService {
-  private readonly API_URL = 'assets/data/appointment.json';
+  private apiUrl = `${UserEnviroment.apiUrl}/appointment`;
 
-  constructor() {}
+  constructor(private http: HttpClient) { }
 
-  async loadEvents(): Promise<EventInput[]> {
-    const response = await fetch(this.API_URL);
-    const events = await response.json();
+  /** Lấy tất cả lịch hẹn (dành cho admin/calendar) */
+  getAllAppointments(): Observable<Appointment[]> {
+    return this.http.get<Appointment[]>(`${this.apiUrl}`);
+  }
 
-    return events.map((event: any) => ({
-      id: event.id,
-      title: event.doctor,
-      start: new Date(event.date), // Make sure to parse the date string
-      end: new Date(event.date), // Make sure to parse the date string
-      className: event.className,
-      groupId: event.groupId,
-      details: event.details,
-      allDay: event.allDay || false, // Default to false if not provided
-    }));
+  // POST: Tạo cuộc hẹn
+  createAppointment(payload: any): Observable<number> {
+    return this.http.post<number>(`${this.apiUrl}`, payload);
+  }
+
+  // PUT: Cập nhật cuộc hẹn
+  updateAppointment(id: number, payload: any): Observable<string> {
+    return this.http.put<string>(`${this.apiUrl}/${id}`, payload, { responseType: 'text' as 'json' });
+  }
+
+  // DELETE: Hủy cuộc hẹn
+  deleteAppointment(id: number): Observable<string> {
+    return this.http.delete<string>(`${this.apiUrl}/${id}`);
+  }
+
+  // GET: Lấy danh sách lịch hẹn theo bệnh nhân
+  getAppointmentsByPatientId(patientId: number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/patient/${patientId}`);
+  }
+
+  // GET: Lấy danh sách lịch hẹn theo bác sĩ
+  getAppointmentsByDoctorId(doctorId: number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/doctor/${doctorId}`);
+  }
+
+  // GET: Lấy chi tiết lịch hẹn theo ID
+  getAppointmentById(id: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/${id}`);
   }
 }

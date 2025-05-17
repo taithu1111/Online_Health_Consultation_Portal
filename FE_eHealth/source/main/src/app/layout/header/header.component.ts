@@ -59,6 +59,7 @@ export class HeaderComponent
   isOpenSidebar?: boolean;
   docElement?: HTMLElement;
   isFullScreen = false;
+  public settingLink = '';
 
   constructor(
     @Inject(DOCUMENT) private document: Document,
@@ -72,12 +73,19 @@ export class HeaderComponent
   ) {
     super();
   }
-  public settingLink = '';
   notifications: Notifications[] = [];
   ngOnInit() {
     this.config = this.configService.configData;
-    const userRole = this.authService.currentUserValue.role;
-    this.userImg = this.authService.currentUserValue.img;
+    const currentUser = this.authService.currentUserValue;
+    if (!currentUser) {
+      // chưa login thì redirect về signin
+      this.router.navigate(['/authentication/signin']);
+      return;
+    }
+    // const userRole = this.authService.currentUserValue.role;
+    // this.userImg = this.authService.currentUserValue.img;
+    const userRole = currentUser.roles[0] ?? '';
+    this.userImg = currentUser.img;
 
     this.docElement = document.documentElement;
 

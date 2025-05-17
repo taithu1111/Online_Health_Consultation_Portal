@@ -1,92 +1,94 @@
+// src/app/admin/appointment/appointment-calendar/appointment-calendar.component.ts
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { BreadcrumbComponent } from '@shared/components/breadcrumb/breadcrumb.component';
-import { AppointmentCalendarService } from './appointment-calendar.service';
-import { EventInput } from '@fullcalendar/core';
-import { MatCardModule } from '@angular/material/card';
-import {
-  FullCalendarComponent,
-  FullCalendarModule,
-} from '@fullcalendar/angular';
-import { CalendarOptions } from '@fullcalendar/core';
+import { FullCalendarComponent } from '@fullcalendar/angular';
+import { CalendarOptions, EventInput } from '@fullcalendar/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import { Router } from '@angular/router';
-import { MatTooltipModule } from '@angular/material/tooltip';
+import { FullCalendarModule } from '@fullcalendar/angular';
+import { CommonModule } from '@angular/common';
+import { MatCardModule } from '@angular/material/card';
+import { BreadcrumbComponent } from '@shared/components/breadcrumb/breadcrumb.component';
+import { UserEnviroment } from 'environments/environment';
+import { AppointmentCalendarService, Appointment } from '../appointment-calendar/appointment-calendar.service';
 
 @Component({
-    selector: 'app-appointment-calendar',
-    imports: [
-        BreadcrumbComponent,
-        MatCardModule,
-        FullCalendarModule,
-        MatTooltipModule,
-    ],
-    templateUrl: './appointment-calendar.component.html',
-    styleUrls: ['./appointment-calendar.component.scss']
+  selector: 'app-appointment-calendar',
+  standalone: true,
+  imports: [
+    BreadcrumbComponent,
+    FullCalendarModule,
+    CommonModule,
+    MatCardModule,
+  ],
+  templateUrl: './appointment-calendar.component.html',
+  styleUrls: ['./appointment-calendar.component.scss']
 })
 export class AppointmentCalendarComponent implements OnInit {
-  calendarEvents?: EventInput[];
   @ViewChild('calendar', { static: false })
-  calendarComponent: FullCalendarComponent | null = null;
+  calendarComponent!: FullCalendarComponent;
 
   calendarOptions: CalendarOptions = {
     plugins: [dayGridPlugin, interactionPlugin],
     initialView: 'dayGridMonth',
-    weekends: true,
-    events: [], // Events will be populated dynamically from the service
-    editable: true, // Allow editing events
-    selectable: true, // Enable selection for creating events
-    dateClick: this.handleDateClick.bind(this), // Handle date click event
-    eventClick: this.handleEventClick.bind(this), // Add eventClick handler
-    eventContent: this.eventContent.bind(this), // Event content customization
+    editable: true,
+    selectable: true,
+    events: [],       // sẽ gán động ở dưới
+    dateClick: this.handleDateClick.bind(this),
+    eventClick: this.handleEventClick.bind(this),
+    eventContent: this.eventContent.bind(this),
   };
 
   constructor(
-    private appointmentCalendarService: AppointmentCalendarService,
+    private appointmentService: AppointmentCalendarService,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.loadAppointments();
   }
 
-  loadAppointments() {
-    this.appointmentCalendarService.loadEvents().then((events) => {
-      this.calendarEvents = events;
-      this.calendarOptions.events = this.calendarEvents;
+  private loadAppointments() {
+    this.appointmentService.getAllAppointments()
+      .subscribe((list: Appointment[]) => {
+        const events: EventInput[] = list.map(appt => ({
+          id: appt.id.toString(),
+          title: appt.doctorName ?? 'Đặng Văn Trường',    // hiển thị tên bác sĩ
+          start: appt.appointmentDateTime,    // FullCalendar tự parse ISO string
+          allDay: false
+        }));
 
-      if (this.calendarComponent) {
-        this.calendarComponent.getApi().refetchEvents(); // Calls FullCalendar's refetchEvents method
-      }
-    });
+        // gán vào calendar và refetch
+        this.calendarOptions = {
+          ...this.calendarOptions,
+          events
+        };
+
+        //   this.calendarComponent.getApi().refetchEvents();
+        //   error: err => {
+        // console.error('Không tải được lịch hẹn:', err);
+        // }
+      });
   }
 
-  handleDateClick(info: any) {}
-  handleEventClick(info: any) {
-    // Get the clicked event's details
-    const eventData = info.event;
-    const eventDetails = {
-      title: eventData.title,
-      start: eventData.start.toISOString(), // Convert to ISO string for passing
-      end: eventData.end?.toISOString(), // Ensure the event has an end date
-      description: eventData.extendedProps.description,
-    };
+  handleDateClick(info: any) {
+    // ...
+  }
 
-    // Navigate to the view-appointment page and pass event data as query parameters
+  handleEventClick(info: any) {
+    const ev = info.event;
     this.router.navigate(['/admin/appointment/viewAppointment'], {
-      queryParams: eventDetails,
+
+      queryParams: {
+        id: ev.id,
+        title: ev.title,
+        start: ev.start?.toISOString()
+      }
     });
+
   }
 
   eventContent(info: any) {
-    const { event } = info;
-    // Return basic HTML content for the event
-    return {
-      html: `
-        <div class="fc-event-title">
-          ${event.title}
-        </div>
-      `,
-    };
+    return { html: `<div class="fc-event-title">${info.event.title}</div>` };
   }
 }

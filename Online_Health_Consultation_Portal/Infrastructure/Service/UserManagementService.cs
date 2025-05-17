@@ -22,13 +22,14 @@ namespace Online_Health_Consultation_Portal.Infrastructure.Services
             if (user.Role == "Admin") 
                 throw new InvalidOperationException("Cannot delete a different Admin.");
             
-            await _userManager.UpdateAsync(user);
             
             // Hủy các appointment liên quan
             await _dbContext.Appointments
                 .Where(a => a.PatientId == userId || a.DoctorId == userId)
                 .ExecuteUpdateAsync(setters => 
                     setters.SetProperty(a => a.Status, "Cancelled"));
+
+            await _userManager.DeleteAsync(user);
         }
     }
 }

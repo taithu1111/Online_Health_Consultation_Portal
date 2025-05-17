@@ -24,9 +24,11 @@ namespace Online_Health_Consultation_Portal.Application.Handlers.Auth
         {
             var user = await _userRepository.Get();
             var userInclude = await user
-                //.Include(e => e.UserRoles)
-                //.ThenInclude(er => er.Role)
+                .Include(e => e.UserRoles)
+                .ThenInclude(er => er.Role)
                 .FirstOrDefaultAsync(e => e.Email == request.LoginDto.Email);
+
+
 
             //var userEmailCheck = await user.FirstOrDefaultAsync(e => e.Email == request.LoginDto.Email);
 

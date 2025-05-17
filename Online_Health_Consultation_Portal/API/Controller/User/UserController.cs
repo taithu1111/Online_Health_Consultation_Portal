@@ -9,7 +9,7 @@ namespace Online_Health_Consultation_Portal.API.Controllers.User
 {
     [ApiController]
     [Route("api/users")]
-    [Authorize]
+    //[Authorize]
     public class UserController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -64,7 +64,7 @@ namespace Online_Health_Consultation_Portal.API.Controllers.User
         }
 
         [HttpDelete("{userId}")]
-        [Authorize(Policy = "AdminOnly")]
+        //[Authorize(Policy = "AdminOnly")]
         public async Task<IActionResult> DeleteUser(int userId)
         {
             try
@@ -79,7 +79,7 @@ namespace Online_Health_Consultation_Portal.API.Controllers.User
         }
 
         [HttpGet]
-        [Authorize(Policy = "AdminOnly")]
+        //[Authorize(Policy = "AdminOnly")]
         public async Task<IActionResult> GetUsers([FromQuery] GetUsersQuery query)
         {
             try
