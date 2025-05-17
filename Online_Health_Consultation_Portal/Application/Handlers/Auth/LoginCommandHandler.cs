@@ -36,7 +36,7 @@ namespace Online_Health_Consultation_Portal.Application.Handlers.Auth
                 throw new UnauthorizedAccessException("Invalid email or password.");
             }
 
-            var roles = userInclude.UserRoles.Select(er => er.Role.Name).ToList() ?? new List<string>();
+            List<String> roles = userInclude.Role.Split(',').ToList();
             var token = _jwtService.GenerateToken(userInclude.Id, roles);
 
             return new LoginResponseDto
