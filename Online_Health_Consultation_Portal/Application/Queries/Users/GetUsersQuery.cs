@@ -1,0 +1,13 @@
+using MediatR;
+using Online_Health_Consultation_Portal.Application.Dtos.Paginated;
+
+namespace Online_Health_Consultation_Portal.Application.Dtos.Users
+{
+    public sealed record GetUsersQuery : IRequest<PaginatedResponse<UserResponse>>
+    {
+        public int Page { get; init; } = 1;
+        public int PageSize { get; init; } = 20;
+        public string? RoleFilter { get; init; }
+        public string? SearchTerm { get; init; }
+    }
+}

@@ -1,0 +1,22 @@
+:host ::ng-deep {
+
+    /* chữ của event month view */
+    .fc-daygrid-event .fc-event-title,
+    .fc-daygrid-event .fc-event-time {
+        color: #000 !important;
+    }
+
+    /* nếu cần đổi nền của các event “Available” */
+    .fc-daygrid-event.fc-event {
+        background-color: #a0d468 !important;
+        /* ví dụ xanh lá nhạt */
+        border-color: #8cbf57 !important;
+    }
+
+    /* và event “Unavailable” */
+    .fc-daygrid-event.fc-event[style*="lightgray"] {
+        /* hoặc dùng selector riêng nếu bạn gán class */
+        background-color: #f2f2f2 !important;
+        color: #000 !important;
+    }
+}

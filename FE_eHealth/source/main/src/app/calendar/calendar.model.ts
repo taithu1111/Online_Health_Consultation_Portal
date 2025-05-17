@@ -31,7 +31,8 @@ export class Calendar {
 export interface ScheduleDto {
   id: number;
   doctorId: number;
-  dayOfWeek: number;       // 0 = Sunday … 6 = Saturday
+  // dayOfWeek: number;       // 0 = Sunday … 6 = Saturday
+  date: string;         // "yyyy-MM-dd"
   startTime: string;       // "HH:mm:ss"
   endTime: string;         // "HH:mm:ss"
   isAvailable: boolean;
@@ -47,7 +48,8 @@ export interface AvailableSlotDto {
 // Payload cho POST api/schedules
 export interface CreateScheduleCommand {
   doctorId: number;
-  dayOfWeek: number;       // 0 = Sunday … 6 = Saturday
+  // dayOfWeek: number;       // 0 = Sunday … 6 = Saturday
+  date: string;         // "yyyy-MM-dd"
   startTime: string;       // "HH:mm:ss"
   endTime: string;         // "HH:mm:ss"
   location?: string;
@@ -57,7 +59,8 @@ export interface CreateScheduleCommand {
 // Payload cho PUT api/schedules/{id}
 export interface UpdateScheduleCommand {
   id: number;
-  dayOfWeek: number;
+  // dayOfWeek: number;
+  date?: string;         // "yyyy-MM-dd"
   startTime: string;
   endTime: string;
   location?: string;

@@ -42,6 +42,8 @@ export class CalendarComponent implements OnInit {
     initialView: 'dayGridMonth',
     selectable: true,
     editable: true,
+    displayEventTime: false,
+    displayEventEnd: false,
     select: this.handleDateSelect.bind(this),
     eventClick: this.handleEventClick.bind(this),
     headerToolbar: {
@@ -49,8 +51,17 @@ export class CalendarComponent implements OnInit {
       center: 'title',
       right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
     },
+    // gán title attribute cho event để hiện tooltip khi hover
+    eventDidMount: info => {
+      const desc = (info.event.extendedProps as any).description;
+      if (desc) {
+        info.el.setAttribute('title', desc);
+      }
+    },
     events: []
   };
+
+
 
   filters = [
     { value: 'Available', checked: true },
@@ -81,10 +92,10 @@ export class CalendarComponent implements OnInit {
       .map(s => ({
         id: s.id.toString(),
         title: `${s.startTime.slice(0, 5)} - ${s.endTime.slice(0, 5)}`,
-        daysOfWeek: [s.dayOfWeek],
-        startTime: s.startTime,
-        endTime: s.endTime,
-        backgroundColor: s.isAvailable ? undefined : 'lightgray'
+        start: `${s.date}T${s.startTime}`,
+        end: `${s.date}T${s.endTime}`,
+        backgroundColor: s.isAvailable ? undefined : 'lightgray',
+        description: s.description // hiện thông tin mô tả khi hover
       } as EventInput));
   }
 
@@ -108,7 +119,7 @@ export class CalendarComponent implements OnInit {
       if (!res) return;
       const cmd: CreateScheduleCommand = {
         doctorId,
-        dayOfWeek: (res.date as Date).getDay(),
+        date: res.date.toISOString().split('T')[0],
         startTime: res.startTime + ':00',
         endTime: res.endTime + ':00',
         location: res.location,
@@ -132,7 +143,7 @@ export class CalendarComponent implements OnInit {
           if (!res) return;
           const cmd: CreateScheduleCommand = {
             doctorId,
-            dayOfWeek: date.getDay(),
+            date: isoDate,
             startTime: res.startTime + ':00',
             endTime: res.endTime + ':00',
             location: res.location,
@@ -159,7 +170,7 @@ export class CalendarComponent implements OnInit {
       } else {
         const cmd: UpdateScheduleCommand = {
           id,
-          dayOfWeek: date.getDay(),
+          date: date.toISOString().split('T')[0],
           startTime: res.startTime + ':00',
           endTime: res.endTime + ':00',
           location: res.location,

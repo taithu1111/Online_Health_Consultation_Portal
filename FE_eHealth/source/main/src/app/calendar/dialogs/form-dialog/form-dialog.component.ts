@@ -116,11 +116,11 @@ export class FormDialogComponent {
     if (this.action === 'edit') {
       const cmd: UpdateScheduleCommand = {
         id: f.id,
-        dayOfWeek: f.startDate.getDay(),
-        startTime: this.formatTime(f.startDate),
-        endTime: this.formatTime(f.endDate),
+        date: f.startDate.toISOString().split('T')[0],
+        startTime: f.startDate.toTimeString().slice(0, 8),
+        endTime: f.endDate.toTimeString().slice(0, 8),
         location: f.title,
-        description: f.category
+        description: f.details
       };
       this.calendarService
         .updateSchedule(cmd.id, cmd)
@@ -129,11 +129,11 @@ export class FormDialogComponent {
       const date: Date = f.startDate;
       const cmd: CreateScheduleCommand = {
         doctorId: this.calendar.doctorId || 1,  // hoặc truyền doctorId qua data
-        dayOfWeek: date.getDay(),
-        startTime: this.formatTime(f.startDate),
-        endTime: this.formatTime(f.endDate),
+        date: f.startDate.toISOString().split('T')[0],
+        startTime: f.startDate.toTimeString().slice(0, 8),
+        endTime: f.endDate.toTimeString().slice(0, 8),
         location: f.title,
-        description: f.category
+        description: f.details
       };
       this.calendarService
         .createSchedule(cmd)

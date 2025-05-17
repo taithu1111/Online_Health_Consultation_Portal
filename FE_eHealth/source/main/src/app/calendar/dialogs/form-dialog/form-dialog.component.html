@@ -31,8 +31,8 @@
           <mat-option value="work">Work</mat-option>
           <mat-option value="personal">Personal</mat-option>
           <mat-option value="important">Important</mat-option>
-          <mat-option value="travel">Travel</mat-option>
-          <mat-option value="friends">Friends</mat-option>
+          <mat-option value="visit">Visit</mat-option>
+          <mat-option value="consult">Consult</mat-option>
         </mat-select>
         <mat-error *ngIf="calendarForm.get('category')?.hasError('required')">
           {{ getErrorMessage(calendarForm.get('category')!) }}

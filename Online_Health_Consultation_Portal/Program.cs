@@ -29,6 +29,11 @@ using System;
 using System.Text;
 using Serilog;
 using Log = Serilog.Log;
+using Online_Health_Consultation_Portal.Application.Queries.Doctors;
+using Online_Health_Consultation_Portal.Application.Dtos.Doctors;
+using Online_Health_Consultation_Portal.Infrastructure.Services;
+using Online_Health_Consultation_Portal.Application.Dtos.Users;
+using Online_Health_Consultation_Portal.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -92,9 +97,11 @@ builder.Services.AddIdentity<User, Role>()
 
 
 // Đăng ký các dịch vụ
+builder.Services.AddScoped<IUserManagementService, UserManagementService>();
 builder.Services.AddScoped<ILogService, LogService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<ILogRepository, LogRepository>();
+
 //add logging 
 builder.Services.AddScoped(typeof(IApplogger<>), typeof(SeriLoggerAdapter<>));
 
@@ -113,13 +120,6 @@ builder.Services.AddAuthentication(options =>
     {
         options.TokenValidationParameters = new TokenValidationParameters
         {
-            //ValidateIssuer = false,
-            //ValidateAudience = false,
-            //ValidateLifetime = false,
-            //ValidIssuer = builder.Configuration["Jwt:Issuer"],
-            //ValidAudience = builder.Configuration["Jwt:Audience"],
-            //IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!))
-
             ValidateIssuer = false,
             ValidateAudience = false,
             ValidateIssuerSigningKey = true,
@@ -149,11 +149,12 @@ builder.Services.AddScoped<IRequestHandler<CreateScheduleCommand, int>, Online_H
 builder.Services.AddScoped<IRequestHandler<UpdateScheduleCommand, bool>, Online_Health_Consultation_Portal.Application.Handlers.Schedule.UpdateScheduleHandler>();
 builder.Services.AddScoped<IRequestHandler<DeleteScheduleCommand, bool>, Online_Health_Consultation_Portal.Application.Handlers.Schedule.DeleteScheduleHandler>();
 
-// Đăng ký các handlers
+// Auth
 builder.Services.AddScoped<IRequestHandler<LoginCommand, LoginResponseDto>, LoginCommandHandler>();
 builder.Services.AddScoped<IRequestHandler<ForgotPasswordCommand, bool>, ForgotPasswordCommandHandler>();
 builder.Services.AddScoped<IRequestHandler<ResetPasswordCommand, bool>, ResetPasswordCommandHandler>();
 builder.Services.AddScoped<IRequestHandler<RegisterCommand, bool>, RegisterCommandHandler>();
+
 
 
 //------------- add queries ------------------
@@ -170,9 +171,12 @@ builder.Services.AddScoped<IRequestHandler<GetConsultationsByPatientQuery, List<
 //schedule
 builder.Services.AddScoped<IRequestHandler<GetDoctorSchedulesQuery, List<ScheduleDto>>, Online_Health_Consultation_Portal.Application.Handlers.Schedule.GetDoctorSchedulesQueryHandler>();
 builder.Services.AddScoped<IRequestHandler<GetAvailableSlotsQuery, List<AvailableSlotDto>>, Online_Health_Consultation_Portal.Application.Handlers.Schedule.GetAvailableSlotsQueryHandler>();
+//doctor
 
 
-
+//reponsitory
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
 
 
 // Đăng ký các dịch vụ
@@ -181,7 +185,7 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddAuthorization();
-
+builder.Services.AddTransient<UserResponse>();
 var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -204,22 +208,6 @@ try
         app.UseSwaggerUI();
     }
 
-    // cấu hình swagger
-    //builder.Services.AddEndpointsApiExplorer();
-    //builder.Services.AddSwaggerGen(c =>
-    //{
-    //    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Online Health Consultation API", Version = "v1" });
-    //});
-
-    // Kích hoạt Swagger UI
-    //if (app.Environment.IsDevelopment())
-    //{
-    //    app.UseSwagger();
-    //    app.UseSwaggerUI(c =>
-    //    {
-    //        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Online Health Consultation API v1");
-    //    });
-    //}
     app.UseAuthentication();
 
     app.UseHttpsRedirection();
