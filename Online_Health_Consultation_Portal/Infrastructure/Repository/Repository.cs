@@ -59,11 +59,5 @@ namespace Online_Health_Consultation_Portal.Infrastructure.Repository
                 await _context.SaveChangesAsync();
             }
         }
-
-        public async Task<User?> GetUserByEmailAsync(string email)
-        {
-            return await _context.Users
-                .FirstOrDefaultAsync(u => u.NormalizedEmail == email.ToUpper());
-        }
     }
 }
