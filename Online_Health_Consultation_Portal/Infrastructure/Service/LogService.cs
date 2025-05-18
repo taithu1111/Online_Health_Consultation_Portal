@@ -28,7 +28,7 @@ namespace Online_Health_Consultation_Portal.Infrastructure.Service
             await _logRepository.AddAsync(log);
         }
 
-        public async Task LogWarningAsync(string message, string userId, string action, string entity, int entityId)
+        public async Task LogWarningAsync(string message, string? userId, string action, string entity, int entityId)
         {
             var log = new Log
             {

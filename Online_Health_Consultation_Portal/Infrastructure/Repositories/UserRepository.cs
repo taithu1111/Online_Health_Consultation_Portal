@@ -29,15 +29,17 @@ namespace Online_Health_Consultation_Portal.Infrastructure.Repositories
             return user;
         }
 
-        public async Task UpdateUserProfileAsync(User user)
+        public async Task<bool> UpdateUserProfileAsync(User user)
         {
-            await userManager.UpdateAsync(user);
+            context.Users.Update(user);
+            await context.SaveChangesAsync();
+            return true;
         }
 
         public async Task<PaginatedResponse<User>> GetPaginatedUsersAsync(
-            int page, 
-            int pageSize, 
-            string? roleFilter, 
+            int page,
+            int pageSize,
+            string? roleFilter,
             string? searchTerm)
         {
             var query = context.Users.AsQueryable();
@@ -69,6 +71,13 @@ namespace Online_Health_Consultation_Portal.Infrastructure.Repositories
                 Page = page,
                 PageSize = pageSize
             };
+        }
+
+        public async Task<User?> GetUserByEmailAsync(string email)
+        {
+            var normalizedEmail = email.ToUpper(); // or use UserManager.NormalizeEmail(email)
+            Console.WriteLine($"Looking for normalized email: {normalizedEmail}");
+            return await context.Users.FirstOrDefaultAsync(u => u.NormalizedEmail == normalizedEmail);
         }
     }
 }

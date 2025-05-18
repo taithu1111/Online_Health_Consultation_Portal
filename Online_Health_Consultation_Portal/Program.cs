@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using System.Text;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
@@ -85,8 +86,8 @@ builder.Services.AddAuthentication(options =>
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey)),
         // Add these additional parameters for better stability
         ClockSkew = TimeSpan.Zero, // Remove default 5-minute tolerance
-        NameClaimType = "name",    // Standard claim type mapping
-        RoleClaimType = "role"     // Standard claim type mapping
+        NameClaimType = ClaimTypes.NameIdentifier,    // Standard claim type mapping
+        RoleClaimType = ClaimTypes.Role     // Standard claim type mapping
     };
 
     // Add debugging events
@@ -107,7 +108,8 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddAuthorization(options =>
 {
-    options.AddPolicy("AdminOnly", policy => policy.RequireRole("Admin"));
+    options.AddPolicy("AdminOnly", policy =>
+        policy.RequireClaim(ClaimTypes.Role, "Admin"));
 });
 
 builder.Services.AddControllers();

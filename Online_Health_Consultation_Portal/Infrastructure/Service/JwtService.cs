@@ -36,7 +36,7 @@ namespace Online_Health_Consultation_Portal.Infrastructure.Service
                 new Claim(JwtRegisteredClaimNames.Sub, userId.ToString()),
                 new Claim(ClaimTypes.NameIdentifier, userId.ToString()), // ✅ Needed for ValidateToken
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim(JwtRegisteredClaimNames.Iat, DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64)
+                new Claim(JwtRegisteredClaimNames.Iat, DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64),
             };
 
             claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));

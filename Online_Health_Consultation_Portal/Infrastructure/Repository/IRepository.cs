@@ -1,4 +1,6 @@
-﻿namespace Online_Health_Consultation_Portal.Infrastructure.Repository
+﻿using Online_Health_Consultation_Portal.Domain;
+
+namespace Online_Health_Consultation_Portal.Infrastructure.Repository
 {
     public interface IRepository<T> where T : class
     {
@@ -8,5 +10,6 @@
         Task AddAsync(T entity);
         Task UpdateAsync(T entity);
         Task DeleteAsync(int id);
+        Task<User?> GetUserByEmailAsync(string email);
     }
 }
