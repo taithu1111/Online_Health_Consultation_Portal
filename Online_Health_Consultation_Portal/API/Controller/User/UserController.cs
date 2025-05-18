@@ -22,23 +22,16 @@ namespace Online_Health_Consultation_Portal.API.Controllers.User
         [HttpGet("profile")]
         public async Task<IActionResult> GetProfile()
         {
-            try
-            {
-                var query = new GetUserProfileQuery { User = User };
-                var result = await _mediator.Send(query);
+            var query = new GetUserProfileQuery { User = User };
+            var result = await _mediator.Send(query);
 
-                if (result == null)
-                {
-                    return NotFound("User profile not found.");
-                }
+            if (result == null)
+                return NotFound("User profile not found.");
 
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
+            return Ok(result);
         }
+
+
 
         [HttpPut("profile")]
         public async Task<IActionResult> UpdateProfile([FromBody] UpdateUserProfileDto profile)
@@ -77,6 +70,17 @@ namespace Online_Health_Consultation_Portal.API.Controllers.User
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
+        [HttpGet("{userId:int}")]
+        public async Task<IActionResult> GetUserById(int userId)
+        {
+            var user = await _mediator.Send(new GetUserByIdQuery { UserId = userId });
+
+            if (user == null)
+                return NotFound($"User with id {userId} not found.");
+
+            return Ok(user);
+        }
+
 
         [HttpGet]
         //[Authorize(Policy = "AdminOnly")]

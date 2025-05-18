@@ -1,11 +1,12 @@
 export interface User {
   token: string;
-  username: string;
-  expires: Date;
-  roles: string[];
-  img?: string;
-  firstName?: string;
-  lastName?: string;
+  username: string,
+  email?: string,
+  expires: Date,
+  roles: string[],
+  img?: string,
+  firstName?: string,
+  lastName?: string,
 }
 
 // import { Role } from './role';

@@ -70,5 +70,11 @@ namespace Online_Health_Consultation_Portal.Infrastructure.Repositories
                 PageSize = pageSize
             };
         }
+
+        public async Task<User?> GetByIdAsync(int userId)
+        {
+            return await context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+        }
+
     }
 }

@@ -1,4 +1,4 @@
-using AutoMapper;
+﻿using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -26,12 +26,13 @@ namespace Online_Health_Consultation_Portal.Application.Handlers.Users
             _mapper = mapper;
         }
 
-        public async Task<UserProfileDto> Handle(GetUserProfileQuery request, CancellationToken cancellationToken)
+        public async Task<UserProfileDto?> Handle(GetUserProfileQuery request, CancellationToken cancellationToken)
         {
             var user = await _userManager.GetUserAsync(request.User);
             if (user == null)
             {
-                throw new Exception("User not found");
+                // Không throw, trả null cho controller xử lý
+                return null;
             }
 
             var roles = await _userManager.GetRolesAsync(user);
@@ -60,6 +61,7 @@ namespace Online_Health_Consultation_Portal.Application.Handlers.Users
             };
 
             var dto = _mapper.Map<UserProfileDto>(wrapper);
+
             if (role != null)
             {
                 dto.Role = role;
@@ -67,5 +69,6 @@ namespace Online_Health_Consultation_Portal.Application.Handlers.Users
 
             return dto;
         }
+
     }
 }

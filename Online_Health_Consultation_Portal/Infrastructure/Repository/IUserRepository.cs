@@ -1,4 +1,5 @@
 using Online_Health_Consultation_Portal.Application.Dtos.Paginated;
+using Online_Health_Consultation_Portal.Application.Dtos.Users;
 using Online_Health_Consultation_Portal.Domain;
 
 namespace Online_Health_Consultation_Portal.Infrastructure.Repositories
@@ -13,5 +14,6 @@ namespace Online_Health_Consultation_Portal.Infrastructure.Repositories
             string? roleFilter, 
             string? searchTerm
         );
+        Task<User?>GetByIdAsync(int userId);
     }
 }

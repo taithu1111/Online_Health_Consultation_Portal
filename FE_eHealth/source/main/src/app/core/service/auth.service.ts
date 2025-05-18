@@ -21,7 +21,7 @@ export class AuthService {
     this.currentUser = this.currentUserSubject.asObservable();
   }
 
-  private getUserFromStorage(): User | null {
+  getUserFromStorage(): User | null {
     const userJson = localStorage.getItem('currentUser') || sessionStorage.getItem('currentUser');
     return userJson ? JSON.parse(userJson) : null;
   }
@@ -79,6 +79,20 @@ export class AuthService {
     } catch {
       return null;
     }
+  }
+  //lấy fullname theo token
+  getFullNameFromToken(token: string): string {
+    try {
+      const decoded: any = jwtDecode(token);
+      return decoded.fullName || '';
+    } catch (error) {
+      console.error('Token decode error', error);
+      return '';
+    }
+  }
+  get currentToken(): string | null {
+    // Lấy token từ localStorage hoặc biến lưu token
+    return localStorage.getItem('token');
   }
 
   isLoggedIn(): boolean {

@@ -93,8 +93,8 @@ export class SigninComponent
   get f() {
     return this.authForm.controls;
   }
-  setRole(role: Role) {
-    this.selectedRole = role;
+  setRole(roles: Role) {
+    this.selectedRole = roles;
   }
   getDefaultRoute(roles?: string[]): string {
     const role = roles?.[0] || this.selectedRole;

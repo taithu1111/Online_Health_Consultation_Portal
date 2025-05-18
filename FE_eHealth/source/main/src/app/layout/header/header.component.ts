@@ -1,26 +1,17 @@
-import { MatToolbarModule } from '@angular/material/toolbar';
+import { Component, Inject, ElementRef, OnInit, Renderer2 } from '@angular/core';
 import { DOCUMENT, NgClass } from '@angular/common';
-import {
-  Component,
-  Inject,
-  ElementRef,
-  OnInit,
-  Renderer2,
-} from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import { Router, ActivatedRoute, RouterLink } from '@angular/router';
 import { ConfigService } from '@config';
-import {
-  AuthService,
-  InConfiguration,
-  LanguageService,
-  RightSidebarService,
-} from '@core';
+import { AuthService, InConfiguration, LanguageService, RightSidebarService } from '@core';
 import { UnsubscribeOnDestroyAdapter } from '@shared';
-import { FeatherIconsComponent } from '@shared/components/feather-icons/feather-icons.component';
-import { NgScrollbar } from 'ngx-scrollbar';
-import { MatMenuModule } from '@angular/material/menu';
+import { User, UserService } from '@core/service/user.service';
 import { MatButtonModule } from '@angular/material/button';
+import { MatMenuModule } from '@angular/material/menu';
+import { NgScrollbar } from 'ngx-scrollbar';
+import { FeatherIconsComponent } from '@shared/components/feather-icons/feather-icons.component';
 import { MatIconModule } from '@angular/material/icon';
+import { NgScrollbarModule } from 'ngx-scrollbar';
+import { MatToolbarModule } from '@angular/material/toolbar';
 
 interface Notifications {
   message: string;
@@ -45,11 +36,11 @@ interface Notifications {
     MatToolbarModule,
   ]
 })
-export class HeaderComponent
-  extends UnsubscribeOnDestroyAdapter
-  implements OnInit {
+export class HeaderComponent extends UnsubscribeOnDestroyAdapter implements OnInit {
   public config!: InConfiguration;
   userImg?: string;
+  userEmail?: string;
+  userName?: string;
   homePage?: string;
   isNavbarCollapsed = true;
   flagvalue: string | string[] | undefined;
@@ -61,6 +52,8 @@ export class HeaderComponent
   isFullScreen = false;
   public settingLink = '';
 
+  user?: User; // thêm biến user để chứa dữ liệu user lấy về
+
   constructor(
     @Inject(DOCUMENT) private document: Document,
     private renderer: Renderer2,
@@ -69,26 +62,40 @@ export class HeaderComponent
     private configService: ConfigService,
     private authService: AuthService,
     private router: Router,
+    private route: ActivatedRoute,      // inject ActivatedRoute
+    private userService: UserService,   // inject UserService
     public languageService: LanguageService
   ) {
     super();
   }
+
   notifications: Notifications[] = [];
+
   ngOnInit() {
     this.config = this.configService.configData;
-    const currentUser = this.authService.currentUserValue;
-    if (!currentUser) {
-      // chưa login thì redirect về signin
-      this.router.navigate(['/authentication/signin']);
-      return;
+    console.log('User image:', this.userImg);
+    this.userService.getProfile().subscribe({
+      next: data => {
+        this.user = data;
+        this.userName = data.fullName;
+        this.userEmail = data.email;
+        this.userImg = (data as any).img;
+        const userRole = data.role || '';
+        this.setHomePageAndSettingLink(userRole);
+      },
+      error: err => console.error('Lỗi lấy user:', err)
+    });
+
+    this.docElement = this.document.documentElement;
+
+    const token = this.authService.currentToken;
+    if (token) {
+      this.userName = this.authService.getFullNameFromToken(token);
     }
-    // const userRole = this.authService.currentUserValue.role;
-    // this.userImg = this.authService.currentUserValue.img;
-    const userRole = currentUser.roles[0] ?? '';
-    this.userImg = currentUser.img;
+  }
 
-    this.docElement = document.documentElement;
 
+  private setHomePageAndSettingLink(userRole: string) {
     if (userRole === 'Admin') {
       this.homePage = 'admin/dashboard/main';
     } else if (userRole === 'Patient') {
@@ -105,23 +112,23 @@ export class HeaderComponent
   callFullscreen() {
     if (!this.isFullScreen) {
       if (this.docElement?.requestFullscreen != null) {
-        this.docElement?.requestFullscreen();
+        this.docElement.requestFullscreen();
       }
     } else {
-      document.exitFullscreen();
+      this.document.exitFullscreen();
     }
     this.isFullScreen = !this.isFullScreen;
   }
+
   mobileMenuSidebarOpen(event: Event, className: string) {
-    const hasClass = (event.target as HTMLInputElement).classList.contains(
-      className
-    );
+    const hasClass = (event.target as HTMLElement).classList.contains(className);
     if (hasClass) {
       this.renderer.removeClass(this.document.body, className);
     } else {
       this.renderer.addClass(this.document.body, className);
     }
   }
+
   callSidemenuCollapse() {
     const hasClass = this.document.body.classList.contains('side-closed');
     if (hasClass) {
@@ -134,8 +141,9 @@ export class HeaderComponent
       localStorage.setItem('collapsed_menu', 'true');
     }
   }
+
   logout() {
-    this.subs.sink = this.authService.logout().subscribe((res) => {
+    this.subs.sink = this.authService.logout().subscribe(res => {
       if (!res.success) {
         this.router.navigate(['/authentication/signin']);
       }
