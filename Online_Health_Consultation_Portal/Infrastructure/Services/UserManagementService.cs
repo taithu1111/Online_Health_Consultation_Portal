@@ -18,7 +18,9 @@ namespace Online_Health_Consultation_Portal.Infrastructure.Services
         {
             var user = await _userManager.FindByIdAsync(userId.ToString());
 
-            if (user == null) throw new KeyNotFoundException("User not found");
+            if (user == null)
+                throw new KeyNotFoundException("User not found");
+
             if (user.Role == "Admin")
                 throw new InvalidOperationException("Cannot delete a different Admin.");
 
