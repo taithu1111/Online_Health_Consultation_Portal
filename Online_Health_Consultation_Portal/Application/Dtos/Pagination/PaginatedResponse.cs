@@ -1,4 +1,4 @@
-namespace Online_Health_Consultation_Portal.Application.Dtos.Paginated
+namespace Online_Health_Consultation_Portal.Application.Dtos.Pagination
 {
     public sealed class PaginatedResponse<T>
     {

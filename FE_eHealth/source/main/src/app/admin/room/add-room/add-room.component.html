@@ -1,0 +1,185 @@
+<section class="content">
+  <div class="content-block">
+    <div class="block-header">
+      <!-- breadcrumb -->
+      <app-breadcrumb [title]="'Add Room'" [items]="['Room']" [active_item]="'Add Room'"></app-breadcrumb>
+    </div>
+    <div class="row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="header">
+            <h2>Add Room</h2>
+          </div>
+          <div class="body">
+            <form class="m-4" [formGroup]="roomForm" (ngSubmit)="onSubmit()">
+              <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Room Number</mat-label>
+                    <input matInput formControlName="roomNumber" required>
+                    @if (roomForm.get('roomNumber')?.hasError('required')) {
+                    <mat-error>
+                      Room Number is required
+                    </mat-error>
+                    }
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Department Name</mat-label>
+                    <input matInput formControlName="departmentName" required>
+                    @if (roomForm.get('departmentName')?.hasError('required')) {
+                    <mat-error>
+                      Department Name is required
+                    </mat-error>
+                    }
+                  </mat-form-field>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Room Type</mat-label>
+                    <mat-select formControlName="roomType" required>
+                      <mat-option [value]="'Single'">Single</mat-option>
+                      <mat-option [value]="'Double'">Double</mat-option>
+                      <mat-option [value]="'ICU'">ICU</mat-option>
+                      <mat-option [value]="'Operating Room'">Operating Room</mat-option>
+                    </mat-select>
+                    @if (roomForm.get('roomType')?.hasError('required')) {
+                    <mat-error>
+                      Room Type is required
+                    </mat-error>
+                    }
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Floor</mat-label>
+                    <input matInput formControlName="floor" required>
+                    @if (roomForm.get('floor')?.hasError('required')) {
+                    <mat-error>
+                      Floor is required
+                    </mat-error>
+                    }
+                  </mat-form-field>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Bed Capacity</mat-label>
+                    <input matInput type="number" formControlName="bedCapacity" required min="1">
+                    @if (roomForm.get('bedCapacity')?.hasError('required')) {
+                    <mat-error>
+                      Bed Capacity is required
+                    </mat-error>
+                    }
+                    @if (roomForm.get('bedCapacity')?.hasError('min')) {
+                    <mat-error>
+                      Bed Capacity must be at least 1
+                    </mat-error>
+                    }
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Room Status</mat-label>
+                    <mat-select formControlName="roomStatus" required>
+                      <mat-option [value]="'Available'">Available</mat-option>
+                      <mat-option [value]="'Occupied'">Occupied</mat-option>
+                      <mat-option [value]="'Under Maintenance'">Under Maintenance</mat-option>
+                    </mat-select>
+                    @if (roomForm.get('roomStatus')?.hasError('required')) {
+                    <mat-error>
+                      Room Status is required
+                    </mat-error>
+                    }
+                  </mat-form-field>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Room Category</mat-label>
+                    <mat-select formControlName="roomCategory" required>
+                      <mat-option [value]="'Critical Care'">Critical Care</mat-option>
+                      <mat-option [value]="'Private'">Private</mat-option>
+                      <mat-option [value]="'General'">General</mat-option>
+                    </mat-select>
+                    @if (roomForm.get('roomCategory')?.hasError('required')) {
+                    <mat-error>
+                      Room Category is required
+                    </mat-error>
+                    }
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Assigned Staff</mat-label>
+                    <input matInput formControlName="assignedStaff" required>
+                    @if (roomForm.get('assignedStaff')?.hasError('required')) {
+                    <mat-error>
+                      Assigned Staff is required
+                    </mat-error>
+                    }
+                  </mat-form-field>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Room Features</mat-label>
+                    <input matInput formControlName="roomFeatures" required>
+                    @if (roomForm.get('roomFeatures')?.hasError('required')) {
+                    <mat-error>
+                      Room Features are required
+                    </mat-error>
+                    }
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Room Rate</mat-label>
+                    <input matInput type="number" formControlName="roomRate" required min="0">
+                    @if (roomForm.get('roomRate')?.hasError('required')) {
+                    <mat-error>
+                      Room Rate is required
+                    </mat-error>
+                    }
+                    @if (roomForm.get('roomRate')?.hasError('min')) {
+                    <mat-error>
+                      Room Rate must be a positive number
+                    </mat-error>
+                    }
+                  </mat-form-field>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Special Instructions</mat-label>
+                    <input matInput formControlName="specialInstructions">
+                  </mat-form-field>
+                </div>
+              </div>
+
+              <!-- Submit and Cancel Buttons -->
+              <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <button class="btn-space" [disabled]="!roomForm.valid" mat-flat-button color="primary">Submit</button>
+                  <button type="button" mat-flat-button class="formCancelBtn">Cancel</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

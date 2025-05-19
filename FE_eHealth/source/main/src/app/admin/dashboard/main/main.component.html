@@ -1,0 +1,176 @@
+<section class="content">
+  <div class="content-block">
+    <div class="block-header">
+      <!-- breadcrumb -->
+      <app-breadcrumb [title]="'Dashboad'" [items]="[]" [active_item]="'Dashboad'"></app-breadcrumb>
+    </div>
+    <!-- Widgets -->
+    <div class="row">
+      <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="card card-statistic-2">
+          <div class="clearfix">
+            <div class="card-icon shadow-primary bg-purple">
+              <i class="material-icons align-middle">face</i>
+            </div>
+            <div class="card-right">
+              <div>
+                <p class="float-end font-b-500">Appointments</p>
+              </div>
+              <div class="m-r-10 m-l-10">
+                <h6 class="font-weight-bold float-end mb-0"> 650</h6>
+              </div>
+            </div>
+          </div>
+          <apx-chart [series]="smallChart1Options.series!" [chart]="smallChart1Options.chart!"
+            [xaxis]="smallChart1Options.xaxis!" [yaxis]="smallChart1Options.yaxis!"
+            [colors]="smallChart1Options.colors!" [stroke]="smallChart1Options.stroke!"
+            [legend]="smallChart1Options.legend!" [tooltip]="smallChart1Options.tooltip!"
+            [dataLabels]="smallChart1Options.dataLabels!"></apx-chart>
+        </div>
+      </div>
+      <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="card card-statistic-2">
+          <div class="clearfix">
+            <div class="card-icon shadow-primary bg-orange">
+              <i class="material-icons align-middle">content_cut</i>
+            </div>
+            <div class="card-right">
+              <div>
+                <p class="float-end font-b-500">Operations</p>
+              </div>
+              <div class="m-r-10 m-l-10">
+                <h6 class="font-weight-bold float-end mb-0"> 54</h6>
+              </div>
+            </div>
+          </div>
+          <apx-chart [series]="smallChart2Options.series!" [chart]="smallChart2Options.chart!"
+            [xaxis]="smallChart2Options.xaxis!" [yaxis]="smallChart2Options.yaxis!"
+            [colors]="smallChart2Options.colors!" [stroke]="smallChart2Options.stroke!"
+            [legend]="smallChart2Options.legend!" [tooltip]="smallChart2Options.tooltip!"
+            [dataLabels]="smallChart2Options.dataLabels!"></apx-chart>
+        </div>
+      </div>
+      <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="card card-statistic-2">
+          <div class="clearfix">
+            <div class="card-icon shadow-primary bg-green">
+              <i class="material-icons align-middle">person_add</i>
+            </div>
+            <div class="card-right">
+              <div>
+                <p class="float-end font-b-500">New Patients</p>
+              </div>
+              <div class="m-r-10 m-l-10">
+                <h6 class="font-weight-bold float-end mb-0"> 129</h6>
+              </div>
+            </div>
+          </div>
+          <apx-chart [series]="smallChart3Options.series!" [chart]="smallChart3Options.chart!"
+            [xaxis]="smallChart3Options.xaxis!" [yaxis]="smallChart3Options.yaxis!"
+            [colors]="smallChart3Options.colors!" [stroke]="smallChart3Options.stroke!"
+            [legend]="smallChart3Options.legend!" [tooltip]="smallChart3Options.tooltip!"
+            [dataLabels]="smallChart3Options.dataLabels!"></apx-chart>
+        </div>
+      </div>
+      <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="card card-statistic-2">
+          <div class="clearfix">
+            <div class="card-icon shadow-primary bg-blue">
+              <i class="material-icons align-middle">local_activity</i>
+            </div>
+            <div class="card-right">
+              <div>
+                <p class="float-end font-b-500">Earning</p>
+              </div>
+              <div class="m-r-10 m-l-10">
+                <h6 class="font-weight-bold float-end mb-0"> $20,125</h6>
+              </div>
+            </div>
+          </div>
+          <apx-chart [series]="smallChart4Options.series!" [chart]="smallChart4Options.chart!"
+            [xaxis]="smallChart4Options.xaxis!" [yaxis]="smallChart4Options.yaxis!"
+            [colors]="smallChart4Options.colors!" [stroke]="smallChart4Options.stroke!"
+            [legend]="smallChart4Options.legend!" [tooltip]="smallChart4Options.tooltip!"
+            [dataLabels]="smallChart4Options.dataLabels!"></apx-chart>
+        </div>
+      </div>
+
+    </div>
+    <!-- #END# Widgets -->
+    <div class="row">
+      <div class="col-xl-8 col-lg-8 col-md-12 col-sm-12">
+        <mat-card>
+          <mat-card-header class="header-menu">
+            <mat-card-title>Hospital Survey</mat-card-title>
+            <mat-form-field appearance="outline" class="header-form-field">
+              <mat-select [(value)]="selectedTimePeriod" (selectionChange)="onTimePeriodChange($event)">
+                <mat-option class="header-select-option" value="Daily">Daily</mat-option>
+                <mat-option class="header-select-option" value="Monthly">Monthly</mat-option>
+                <mat-option class="header-select-option" value="Yearly">Yearly</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </mat-card-header>
+          <mat-card-content>
+            <apx-chart [series]="areaChartOptions.series!" [chart]="areaChartOptions.chart!"
+              [xaxis]="areaChartOptions.xaxis!" [yaxis]="areaChartOptions.yaxis!" [colors]="areaChartOptions.colors!"
+              [stroke]="areaChartOptions.stroke!" [legend]="areaChartOptions.legend!"
+              [tooltip]="areaChartOptions.tooltip!" [grid]="areaChartOptions.grid!"
+              [dataLabels]="areaChartOptions.dataLabels!"></apx-chart>
+          </mat-card-content>
+        </mat-card>
+      </div>
+      <div class="col-sm-4 m-t-16">
+        <mat-card>
+          <mat-card-content>
+            <app-appointment-card [totalAppointments]="128" [completed]="73" [upcoming]="55">
+            </app-appointment-card>
+          </mat-card-content>
+        </mat-card>
+        <mat-card>
+          <mat-card-content>
+            <app-small-card-chart [title]="'Revenue'" [amount]="'$4,589'" [percentageChange]="'+7.5%'"
+              [profitData]="[210, 235, 400, 201, 210, 140, 110, 135, 400]"
+              [chartCategories]="['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep']">
+            </app-small-card-chart>
+
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+    <div class="row clearfix">
+      <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
+        <mat-card>
+          <mat-card-header class="header-style">
+            <mat-card-title>Appointments</mat-card-title>
+            <a mat-button color="primary" href="#" (click)="$event.preventDefault();">View All</a>
+          </mat-card-header>
+          <mat-card-content>
+            <ng-scrollbar style="height: 410px" visibility="hover">
+              <app-patient-tbl-widget></app-patient-tbl-widget>
+            </ng-scrollbar>
+          </mat-card-content>
+        </mat-card>
+      </div>
+
+      <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+        <mat-card>
+          <mat-card-header class="header-style">
+            <mat-card-title>Doctor Status</mat-card-title>
+            <a mat-button color="primary" href="#" (click)="$event.preventDefault();">View All</a>
+          </mat-card-header>
+          <mat-card-content>
+            <ng-scrollbar style="height: 410px" visibility="hover">
+              <app-emp-status></app-emp-status>
+            </ng-scrollbar>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+
+    <div class="row clearfix">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <app-operations-tbl-widget></app-operations-tbl-widget>
+      </div>
+    </div>
+  </div>
+</section>

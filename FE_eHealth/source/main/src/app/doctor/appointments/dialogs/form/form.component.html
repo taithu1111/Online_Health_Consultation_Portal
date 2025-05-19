@@ -1,0 +1,25 @@
+<h2 mat-dialog-title>Update Status</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="appointmentsForm">
+    <mat-form-field appearance="fill" style="width: 100%;">
+      <mat-label>Status</mat-label>
+      <!-- Dùng formControlName thay vì formControl -->
+      <mat-select formControlName="status">
+        <mat-option value="Pending">Pending</mat-option>
+        <mat-option value="Completed">Completed</mat-option>
+        <mat-option value="Cancelled">Cancelled</mat-option>
+      </mat-select>
+      <mat-error *ngIf="appointmentsForm.get('status')?.hasError('required')">
+        Please select status
+      </mat-error>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">Cancel</button>
+  <button mat-flat-button color="primary" (click)="onSave()" [disabled]="appointmentsForm.invalid">
+    Save
+  </button>
+</mat-dialog-actions>

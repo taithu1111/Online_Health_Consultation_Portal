@@ -28,9 +28,14 @@ namespace Online_Health_Consultation_Portal.Application.Handlers.Appointment
                 .Select(a => new AppointmentDto
                 {
                     Id = a.Id,
-                    PatientId = a.PatientId,
-                    DoctorId = a.DoctorId,
+                    //PatientId = a.PatientId,
+                    //DoctorId = a.DoctorId,
+                    PatientName = a.Patient.User.FullName,
                     AppointmentDateTime = a.AppointmentDateTime,
+                    Gender = a.Patient.Gender,
+                    Email = a.Patient.User.Email,
+                    PhoneNumber = a.Patient.Phone,
+                    Address = a.Patient.Address,
                     Status = a.Status,
                     Type = a.Type,
                     Notes = a.Notes

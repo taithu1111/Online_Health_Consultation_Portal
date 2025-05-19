@@ -77,6 +77,17 @@ namespace Online_Health_Consultation_Portal.API.Controllers.User
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
+        [HttpGet("{userId:int}")]
+        public async Task<IActionResult> GetUserById(int userId)
+        {
+            var user = await _mediator.Send(new GetUserByIdQuery { UserId = userId });
+
+            if (user == null)
+                return NotFound($"User with id {userId} not found.");
+
+            return Ok(user);
+        }
+
 
         [HttpGet]
         [Authorize(Policy = "AdminOnly")]

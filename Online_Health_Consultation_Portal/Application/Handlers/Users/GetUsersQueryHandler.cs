@@ -3,6 +3,7 @@ using MediatR;
 using Online_Health_Consultation_Portal.Application.Dtos.Paginated;
 using Online_Health_Consultation_Portal.Application.Dtos.Users;
 using Online_Health_Consultation_Portal.Infrastructure.Repositories;
+using Online_Health_Consultation_Portal.Infrastructure;
 
 public sealed class GetUsersQueryHandler : IRequestHandler<GetUsersQuery, PaginatedResponse<UserResponse>>
 {

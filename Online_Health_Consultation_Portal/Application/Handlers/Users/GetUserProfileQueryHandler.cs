@@ -6,10 +6,11 @@ using Online_Health_Consultation_Portal.Application.Dtos.Users;
 using Online_Health_Consultation_Portal.Application.Queries.Users;
 using Online_Health_Consultation_Portal.Domain;
 using Online_Health_Consultation_Portal.Infrastructure;
+using Online_Health_Consultation_Portal.Infrastructure.Repository;
 
 namespace Online_Health_Consultation_Portal.Application.Handlers.Users
 {
-    public class GetUserProfileQueryHandler : IRequestHandler<GetUserProfileQuery, UserProfileDto>
+    public class GetUserProfileQueryHandler : IRequestHandler<GetUserProfileQuery, UserProfileDto?>
     {
         private readonly UserManager<User> _userManager;
         private readonly AppDbContext _context;
@@ -25,12 +26,12 @@ namespace Online_Health_Consultation_Portal.Application.Handlers.Users
             _mapper = mapper;
         }
 
-        public async Task<UserProfileDto> Handle(GetUserProfileQuery request, CancellationToken cancellationToken)
+        public async Task<UserProfileDto?> Handle(GetUserProfileQuery request, CancellationToken cancellationToken)
         {
             var user = await _userManager.GetUserAsync(request.User);
             if (user == null)
             {
-                throw new Exception("User not found");
+                return null;  // Let controller handle null case
             }
 
             var roles = await _userManager.GetRolesAsync(user);
@@ -59,6 +60,7 @@ namespace Online_Health_Consultation_Portal.Application.Handlers.Users
             };
 
             var dto = _mapper.Map<UserProfileDto>(wrapper);
+            
             if (role != null)
             {
                 dto.Role = role;

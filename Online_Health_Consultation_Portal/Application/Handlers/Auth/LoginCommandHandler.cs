@@ -26,6 +26,8 @@ namespace Online_Health_Consultation_Portal.Application.Handlers.Auth
                 .ThenInclude(er => er.Role)
                 .FirstOrDefaultAsync(e => e.Email == request.LoginDto.Email);
 
+
+
             //var userEmailCheck = await user.FirstOrDefaultAsync(e => e.Email == request.LoginDto.Email);
 
 

@@ -4,15 +4,6 @@ namespace Online_Health_Consultation_Portal.Domain
 {
     public class Appointment
     {
-        public Appointment(int patientId, int doctorId, DateTime appointmentDateTime, string? notes, string type)
-        {
-            PatientId = patientId;
-            DoctorId = doctorId;
-            AppointmentDateTime = appointmentDateTime;
-            Notes = notes;
-            Type = type;
-        }
-
         public int Id { get; set; }
 
         public int DoctorId { get; set; }
@@ -31,6 +22,14 @@ namespace Online_Health_Consultation_Portal.Domain
         public Payment Payment { get; set; }
         //========= thêm
         public ConsultationSession ConsultationSession { get; set; }
+        public Appointment(int patientId, int doctorId, DateTime appointmentDateTime, string? notes, string type)
+        {
+            PatientId = patientId;
+            DoctorId = doctorId;
+            AppointmentDateTime = appointmentDateTime;
+            Notes = notes;
+            Type = type;
+        }
 
     }
 }

@@ -1,0 +1,106 @@
+<div class="addContainer">
+  <div class="modalHeader">
+    <div class="avatarDetails">
+      <div class="modalTitle">
+        {{ dialogTitle }}
+      </div>
+    </div>
+    <button mat-icon-button mat-dialog-close class="modal-close-button" aria-label="Close dialog" type="button">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <div mat-dialog-content>
+    <form class="register-form m-4" [formGroup]="appointmentForm" (ngSubmit)="submit()">
+      <!-- patientId ẩn -->
+      <input type="hidden" formControlName="patientId" />
+
+      <!-- Hàng 1: Doctor + Date -->
+      <div class="row gx-3 mb-2">
+        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Doctor Name</mat-label>
+            <mat-select formControlName="doctorId">
+              <!-- TODO: populate từ API -->
+              <mat-option [value]="1">Vu Ba Dien</mat-option>
+              <mat-option [value]="2">Tran Ba Quan</mat-option>
+              <mat-option value="other">Other</mat-option>
+            </mat-select>
+            <mat-error *ngIf="f['doctorId'].invalid && f['doctorId'].touched">
+              Please select a doctor
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Choose a date</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="doa" required />
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+            <mat-error *ngIf="f['doa'].hasError('required')">
+              Please select a date
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <!-- Hàng 2: Time + Injury/Notes -->
+      <div class="row gx-3 mb-2">
+        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Time Of Appointment</mat-label>
+            <mat-select formControlName="timeSlot" required>
+              <mat-option value="10:30:00">10:30 - 11:00</mat-option>
+              <mat-option value="11:00:00">11:00 - 11:30</mat-option>
+              <mat-option value="11:30:00">11:30 - 12:00</mat-option>
+              <mat-option value="12:00:00">12:00 - 12:30</mat-option>
+              <mat-option value="12:30:00">12:30 - 13:00</mat-option>
+              <mat-option value="15:30:00">15:30 - 16:00</mat-option>
+              <mat-option value="16:00:00">16:00 - 16:30</mat-option>
+              <mat-option value="16:30:00">16:30 - 17:00</mat-option>
+              <mat-option value="17:00:00">17:00 - 17:30</mat-option>
+              <mat-option value="17:30:00">17:30 - 18:00</mat-option>
+            </mat-select>
+            <mat-error *ngIf="f['timeSlot'].invalid && f['timeSlot'].touched">
+              Please select a time
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Type</mat-label>
+            <mat-select formControlName="type">
+              <mat-option value="video">Online</mat-option>
+              <mat-option value="in-person">In-person</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <!-- Hàng 4: Notes -->
+      <div class="row gx-3 mb-3">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Notes</mat-label>
+            <textarea matInput formControlName="notes"></textarea>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <!-- Buttons -->
+      <div class="row">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <div class="example-button-row text-end">
+            <button mat-flat-button class="formSubmitBtn" color="primary" [disabled]="!appointmentForm.valid"
+              type="submit">
+              Save
+            </button>
+            <button mat-flat-button mat-dialog-close class="formCancelBtn ms-2" tabindex="-1">
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

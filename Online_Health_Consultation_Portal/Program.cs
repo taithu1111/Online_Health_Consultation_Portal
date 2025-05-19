@@ -39,6 +39,11 @@ using Online_Health_Consultation_Portal.Infrastructure.Services;
 using Online_Health_Consultation_Portal.Mappers.AutoMapping;
 using Serilog;
 using Log = Serilog.Log;
+using Online_Health_Consultation_Portal.Application.Queries.Doctors;
+using Online_Health_Consultation_Portal.Application.Dtos.Doctors;
+using Online_Health_Consultation_Portal.Infrastructure.Services;
+using Online_Health_Consultation_Portal.Application.Dtos.Users;
+using Online_Health_Consultation_Portal.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -249,7 +254,6 @@ builder.Services.AddScoped<IRequestHandler<GetConsultationsByDoctorQuery, List<C
 builder.Services.AddScoped<IRequestHandler<GetConsultationsByPatientQuery, List<ConsultationSessionDto>>, GetConsultationsByPatientHandler>();
 builder.Services.AddScoped<IRequestHandler<GetDoctorSchedulesQuery, List<ScheduleDto>>, GetDoctorSchedulesQueryHandler>();
 builder.Services.AddScoped<IRequestHandler<GetAvailableSlotsQuery, List<AvailableSlotDto>>, GetAvailableSlotsQueryHandler>();
-
 
 builder.Services.AddHttpContextAccessor();
 

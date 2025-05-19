@@ -1,0 +1,100 @@
+<section class="content">
+  <div class="content-block">
+
+    <div class="block-header">
+      <app-breadcrumb [title]="'Today'" [items]="['Appointments']" [active_item]="'Today'">
+      </app-breadcrumb>
+    </div>
+
+    <!-- row filter date -->
+    <!-- row filter date -->
+    <div class="row mb-3 gx-2 align-items-center">
+      <div class="col-md-4">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Filter by date</mat-label>
+          <input matInput [matDatepicker]="picker" (dateChange)="onFilterDate($event.value)" [value]="filterDate"
+            placeholder="yyyy-MM-dd" />
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+      </div>
+      <div class="col-md-2 d-flex">
+        <!-- đổi thành stroked để nhỏ hơn flat, chiếm hết chiều cao của col -->
+        <button mat-stroked-button color="primary" class="clear-btn w-100" (click)="onFilterDate(null)">
+          Clear
+        </button>
+      </div>
+    </div>
+
+    <div class="row clearfix">
+      <div class="col-12">
+        <div class="card">
+          <div class="header">
+            <h2>Today's Appointments</h2>
+          </div>
+          <div class="body">
+
+            <ul class="list-unstyled user-progress list-unstyled-border list-unstyled-noborder">
+              <li *ngFor="let appt of filtered" class="app-list">
+
+                <!-- Doctor + Type -->
+                <div class="set-flex">
+                  <div class="media-title font-b-500 font-14">{{ appt.doctorName }}</div>
+                  <div class="text-job text-muted font-12 mb-0">{{ appt.type }}</div>
+                </div>
+
+                <!-- Date + Time -->
+                <div class="set-flex">
+                  <div class="media-title font-b-500 font-14">{{ appt.appointmentDate }}</div>
+                  <div class="text-job text-muted font-12 mb-0">{{ appt.appointmentTime }}</div>
+                </div>
+
+                <!-- Status -->
+                <div class="set-flex">
+                  <div class="media-title text-muted mb-0">Status</div>
+                  <div [ngClass]="{
+                      'col-green': appt.status==='Confirmed' || appt.status==='Pending',
+                      'col-red': appt.status==='Cancelled'
+                    }" class="font-b-500 font-14">
+                    {{ appt.status }}
+                  </div>
+                </div>
+
+                <!-- Notes -->
+                <div class="set-flex">
+                  <div class="media-title text-muted mb-0">Notes</div>
+                  <div class="text-job font-b-500 font-14">{{ appt.notes }}</div>
+                </div>
+
+                <!-- Diagnosis -->
+                <div class="set-flex">
+                  <div class="media-title text-muted mb-0">Diagnosis</div>
+                  <div class="text-job font-b-500 font-14">{{ appt.diagnosis }}</div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="media-cta">
+                  <!-- <button mat-icon-button color="primary">
+                      <mat-icon>check_circle_outline</mat-icon>
+                    </button> -->
+                  <button mat-icon-button color="warn" (click)="openDeleteDialog(appt)">
+                    <mat-icon>highlight_off</mat-icon>
+                  </button>
+                </div>
+
+              </li>
+            </ul>
+
+            <div *ngIf="filtered.length===0" class="text-center text-muted">
+              No appointments found for
+              <strong>
+                {{ filterDate ? (filterDate | date:'yyyy-MM-dd') : 'today' }}
+              </strong>.
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

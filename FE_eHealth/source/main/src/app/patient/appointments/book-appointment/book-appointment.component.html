@@ -1,0 +1,124 @@
+<section class="content">
+  <div class="content-block">
+    <div class="block-header">
+      <app-breadcrumb [title]="'Book Appointment'" [items]="['Appointment']" [active_item]="'Book'"></app-breadcrumb>
+    </div>
+    <div class="row clearfix">
+      <div class="col-12">
+        <div class="card">
+          <div class="header">
+            <h2>Book Appointment</h2>
+          </div>
+          <div class="body">
+            <form [formGroup]="bookingForm" (ngSubmit)="onSubmit()">
+
+              <!-- giữ patientId ngầm -->
+              <input type="hidden" formControlName="patientId" />
+
+              <h3 class="card-inside-title">Appointment Details</h3>
+
+              <div class="row">
+                <!-- Chọn bác sĩ -->
+                <div class="col-md-6 mb-3">
+                  <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label>Consulting Doctor</mat-label>
+                    <mat-select formControlName="doctorId" required>
+                      <mat-option [value]="1">Vu Ba Dien</mat-option>
+                      <mat-option [value]="2">Tran ba Quan</mat-option>
+                      <mat-option value="other">Other</mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="f['doctorId'].invalid && f['doctorId'].touched">
+                      Please select a doctor
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
+                <!-- Chọn ngày -->
+                <div class="col-md-6 mb-3">
+                  <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label>Date Of Appointment</mat-label>
+                    <input matInput [matDatepicker]="picker1" formControlName="doa" required>
+                    <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                    <mat-datepicker #picker1></mat-datepicker>
+                    <mat-error *ngIf="f['doa'].invalid && f['doa'].touched">
+                      Please select a date
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+
+              <!-- Chọn khung giờ -->
+              <div class="row mb-3">
+                <div class="col-md-6 mb-3">
+                  <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label>Time Of Appointment*</mat-label>
+                    <mat-select formControlName="timeSlot" required>
+                      <mat-option value="10:30:00">10:30 - 11:00</mat-option>
+                      <mat-option value="11:00:00">11:00 - 11:30</mat-option>
+                      <mat-option value="11:30:00">11:30 - 12:00</mat-option>
+                      <mat-option value="12:00:00">12:00 - 12:30</mat-option>
+                      <mat-option value="12:30:00">12:30 - 13:00</mat-option>
+                      <mat-option value="15:30:00">15:30 - 16:00</mat-option>
+                      <mat-option value="16:00:00">16:00 - 16:30</mat-option>
+                      <mat-option value="16:30:00">16:30 - 17:00</mat-option>
+                      <mat-option value="17:00:00">17:00 - 17:30</mat-option>
+                      <mat-option value="17:30:00">17:30 - 18:00</mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="f['timeSlot'].invalid && f['timeSlot'].touched">
+                      Please select a time
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
+                <!-- Chọn loại appointment -->
+                <div class="col-md-6">
+                  <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label>Appointment Type</mat-label>
+                    <mat-select formControlName="type" required>
+                      <mat-option value="video">Online</mat-option>
+                      <mat-option value="in-person">In-person</mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="f['type'].invalid && f['type'].touched">
+                      Please select a type
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+
+              <!-- Ghi chú -->
+              <div class="row mb-4">
+                <div class="col-12">
+                  <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label>Note</mat-label>
+                    <textarea matInput formControlName="notes"></textarea>
+                  </mat-form-field>
+                </div>
+              </div>
+
+              <!-- Tải file
+              <div class="row mb-4">
+                <div class="col-12">
+                  <label>Upload Reports</label>
+                  <app-file-upload formControlName="uploadFile"></app-file-upload>
+                </div>
+              </div> -->
+
+              <!-- Nút submit/ cancel -->
+              <div class="row">
+                <div class="col-12 mb-3">
+                  <button mat-flat-button color="primary" [disabled]="bookingForm.invalid || isSubmitting">
+                    Submit
+                  </button>
+                  <button type="button" mat-flat-button color="warn"
+                    (click)="bookingForm.reset({ patientId: bookingForm.get('patientId')?.value })">
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

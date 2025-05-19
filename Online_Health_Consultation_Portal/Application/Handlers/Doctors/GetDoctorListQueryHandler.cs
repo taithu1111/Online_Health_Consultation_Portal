@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using Online_Health_Consultation_Portal.Application.Dtos.Doctors;
 using Online_Health_Consultation_Portal.Application.Dtos.Paginated;
 using Online_Health_Consultation_Portal.Application.Queries.Doctors;
-using Online_Health_Consultation_Portal.Domain;
 using Online_Health_Consultation_Portal.Infrastructure;
 
 namespace Online_Health_Consultation_Portal.Application.Handlers.Doctors

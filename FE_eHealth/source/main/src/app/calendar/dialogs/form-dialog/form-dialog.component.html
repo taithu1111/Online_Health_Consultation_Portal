@@ -1,0 +1,96 @@
+<div class="addContainer">
+  <div class="modalHeader">
+    <div class="avatarDetails">
+      <h2 class="modalTitle">{{ dialogTitle }}</h2>
+    </div>
+    <button mat-icon-button (click)="cancel()" aria-label="Close dialog">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <div mat-dialog-content>
+    <form [formGroup]="calendarForm" (ngSubmit)="submit()" class="register-form m-4">
+
+      <!-- hidden id -->
+      <input type="hidden" formControlName="id" />
+
+      <!-- Location -->
+      <mat-form-field appearance="outline" class="example-full-width mb-3">
+        <mat-label>Location</mat-label>
+        <input matInput formControlName="title" placeholder="Enter location" required>
+        <mat-icon matSuffix>place</mat-icon>
+        <mat-error *ngIf="calendarForm.get('title')?.hasError('required')">
+          {{ getErrorMessage(calendarForm.get('title')!) }}
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Category -->
+      <!-- <mat-form-field appearance="outline" class="example-full-width mb-3">
+        <mat-label>Category</mat-label>
+        <mat-select formControlName="category" required>
+          <mat-option value="work">Work</mat-option>
+          <mat-option value="personal">Personal</mat-option>
+          <mat-option value="important">Important</mat-option>
+          <mat-option value="visit">Visit</mat-option>
+          <mat-option value="consult">Consult</mat-option>
+        </mat-select>
+        <mat-error *ngIf="calendarForm.get('category')?.hasError('required')">
+          {{ getErrorMessage(calendarForm.get('category')!) }}
+        </mat-error>
+      </mat-form-field> -->
+
+      <!-- Date pickers -->
+      <div class="row">
+        <div class="col-md-6">
+          <mat-form-field appearance="outline" class="example-full-width mb-3">
+            <mat-label>Start date</mat-label>
+            <input matInput formControlName="startDate" placeholder="Choose a date" [owlDateTimeTrigger]="startPicker"
+              [owlDateTime]="startPicker" required>
+            <mat-icon matSuffix [owlDateTimeTrigger]="startPicker">today</mat-icon>
+            <owl-date-time #startPicker></owl-date-time>
+            <mat-error *ngIf="calendarForm.get('startDate')?.hasError('required')">
+              {{ getErrorMessage(calendarForm.get('startDate')!) }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-md-6">
+          <mat-form-field appearance="outline" class="example-full-width mb-3">
+            <mat-label>End date</mat-label>
+            <input matInput formControlName="endDate" placeholder="Choose a date" [owlDateTimeTrigger]="endPicker"
+              [owlDateTime]="endPicker" required>
+            <mat-icon matSuffix [owlDateTimeTrigger]="endPicker">today</mat-icon>
+            <owl-date-time #endPicker></owl-date-time>
+            <mat-error *ngIf="calendarForm.get('endDate')?.hasError('required')">
+              {{ getErrorMessage(calendarForm.get('endDate')!) }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <!-- Details -->
+      <mat-form-field appearance="outline" class="example-full-width mb-3">
+        <mat-label>Event Details</mat-label>
+        <textarea matInput formControlName="details" rows="3" placeholder="Additional details">
+        </textarea>
+      </mat-form-field>
+
+      <!-- Actions -->
+      <div class="row align-items-center">
+        <div class="col-10">
+          <button mat-flat-button color="primary" type="submit" [disabled]="calendarForm.invalid">
+            Save
+          </button>
+          <button mat-flat-button type="button" (click)="cancel()">
+            Cancel
+          </button>
+        </div>
+        <div class="col-2" *ngIf="showDeleteBtn">
+          <button mat-icon-button color="warn" aria-label="Delete event" (click)="deleteEvent()">
+            <mat-icon>delete_outline</mat-icon>
+          </button>
+        </div>
+      </div>
+
+    </form>
+  </div>
+</div>

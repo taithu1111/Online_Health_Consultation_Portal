@@ -1,9 +1,11 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Online_Health_Consultation_Portal.Application.Command.Appointment;
 using Online_Health_Consultation_Portal.Application.Dtos.Appointment;
 using Online_Health_Consultation_Portal.Application.Queries.Appointment;
+using Online_Health_Consultation_Portal.Infrastructure;
 
 namespace Online_Health_Consultation_Portal.API.Controllers.Appointment
 {
@@ -12,9 +14,11 @@ namespace Online_Health_Consultation_Portal.API.Controllers.Appointment
     public class AppointmentController : ControllerBase
     {
         private readonly IMediator _mediator;
-        public AppointmentController(IMediator mediator)
+        private readonly AppDbContext _context;
+        public AppointmentController(IMediator mediator, AppDbContext context)
         {
             _mediator = mediator;
+            _context = context;
         }
 
         // POST: api/appointment
@@ -88,6 +92,7 @@ namespace Online_Health_Consultation_Portal.API.Controllers.Appointment
             var appointments = await _mediator.Send(new GetPatientAppointmentsQuery { PatientId = patientId });
             return Ok(appointments);
         }
+        
 
         //[Authorize(Roles = "Doctor")]
         [HttpGet("doctor/{doctorId}")]
@@ -96,7 +101,12 @@ namespace Online_Health_Consultation_Portal.API.Controllers.Appointment
             var appointments = await _mediator.Send(new GetDoctorAppointmentsQuery { DoctorId = doctorId });
             return Ok(appointments);
         }
-
+        [HttpGet]
+        public async Task<IActionResult> GetAllAppointments()
+        {
+            var list = await _context.Appointments.ToListAsync();
+            return Ok(list);
+        }
         // GET: api/appointment/{id}
         //[Authorize(Roles = "Admin, Patient, Doctor")]
         [HttpGet("{id}")]

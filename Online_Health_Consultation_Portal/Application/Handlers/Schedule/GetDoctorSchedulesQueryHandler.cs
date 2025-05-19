@@ -29,10 +29,12 @@ namespace Online_Health_Consultation_Portal.Application.Handlers.Schedule
                 {
                     Id = s.Id,
                     DoctorId = s.DoctorId,
-                    DayOfWeek = s.DayOfWeek,
-                    StartTime = s.StartTime,
-                    EndTime = s.EndTime,
-                    IsAvailable = s.IsAvailable
+                    Date = s.Date.ToString("yyyy-MM-dd"),
+                    StartTime = s.StartTime.ToString(@"hh\:mm\:ss"),
+                    EndTime = s.EndTime.ToString(@"hh\:mm\:ss"),
+                    IsAvailable = s.IsAvailable,
+                    Location = s.Location,
+                    Description = s.Description
                 })
                 .ToListAsync(cancellationToken);
             return schedules;
