@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Online_Health_Consultation_Portal.Application.Dtos.Paginated;
+using Online_Health_Consultation_Portal.Application.Dtos.Pagination;
 using Online_Health_Consultation_Portal.Domain;
 
 namespace Online_Health_Consultation_Portal.Infrastructure.Repositories

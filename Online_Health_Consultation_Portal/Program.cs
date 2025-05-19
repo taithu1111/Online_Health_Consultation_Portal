@@ -34,6 +34,9 @@ using Online_Health_Consultation_Portal.Application.Dtos.Doctors;
 using Online_Health_Consultation_Portal.Infrastructure.Services;
 using Online_Health_Consultation_Portal.Application.Dtos.Users;
 using Online_Health_Consultation_Portal.Infrastructure.Repositories;
+using Online_Health_Consultation_Portal.Application.Commands.Payment;
+using Online_Health_Consultation_Portal.Application.Dtos.Payment;
+using Online_Health_Consultation_Portal.Application.Queries.Payment;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -148,12 +151,13 @@ builder.Services.AddScoped<IRequestHandler<EndConsultationSessionCommand, bool>,
 builder.Services.AddScoped<IRequestHandler<CreateScheduleCommand, int>, Online_Health_Consultation_Portal.Application.Handlers.Schedule.CreateScheduleHandler>();
 builder.Services.AddScoped<IRequestHandler<UpdateScheduleCommand, bool>, Online_Health_Consultation_Portal.Application.Handlers.Schedule.UpdateScheduleHandler>();
 builder.Services.AddScoped<IRequestHandler<DeleteScheduleCommand, bool>, Online_Health_Consultation_Portal.Application.Handlers.Schedule.DeleteScheduleHandler>();
-
 // Auth
 builder.Services.AddScoped<IRequestHandler<LoginCommand, LoginResponseDto>, LoginCommandHandler>();
 builder.Services.AddScoped<IRequestHandler<ForgotPasswordCommand, bool>, ForgotPasswordCommandHandler>();
 builder.Services.AddScoped<IRequestHandler<ResetPasswordCommand, bool>, ResetPasswordCommandHandler>();
 builder.Services.AddScoped<IRequestHandler<RegisterCommand, bool>, RegisterCommandHandler>();
+//Payment
+builder.Services.AddScoped<IRequestHandler<CreatePaymentCommand, PaymentDto>, Online_Health_Consultation_Portal.Application.Handlers.Payment.CreatePaymentHandler>();
 
 
 
@@ -171,7 +175,9 @@ builder.Services.AddScoped<IRequestHandler<GetConsultationsByPatientQuery, List<
 //schedule
 builder.Services.AddScoped<IRequestHandler<GetDoctorSchedulesQuery, List<ScheduleDto>>, Online_Health_Consultation_Portal.Application.Handlers.Schedule.GetDoctorSchedulesQueryHandler>();
 builder.Services.AddScoped<IRequestHandler<GetAvailableSlotsQuery, List<AvailableSlotDto>>, Online_Health_Consultation_Portal.Application.Handlers.Schedule.GetAvailableSlotsQueryHandler>();
-//doctor
+//payment
+builder.Services.AddScoped<IRequestHandler<GetPaymentByIdQuery, PaymentDto>, Online_Health_Consultation_Portal.Application.Handlers.Payment.GetPaymentByIdHandler>();
+builder.Services.AddScoped<IRequestHandler<GetPaymentsByAppointmentQuery, IEnumerable<PaymentDto>>, Online_Health_Consultation_Portal.Application.Handlers.Payment.GetPaymentsByAppointmentHandler>();
 
 
 //reponsitory

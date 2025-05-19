@@ -1,12 +1,12 @@
 using AutoMapper;
 using MediatR;
 using Online_Health_Consultation_Portal.Application.Dtos.Users;
-using Online_Health_Consultation_Portal.Application.Dtos.Paginated;
 using Online_Health_Consultation_Portal.Infrastructure.Repositories;
 using Online_Health_Consultation_Portal.Infrastructure.Repository;
 using Online_Health_Consultation_Portal.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using Online_Health_Consultation_Portal.Application.Dtos.Pagination;
 
 public sealed class GetUsersQueryHandler : IRequestHandler<GetUsersQuery, PaginatedResponse<UserResponse>>
 {
