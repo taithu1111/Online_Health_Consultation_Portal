@@ -1,23 +1,26 @@
 // src/app/billing/billing.component.ts
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { CommonModule, DatePipe, CurrencyPipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { BreadcrumbComponent } from '@shared/components/breadcrumb/breadcrumb.component';
+import { forkJoin } from 'rxjs';
 
 import { PaymentService } from '../billing/billing.servide';
 import { PaymentDto } from '../billing/billing.model';
+import { AppointmentService, } from '../appointments/appointment-v1.service';
 
-interface Billing {
+interface BillingRow {
   invoiceNo: string;
   doctorName: string;
-  doctorEmail: string;
+  doctorEmail?: string;
   date: Date;
   amount: number;
-  tax: number;
-  discount: number;
+  taxPct: number;
+  taxAmt: number;
+  discountAmt: number;
   total: number;
   transactionId: string;
 }
@@ -27,8 +30,6 @@ interface Billing {
   standalone: true,
   imports: [
     CommonModule,
-    DatePipe,
-    CurrencyPipe,
     MatTableModule,
     MatIconModule,
     MatButtonModule,
@@ -39,75 +40,57 @@ interface Billing {
 })
 export class BillingComponent implements OnInit {
   appointmentId!: number;
-  bills: Billing[] = [];
   displayedColumns = [
-    'invoiceNo',
-    'doctorName',
-    'date',
-    'amount',
-    'tax',
-    'discount',
-    'total',
-    'actions'
+    'invoiceNo', 'doctorName', 'date', 'amount', 'taxPct', 'discountAmt', 'total', 'actions'
   ];
+  dataSource: BillingRow[] = [];
 
-  private readonly TAX_RATE = 0.10;    // 10%
-  private readonly DISCOUNT = 5;       // $5
+  private readonly TAX_RATE = 0.10;
+  private readonly DISCOUNT_AMT = 5;
 
   constructor(
     private route: ActivatedRoute,
-    private paymentService: PaymentService
+    private paySvc: PaymentService,
+    private apptSvc: AppointmentService
   ) { }
 
   ngOnInit(): void {
-    this.route.paramMap.subscribe(params => {
-      const id = params.get('appointmentId');
-      if (id) {
-        this.appointmentId = +id;
-        this.loadBills();
-      }
+    this.route.paramMap.subscribe(mp => {
+      const raw = mp.get('appointmentId');
+      if (!raw) return;
+      this.appointmentId = +raw;
+      this.loadAll();
     });
   }
 
-  private loadBills(): void {
-    this.paymentService
-      .getPaymentsByAppointmentId(this.appointmentId)
-      .subscribe((payments: PaymentDto[]) => {
-        this.bills = payments.map(p => {
-          // Nếu DTO chưa có nested info, bạn cần bổ sung backend hoặc service
-          const appt = (p as any).appointment;
-          const doctor = appt?.doctor || {};
-          const dateStr = appt?.date || (p as any).createdAt;
-
-          const amount = p.amount;
-          const taxAmt = parseFloat((amount * this.TAX_RATE).toFixed(2));
-          const discountAmt = this.DISCOUNT;
-          const totalAmt = parseFloat((amount + taxAmt - discountAmt).toFixed(2));
-
-          return {
-            invoiceNo: `A${p.id}`,
-            doctorName: `${doctor.firstName || ''} ${doctor.lastName || ''}`.trim(),
-            doctorEmail: doctor.email || '',
-            date: new Date(dateStr),
-            amount,
-            tax: taxAmt,
-            discount: discountAmt,
-            total: totalAmt,
-            transactionId: p.transactionId
-          } as Billing;
-        });
+  private loadAll() {
+    forkJoin({
+      appt: this.apptSvc.getAppointmentById(this.appointmentId),
+      payments: this.paySvc.getPaymentsByAppointmentId(this.appointmentId)
+    }).subscribe(({ appt, payments }) => {
+      this.dataSource = payments.map(p => {
+        const taxAmt = parseFloat((p.amount * this.TAX_RATE).toFixed(2));
+        const discountAmt = this.DISCOUNT_AMT;
+        const total = parseFloat((p.amount + taxAmt - discountAmt).toFixed(2));
+        return {
+          invoiceNo: `A${p.id}`,
+          doctorName: appt.doctorName,
+          doctorEmail: appt.email ?? undefined,
+          date: new Date(appt.appointmentDateTime),
+          amount: p.amount,
+          taxPct: this.TAX_RATE * 100,
+          taxAmt,
+          discountAmt,
+          total,
+          transactionId: p.transactionId
+        };
       });
+    }, err => {
+      console.error('Load billing data failed', err);
+    });
   }
 
-  download(bill: Billing): void {
-    console.log('Download invoice for', bill.invoiceNo);
-  }
-
-  view(bill: Billing): void {
-    console.log('View invoice', bill.invoiceNo);
-  }
-
-  print(bill: Billing): void {
-    window.print();
-  }
+  download(row: BillingRow) { /* TODO */ }
+  view(row: BillingRow) { /* TODO */ }
+  print(row: BillingRow) { window.print(); }
 }

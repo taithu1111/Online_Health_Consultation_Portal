@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
-import { BookappointmentComponent } from "./bookappointment.component";
+import { BookAppointmentComponent } from "./bookappointment.component";
 describe("BookappointmentComponent", () => {
-  let component: BookappointmentComponent;
-  let fixture: ComponentFixture<BookappointmentComponent>;
+  let component: BookAppointmentComponent;
+  let fixture: ComponentFixture<BookAppointmentComponent>;
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
-    imports: [BookappointmentComponent],
-}).compileComponents();
+        imports: [BookAppointmentComponent],
+      }).compileComponents();
     })
   );
   beforeEach(() => {
-    fixture = TestBed.createComponent(BookappointmentComponent);
+    fixture = TestBed.createComponent(BookAppointmentComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

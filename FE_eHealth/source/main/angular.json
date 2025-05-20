@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "cliniva": {
+    "eHealth": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -18,7 +18,7 @@
           "builder": "@angular-devkit/build-angular:application",
           "options": {
             "outputPath": {
-              "base": "dist/cliniva"
+              "base": "dist/eHealth"
             },
             "index": "src/index.html",
             "polyfills": [
@@ -103,10 +103,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "cliniva:build:production"
+              "buildTarget": "eHealth:build:production"
             },
             "development": {
-              "buildTarget": "cliniva:build:development"
+              "buildTarget": "eHealth:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -114,7 +114,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "buildTarget": "cliniva:build"
+            "buildTarget": "eHealth:build"
           }
         },
         "test": {

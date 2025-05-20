@@ -34,7 +34,7 @@ namespace Online_Health_Consultation_Portal.Application.Handlers.Appointment
                     AppointmentDateTime = a.AppointmentDateTime,
                     Gender = a.Patient.Gender,
                     Email = a.Patient.User.Email,
-                    PhoneNumber = a.Patient.Phone,
+                    Phone = a.Patient.Phone,
                     Address = a.Patient.Address,
                     Status = a.Status,
                     Type = a.Type,

@@ -139,20 +139,6 @@
             ""
           ],
           "submenu": []
-        },
-        {
-          "path": "/admin/appointment/edit-ppointment",
-          "title": "MENUITEMS.APPOINTMENTS.LIST.EDIT-APPOINTMENT",
-          "iconType": "",
-          "icon": "",
-          "class": "ml-menu",
-          "groupTitle": false,
-          "badge": "",
-          "badgeClass": "",
-          "role": [
-            ""
-          ],
-          "submenu": []
         }
       ]
     },

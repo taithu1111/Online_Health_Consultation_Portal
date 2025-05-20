@@ -14,7 +14,6 @@ export class AppointmentService {
   >([]);
 
   constructor(private httpClient: HttpClient) { }
-
   /** GET: Fetch all appointments */
   getAllAppointments(): Observable<Appointment[]> {
     return this.httpClient
@@ -34,12 +33,9 @@ export class AppointmentService {
 
   /** PUT: Update an existing appointment */
   updateAppointment(appointment: Appointment): Observable<Appointment> {
-    return this.httpClient
-      .put<Appointment>(`${this.API_URL}`, appointment)
+    return this.httpClient.put<Appointment>(`${this.API_URL}`, appointment)
       .pipe(
-        map((response) => {
-          return appointment; // return response from API
-        }),
+        map(response => response),
         catchError(this.handleError)
       );
   }

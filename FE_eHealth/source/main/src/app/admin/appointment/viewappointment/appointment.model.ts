@@ -2,46 +2,34 @@ import { formatDate } from '@angular/common';
 
 export class Appointment {
   id: number;
-  img: string;
-  name: string;
+  // img: string;
+  patientName: string;
+  doctorName: string;
+  appointmentDateTime: string;
   email: string;
   gender: string;
-  date: string;
-  time: string;
-  mobile: string;
-  doctor: string;
-  injury: string;
-  appointmentStatus: string;
-  visitType: string;
-  paymentStatus: string;
-  insuranceProvider: string;
+  phone: string;
+  address: string;
+  status: string;
+  type: string;
   notes: string;
-  createdAt: string;
-  updatedAt: string;
+  diagnosis: string;
+
 
   constructor(appointment: Partial<Appointment>) {
     this.id = appointment.id || this.getRandomID();
-    this.img = appointment.img || 'assets/images/user/user1.jpg';
-    this.name = appointment.name || '';
+    // this.img = appointment.img || 'assets/images/user/user1.jpg';
+    this.patientName = appointment.patientName || '';
+    this.doctorName = appointment.doctorName || '';
+    this.appointmentDateTime = appointment.appointmentDateTime || formatDate(new Date(), 'yyyy-MM-ddTHH:mm:ss', 'en-US');
     this.email = appointment.email || '';
-    this.gender = appointment.gender || 'male';
-    this.date =
-      appointment.date || formatDate(new Date(), 'yyyy-MM-ddTHH:mm:ssZ', 'en');
-    this.time = appointment.time || formatDate(new Date(), 'HH:mm', 'en');
-    this.mobile = appointment.mobile || '';
-    this.doctor = appointment.doctor || '';
-    this.injury = appointment.injury || '';
-    this.appointmentStatus = appointment.appointmentStatus || '';
-    this.visitType = appointment.visitType || '';
-    this.paymentStatus = appointment.paymentStatus || '';
-    this.insuranceProvider = appointment.insuranceProvider || '';
+    this.gender = appointment.gender || '';
+    this.phone = appointment.phone || '';
+    this.address = appointment.address || '';
+    this.status = appointment.status || 'Pending';
+    this.type = appointment.type || 'New Patient';
     this.notes = appointment.notes || '';
-    this.createdAt =
-      appointment.createdAt ||
-      formatDate(new Date(), 'yyyy-MM-ddTHH:mm:ssZ', 'en');
-    this.updatedAt =
-      appointment.updatedAt ||
-      formatDate(new Date(), 'yyyy-MM-ddTHH:mm:ssZ', 'en');
+    this.diagnosis = appointment.diagnosis || '';
   }
 
   public getRandomID(): number {

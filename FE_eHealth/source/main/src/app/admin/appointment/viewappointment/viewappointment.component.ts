@@ -1,28 +1,14 @@
-import {
-  Component,
-  ElementRef,
-  OnDestroy,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild, } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
-import {
-  MatSnackBar,
-  MatSnackBarHorizontalPosition,
-  MatSnackBarVerticalPosition,
-} from '@angular/material/snack-bar';
+import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition, } from '@angular/material/snack-bar';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { SelectionModel } from '@angular/cdk/collections';
 import { fromEvent, Subject } from 'rxjs';
 import { ViewAppointmentFormComponent } from './dialogs/form-dialog/form-dialog.component';
 import { ViewAppointmentDeleteComponent } from './dialogs/delete/delete.component';
-import {
-  MAT_DATE_LOCALE,
-  MatOptionModule,
-  MatRippleModule,
-} from '@angular/material/core';
+import { MAT_DATE_LOCALE, MatOptionModule, MatRippleModule, } from '@angular/material/core';
 import { AppointmentService } from './appointment.service';
 import { Appointment } from './appointment.model';
 import { rowsAnimation, TableExportUtil } from '@shared';
@@ -45,66 +31,48 @@ import { Direction } from '@angular/cdk/bidi';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
-    selector: 'app-viewappointment',
-    templateUrl: './viewappointment.component.html',
-    styleUrls: ['./viewappointment.component.scss'],
-    providers: [{ provide: MAT_DATE_LOCALE, useValue: 'en-GB' }],
-    animations: [rowsAnimation],
-    imports: [
-        BreadcrumbComponent,
-        FeatherIconsComponent,
-        CommonModule,
-        MatCardModule,
-        MatFormFieldModule,
-        MatInputModule,
-        MatIconModule,
-        MatButtonModule,
-        MatTooltipModule,
-        MatSelectModule,
-        ReactiveFormsModule,
-        FormsModule,
-        MatOptionModule,
-        MatCheckboxModule,
-        MatTableModule,
-        MatSortModule,
-        NgClass,
-        MatRippleModule,
-        MatProgressSpinnerModule,
-        MatMenuModule,
-        MatPaginatorModule,
-        DatePipe,
-    ]
+  selector: 'app-viewappointment',
+  templateUrl: './viewappointment.component.html',
+  styleUrls: ['./viewappointment.component.scss'],
+  providers: [{ provide: MAT_DATE_LOCALE, useValue: 'en-GB' }],
+  animations: [rowsAnimation],
+  imports: [
+    BreadcrumbComponent,
+    FeatherIconsComponent,
+    CommonModule,
+    MatCardModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatIconModule,
+    MatButtonModule,
+    MatTooltipModule,
+    MatSelectModule,
+    ReactiveFormsModule,
+    FormsModule,
+    MatOptionModule,
+    MatCheckboxModule,
+    MatTableModule,
+    MatSortModule,
+    NgClass,
+    MatRippleModule,
+    MatProgressSpinnerModule,
+    MatMenuModule,
+    MatPaginatorModule,
+    DatePipe,
+  ]
 })
 export class ViewappointmentComponent implements OnInit, OnDestroy {
   columnDefinitions = [
     { def: 'select', label: 'Checkbox', type: 'check', visible: true },
-    { def: 'name', label: 'Name', type: 'text', visible: true },
-    { def: 'doctor', label: 'Doctor', type: 'text', visible: true },
+    { def: 'doctorName', label: 'Doctor Name', type: 'text', visible: true },
+    { def: 'patientName', label: 'Patient Name', type: 'text', visible: true },
     { def: 'gender', label: 'Gender', type: 'text', visible: true },
-    { def: 'date', label: 'Date', type: 'date', visible: true },
-    { def: 'time', label: 'Time', type: 'time', visible: true },
-    { def: 'mobile', label: 'Mobile', type: 'phone', visible: true },
-    { def: 'injury', label: 'Injury', type: 'text', visible: false },
+    { def: 'appoimentDateTime', label: 'Create Date', type: 'date', visible: true },
+    { def: 'phone', label: 'Phone Number', type: 'phone', visible: true },
+    { def: 'address', label: 'Address', type: 'text', visible: false },
     { def: 'email', label: 'Email', type: 'email', visible: true },
-    {
-      def: 'appointmentStatus',
-      label: 'Appointment Status',
-      type: 'text',
-      visible: true,
-    },
-    { def: 'visitType', label: 'Visit Type', type: 'text', visible: true },
-    {
-      def: 'paymentStatus',
-      label: 'Payment Status',
-      type: 'text',
-      visible: false,
-    },
-    {
-      def: 'insuranceProvider',
-      label: 'Insurance Provider',
-      type: 'text',
-      visible: false,
-    },
+    { def: 'status', label: 'Status', type: 'text', visible: true },
+    { def: 'type', label: 'Type', type: 'text', visible: true },
     { def: 'notes', label: 'Notes', type: 'text', visible: false },
     { def: 'actions', label: 'Actions', type: 'actionBtn', visible: true },
   ];
@@ -127,7 +95,7 @@ export class ViewappointmentComponent implements OnInit, OnDestroy {
     public appointmentService: AppointmentService,
     private snackBar: MatSnackBar,
     private route: ActivatedRoute
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.route.queryParams.subscribe((params) => {
@@ -154,35 +122,44 @@ export class ViewappointmentComponent implements OnInit, OnDestroy {
   loadData(filterDate?: string) {
     this.appointmentService.getAllAppointments().subscribe({
       next: (data) => {
+        const mappedData = data.map(item => new Appointment({
+          id: item.id,
+          patientName: item.patientName,
+          doctorName: item.doctorName,
+          appointmentDateTime: item.appointmentDateTime,
+          email: item.email,
+          gender: item.gender.toLowerCase(),
+          phone: item.phone,
+          address: item.address,
+          status: item.status,
+          type: item.type,
+          notes: item.notes,
+          diagnosis: item.diagnosis
+        }));
+
+        let filteredData = mappedData;
         if (filterDate) {
-          // Filter data based on the selected date
-          const filteredData = data.filter((appointment) => {
-            const appointmentDate = formatDate(
-              new Date(appointment.date),
-              'yyyy-MM-dd',
-              'en'
-            );
-            const selectedDate = formatDate(
-              new Date(filterDate),
-              'yyyy-MM-dd',
-              'en'
-            );
-            return appointmentDate === selectedDate; // Match by date
+          filteredData = mappedData.filter(appointment => {
+            const appointmentDate = formatDate(new Date(appointment.appointmentDateTime), 'yyyy-MM-dd', 'en');
+            const selectedDate = formatDate(new Date(filterDate), 'yyyy-MM-dd', 'en');
+            return appointmentDate === selectedDate;
           });
-          this.dataSource.data = filteredData;
-        } else {
-          // If no filter date, load all data
-          this.dataSource.data = data;
         }
 
+        this.dataSource.data = filteredData;
         this.isLoading = false;
         this.refreshTable();
-        this.dataSource.filterPredicate = (data: Appointment, filter: string) =>
-          Object.values(data).some((value) =>
-            value.toString().toLowerCase().includes(filter)
+
+        this.dataSource.filterPredicate = (data: Appointment, filter: string) => {
+          return Object.values(data).some(value =>
+            value && value.toString().toLowerCase().includes(filter)
           );
+        };
       },
-      error: (err) => console.error(err),
+      error: (err) => {
+        console.error(err);
+        this.isLoading = false;
+      }
     });
   }
 
@@ -286,18 +263,20 @@ export class ViewappointmentComponent implements OnInit, OnDestroy {
 
   exportExcel() {
     const exportData = this.dataSource.filteredData.map((x) => ({
-      Name: x.name,
-      Email: x.email,
-      Gender: x.gender,
-      Date: formatDate(new Date(x.date), 'yyyy-MM-dd', 'en') || '',
-      Time: x.time,
-      Mobile: x.mobile,
-      Doctor: x.doctor,
-      Injury: x.injury,
-      AppointmentStatus: x.appointmentStatus,
-      VisitType: x.visitType,
-      PaymentStatus: x.paymentStatus,
-      InsuranceProvider: x.insuranceProvider,
+      id: x.id,
+      doctorName: x.doctorName,
+      patientName: x.patientName,
+      gender: x.gender,
+      appointmentDateTime: formatDate(
+        new Date(x.appointmentDateTime),
+        'yyyy-MM-dd HH:mm:ss',
+        'en-US'
+      ),
+      phone: x.phone,
+      address: x.address,
+      email: x.email,
+      status: x.status,
+      type: x.type,
       Notes: x.notes,
     }));
 

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Online_Health_Consultation_Portal.Application.Command.Appointment;
 using Online_Health_Consultation_Portal.Application.Dtos.Appointment;
 using Online_Health_Consultation_Portal.Application.Queries.Appointment;
-using Online_Health_Consultation_Portal.Infrastructure;
+
 
 namespace Online_Health_Consultation_Portal.API.Controllers.Appointment
 {
@@ -14,11 +14,9 @@ namespace Online_Health_Consultation_Portal.API.Controllers.Appointment
     public class AppointmentController : ControllerBase
     {
         private readonly IMediator _mediator;
-        private readonly AppDbContext _context;
-        public AppointmentController(IMediator mediator, AppDbContext context)
+        public AppointmentController(IMediator mediator)
         {
             _mediator = mediator;
-            _context = context;
         }
 
         // POST: api/appointment
@@ -104,7 +102,7 @@ namespace Online_Health_Consultation_Portal.API.Controllers.Appointment
         [HttpGet]
         public async Task<IActionResult> GetAllAppointments()
         {
-            var list = await _context.Appointments.ToListAsync();
+            var list = await _mediator.Send(new GetAllAppointmentsQuery());
             return Ok(list);
         }
         // GET: api/appointment/{id}

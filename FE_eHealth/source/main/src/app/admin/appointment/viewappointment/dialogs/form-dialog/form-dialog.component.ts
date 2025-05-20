@@ -1,25 +1,10 @@
-import {
-  MAT_DIALOG_DATA,
-  MatDialogRef,
-  MatDialogContent,
-  MatDialogClose,
-} from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef, MatDialogContent, MatDialogClose, } from '@angular/material/dialog';
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { AppointmentService } from '../../appointment.service';
-import {
-  UntypedFormControl,
-  Validators,
-  UntypedFormGroup,
-  UntypedFormBuilder,
-  FormsModule,
-  ReactiveFormsModule,
-} from '@angular/forms';
+import { UntypedFormControl, Validators, UntypedFormGroup, UntypedFormBuilder, FormsModule, ReactiveFormsModule, } from '@angular/forms';
 import { Appointment } from '../../appointment.model';
-import {
-  MAT_DATE_LOCALE,
-  provideNativeDateAdapter,
-} from '@angular/material/core';
-import { formatDate } from '@angular/common';
+import { MAT_DATE_LOCALE, provideNativeDateAdapter, } from '@angular/material/core';
+import { formatDate, CommonModule } from '@angular/common';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatRadioModule } from '@angular/material/radio';
@@ -44,6 +29,7 @@ export interface DialogData {
     { provide: MAT_DATE_LOCALE, useValue: 'en-GB' },
   ],
   imports: [
+    CommonModule,
     MatButtonModule,
     MatIconModule,
     MatDialogContent,
@@ -73,38 +59,40 @@ export class ViewAppointmentFormComponent {
   ) {
     this.action = data.action;
     this.dialogTitle =
-      this.action === 'edit' ? data.appointment.name : 'New Appointment';
+      this.action === 'edit' ? data.appointment.patientName : 'New Appointment';
     this.appointment =
       this.action === 'edit' ? data.appointment : new Appointment({});
     this.appointmentForm = this.createAppointmentForm();
   }
 
   createAppointmentForm(): UntypedFormGroup {
-    const timeValue = this.appointment.time
-      ? this.parseTimeString(this.appointment.time)
+    const timeValue = this.appointment.appointmentDateTime
+      ? this.parseTimeStringFromDate(this.appointment.appointmentDateTime)
       : null;
+    const dateValue = this.appointment.appointmentDateTime
+      ? new Date(this.appointment.appointmentDateTime)
+      : null;
+
     return this.fb.group({
       id: [this.appointment.id],
-      img: [this.appointment.img],
-      name: [this.appointment.name, [Validators.required]],
+      patientName: [this.appointment.patientName, [Validators.required]],
       email: [this.appointment.email, [Validators.required, Validators.email]],
-      gender: [this.appointment.gender],
-      date: [
-        formatDate(this.appointment.date, 'yyyy-MM-dd', 'en'),
-        [Validators.required],
-      ],
+      gender: [this.appointment.gender, [Validators.required]],
+      date: [dateValue, [Validators.required]],
       time: [timeValue, [Validators.required]],
-      mobile: [this.appointment.mobile, [Validators.required]],
-      doctor: [this.appointment.doctor, [Validators.required]],
-      injury: [this.appointment.injury],
-      appointmentStatus: [this.appointment.appointmentStatus],
-      visitType: [this.appointment.visitType],
-      paymentStatus: [this.appointment.paymentStatus],
-      insuranceProvider: [this.appointment.insuranceProvider],
+      phone: [this.appointment.phone, [Validators.required]], // Đồng bộ với tên phone
+      doctorName: [this.appointment.doctorName, [Validators.required]],
+      diagnosis: [this.appointment.diagnosis],
+      status: [this.appointment.status],
+      type: [this.appointment.type],
       notes: [this.appointment.notes],
-      createdAt: [this.appointment.createdAt],
-      updatedAt: [this.appointment.updatedAt],
     });
+  }
+
+  private parseTimeStringFromDate(dateTime: string): Date | null {
+    if (!dateTime) return null;
+    const dateObj = new Date(dateTime);
+    return dateObj;
   }
 
   getErrorMessage(control: UntypedFormControl): string {
@@ -116,23 +104,24 @@ export class ViewAppointmentFormComponent {
     return '';
   }
 
-  private parseTimeString(timeString: string): Date | null {
-    if (!timeString) return null;
-
-    const [hours, minutes] = timeString.split(':').map(Number);
-    const date = new Date();
-    date.setHours(hours, minutes, 0, 0);
-    return date;
-  }
-
   submit() {
     if (this.appointmentForm.valid) {
       const formData = this.appointmentForm.getRawValue();
-      if (formData.time instanceof Date) {
-        const hours = formData.time.getHours().toString().padStart(2, '0');
-        const minutes = formData.time.getMinutes().toString().padStart(2, '0');
-        formData.time = `${hours}:${minutes}`;
-      }
+
+      const date: Date = formData.date;
+      const time: Date = formData.time;
+
+      const appointmentDateTime = new Date(date);
+      appointmentDateTime.setHours(time.getHours());
+      appointmentDateTime.setMinutes(time.getMinutes());
+      appointmentDateTime.setSeconds(0);
+      appointmentDateTime.setMilliseconds(0);
+
+      formData.appointmentDateTime = appointmentDateTime.toISOString();
+
+      delete formData.date;
+      delete formData.time;
+
       if (this.action === 'edit') {
         this.appointmentService.updateAppointment(formData).subscribe({
           next: (response) => {
@@ -140,7 +129,7 @@ export class ViewAppointmentFormComponent {
           },
           error: (error) => {
             console.error('Update Error:', error);
-            // Optionally display an error message to the user
+            alert('Update failed, please try again later!');
           },
         });
       } else {
@@ -150,7 +139,7 @@ export class ViewAppointmentFormComponent {
           },
           error: (error) => {
             console.error('Add Error:', error);
-            // Optionally display an error message to the user
+            alert('Add failed, please try again later!');
           },
         });
       }
@@ -158,7 +147,7 @@ export class ViewAppointmentFormComponent {
   }
 
   onNoClick(): void {
-    this.appointmentForm.reset(); // Reset the form
+    this.appointmentForm.reset();
     this.dialogRef.close();
   }
 }

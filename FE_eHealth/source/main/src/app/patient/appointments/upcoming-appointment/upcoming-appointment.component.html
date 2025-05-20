@@ -23,8 +23,24 @@
               <ul class="tbl-export-btn">
                 <li class="tbl-header-btn">
                   <div class="m-l-10">
-                    <button mat-icon-button color="primary" matTooltip="Show/Hide Column">
+                    <!-- <button mat-icon-button color="primary" matTooltip="Show/Hide Column">
                       <mat-icon>filter_list</mat-icon>
+                    </button> -->
+                    <button mat-icon-button color="primary" (click)="select.open()" matTooltip="Show/Hide Column">
+                      <mat-icon>filter_list</mat-icon>
+                      <mat-select #select [(ngModel)]="filter.value" style="width: 200px; display: table;"
+                        class="column-filter">
+                        <span class="table-column-label">Show/Hide Column</span>
+                        @for (cd of columnDefinitions; track cd; let i = $index) {
+                        <div>
+                          <mat-option>
+                            <mat-checkbox (click)="$event.stopPropagation()" [(ngModel)]="cd.visible" color="primary">
+                              {{cd.label}}
+                            </mat-checkbox>
+                          </mat-option>
+                        </div>
+                        }
+                      </mat-select>
                     </button>
                     <mat-select [(ngModel)]="filter.value" style="width: 200px;" class="column-filter">
                       <mat-option *ngFor="let cd of columnDefinitions; let i = index">

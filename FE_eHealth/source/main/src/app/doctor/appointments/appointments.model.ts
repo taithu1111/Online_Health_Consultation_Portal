@@ -8,8 +8,6 @@ export class Appointments {
   patientName: string;
   email: string;
   phoneNumber: string;
-  // appointmentDate: string;
-  // appointmentTime: string;
   appointmentDateTime: string;
   gender: string;
   status: string;
@@ -25,10 +23,6 @@ export class Appointments {
     this.patientName = appointments.patientName || '';
     this.email = appointments.email || '';
     this.phoneNumber = appointments.phoneNumber || '';
-    // this.appointmentDate =
-    //   appointments.appointmentDate ||
-    //   formatDate(new Date(), 'yyyy-MM-ddTHH:mm:ssZ', 'en');
-    // this.appointmentTime = appointments.appointmentTime || '';
     this.appointmentDateTime = appointments.appointmentDateTime || new Date().toISOString();
     this.gender = appointments.gender || '';
     this.status = appointments.status || 'Upcoming'; // Default status
