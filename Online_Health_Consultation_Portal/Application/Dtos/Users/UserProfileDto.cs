@@ -9,7 +9,6 @@ namespace Online_Health_Consultation_Portal.Application.Dtos.Users
         
         // Patient specific fields
         public DateTime? DateOfBirth { get; set; }
-        public string Phone { get; set; }
         public string Address { get; set; }
         
         // Doctor specific fields

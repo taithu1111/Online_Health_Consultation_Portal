@@ -3,11 +3,10 @@ namespace Online_Health_Consultation_Portal.Application.Dtos.Users
     public class UpdateUserProfileDto
     {
         public string? FullName { get; set; }
-        public string? Gender { get; set; }
+        public string? Phone { get; set; } // For updating PhoneNumber in IdentityUser
         
         // Patient specific fields
         public DateTime? DateOfBirth { get; set; }
-        public string? Phone { get; set; }
         public string? Address { get; set; }
         
         // Doctor specific fields
