@@ -6,7 +6,7 @@ namespace Online_Health_Consultation_Portal.Domain
     {
         public string FullName { get; set; }
         public string Gender { get; set; }
-        public string ImageUrl { get; set; }
+        public string? ImageUrl { get; set; }
         public DateTime CreatedAt { get; set; }
         public string Role { get; set; } // Admin, Doctor, Patient
         public ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();
