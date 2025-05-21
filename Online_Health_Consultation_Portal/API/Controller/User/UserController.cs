@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -54,8 +55,51 @@ namespace Online_Health_Consultation_Portal.API.Controllers.User
                     Profile = profile
                 };
 
-                await _mediator.Send(command);
-                return NoContent();
+                var result = await _mediator.Send(command);
+
+                if (result)
+                {
+                    return NoContent(); // 204 on success
+                }
+                else
+                {
+                    // Could mean user not found, concurrency failure, or validation failure
+                    // You can customize the message or use Conflict for concurrency issues
+                    return Conflict("Failed to update profile. The data may be out of date or invalid.");
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    error = "Update failed",
+                    details = ex.Message
+                });
+            }
+        }
+
+        [HttpPost("change-password")]
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDto dto)
+        {
+            try
+            {
+                if (dto == null || string.IsNullOrEmpty(dto.CurrentPassword) || string.IsNullOrEmpty(dto.NewPassword))
+                {
+                    return BadRequest("Current and new password must be provided.");
+                }
+
+                var command = new ChangePasswordCommand
+                {
+                    User = User,
+                    changePasswordDto = dto
+                };
+
+                var result = await _mediator.Send(command);
+
+                if (!result)
+                    return BadRequest("Incorrect current password or failed to update.");
+
+                return Ok("Password changed successfully.");
             }
             catch (Exception ex)
             {

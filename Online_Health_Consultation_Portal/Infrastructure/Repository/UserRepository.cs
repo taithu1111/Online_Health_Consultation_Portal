@@ -76,8 +76,13 @@ namespace Online_Health_Consultation_Portal.Infrastructure.Repositories
         public async Task<User?> GetUserByEmailAsync(string email)
         {
             var normalizedEmail = email.ToUpper(); // or use UserManager.NormalizeEmail(email)
-            Console.WriteLine($"Looking for normalized email: {normalizedEmail}");
-            return await context.Users.FirstOrDefaultAsync(u => u.NormalizedEmail == normalizedEmail);
+            // Console.WriteLine($"Looking for normalized email: {normalizedEmail}");
+            // return await context.Users.FirstOrDefaultAsync(u => u.NormalizedEmail == normalizedEmail);
+            
+            return await context.Users
+                .Include(u => u.UserRoles)
+                    .ThenInclude(ur => ur.Role)
+                .FirstOrDefaultAsync(u => u.NormalizedEmail == normalizedEmail);
         }
     }
 }

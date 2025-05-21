@@ -1,39 +1,34 @@
 <section class="content">
   <div class="content-block">
     <div class="block-header">
-      <!-- breadcrumb -->
       <app-breadcrumb [title]="'Profile'" [items]="['Extra']" [active_item]="'Profile'"></app-breadcrumb>
     </div>
-    <!-- Your content goes here  -->
     <div class="row clearfix">
       <div class="col-lg-4 col-md-12">
         <div class="card">
           <div class="m-b-20">
             <div class="contact-grid">
               <div class="profile-header bg-dark">
-                <div class="user-name">John Smith</div>
-                <div class="name-center">Software Engineer</div>
+                <div class="user-name">{{ profile?.fullName }}</div>
+                <div class="name-center">{{ profile?.role }}</div>
               </div>
               <img src="assets/images/user/usrbig3.jpg" class="user-img" alt="">
-              <p>
-                456, Estern evenue, Courtage area,
-                <br />New York
-              </p>
-              <div>
+              <p *ngIf="profile?.address">{{ profile?.address }}</p>
+              <div *ngIf="profile?.phone">
                 <span class="phone">
-                  <i class="material-icons">phone</i>264-625-2583</span>
+                  <i class="material-icons">phone</i>{{ profile?.phone }}</span>
               </div>
               <div class="row">
                 <div class="col-4">
-                  <p class="font-16 font-b-600">564</p>
+                  <p class="font-16 font-b-600">--</p>
                   <small>Following</small>
                 </div>
                 <div class="col-4">
-                  <p class="font-16 font-b-600">18k</p>
+                  <p class="font-16 font-b-600">--</p>
                   <small>Followers</small>
                 </div>
                 <div class="col-4">
-                  <p class="font-16 font-b-600">565</p>
+                  <p class="font-16 font-b-600">--</p>
                   <small>Post</small>
                 </div>
               </div>
@@ -44,54 +39,61 @@
           <mat-tab-group mat-align-tabs="start">
             <mat-tab label="About">
               <div class="p-4">
-                <p class="text-default">Lorem Ipsum is simply dummy text of the printing and
-                  typesetting industry. Lorem Ipsum has
-                  been the industry's standard dummy text ever since the 1500s, when an unknown
-                  printer
-                  took a galley of type and scrambled it to make a type specimen book. It has
-                  survived
-                  not only five centuries, but also the leap into electronic typesetting, remaining
-                  essentially
-                  unchanged.</p>
-                <small class="text-muted">Email address: </small>
-                <p>john&#64;gmail.com</p>
-                <hr>
-                <small class="text-muted">Phone: </small>
-                <p>+91 1234567890</p>
-                <hr>
+                <ng-container *ngIf="profile?.email">
+                  <small class="text-muted">Email:</small>
+                  <p>{{ profile.email }}</p>
+                  <hr>
+                </ng-container>
+                <ng-container *ngIf="profile?.fullName">
+                  <small class="text-muted">Full Name:</small>
+                  <p>{{ profile.fullName }}</p>
+                  <hr>
+                </ng-container>
+                <ng-container *ngIf="profile?.gender">
+                  <small class="text-muted">Gender:</small>
+                  <p>{{ profile.gender }}</p>
+                  <hr>
+                </ng-container>
+                <ng-container *ngIf="profile?.role">
+                  <small class="text-muted">Role:</small>
+                  <p>{{ profile.role }}</p>
+                  <hr>
+                </ng-container>
+                <ng-container *ngIf="profile?.dateOfBirth">
+                  <small class="text-muted">Date of Birth:</small>
+                  <p>{{ profile.dateOfBirth | date:'longDate' }}</p>
+                  <hr>
+                </ng-container>
+                <ng-container *ngIf="profile?.phone">
+                  <small class="text-muted">Phone:</small>
+                  <p>{{ profile.phone }}</p>
+                  <hr>
+                </ng-container>
+                <ng-container *ngIf="profile?.address">
+                  <small class="text-muted">Address:</small>
+                  <p>{{ profile.address }}</p>
+                  <hr>
+                </ng-container>
+                <ng-container *ngIf="profile?.languages">
+                  <small class="text-muted">Languages:</small>
+                  <p>{{ profile.languages }}</p>
+                  <hr>
+                </ng-container>
+                <ng-container *ngIf="profile?.specialization">
+                  <small class="text-muted">Specialization:</small>
+                  <p>{{ profile.specialization }}</p>
+                  <hr>
+                </ng-container>
+                <ng-container *ngIf="profile?.consultationFee">
+                  <small class="text-muted">Consultation Fee:</small>
+                  <p>{{ profile.consultationFee | currency }}</p>
+                  <hr>
+                </ng-container>
+                <ng-container *ngIf="profile?.experienceYears">
+                  <small class="text-muted">Experience:</small>
+                  <p>{{ profile.experienceYears }} years</p>
+                </ng-container>
               </div>
-            </mat-tab>
-            <mat-tab label="Skills">
-              <ul class="list-unstyled p-4">
-                <li>
-                  <div>Photoshop</div>
-                  <div class="progress skill-progress m-b-20">
-                    <div class="progress-bar l-bg-green width-per-45" role="progressbar" aria-valuenow="45"
-                      aria-valuemin="0" aria-valuemax="100"></div>
-                  </div>
-                </li>
-                <li>
-                  <div>Wordpress</div>
-                  <div class="progress skill-progress m-b-20">
-                    <div class="progress-bar l-bg-orange width-per-38" role="progressbar" aria-valuenow="38"
-                      aria-valuemin="0" aria-valuemax="100"></div>
-                  </div>
-                </li>
-                <li>
-                  <div>HTML 5</div>
-                  <div class="progress skill-progress m-b-20">
-                    <div class="progress-bar l-bg-cyan width-per-39" role="progressbar" aria-valuenow="39"
-                      aria-valuemin="0" aria-valuemax="100"></div>
-                  </div>
-                </li>
-                <li>
-                  <div>Angular</div>
-                  <div class="progress skill-progress m-b-20">
-                    <div class="progress-bar l-bg-purple width-per-70" role="progressbar" aria-valuenow="70"
-                      aria-valuemin="0" aria-valuemax="100"></div>
-                  </div>
-                </li>
-              </ul>
             </mat-tab>
           </mat-tab-group>
         </div>
@@ -107,229 +109,78 @@
               <div class="col-lg-12 col-md-12 col-sm-12">
                 <div class="project_widget">
                   <div class="header">
-                    <h2><strong>About</strong></h2>
+                    <h2><strong>Bio</strong></h2>
                   </div>
                   <div class="body">
-                    <div class="row">
-                      <div class="col-md-3 col-6 b-r">
-                        <strong>Full Name</strong>
-                        <br>
-                        <p class="text-muted">Emily Smith</p>
-                      </div>
-                      <div class="col-md-3 col-6 b-r">
-                        <strong>Mobile</strong>
-                        <br>
-                        <p class="text-muted">(123) 456 7890</p>
-                      </div>
-                      <div class="col-md-3 col-6 b-r">
-                        <strong>Email</strong>
-                        <br>
-                        <p class="text-muted">johndeo&#64;example.com</p>
-                      </div>
-                      <div class="col-md-3 col-6">
-                        <strong>Location</strong>
-                        <br>
-                        <p class="text-muted">India</p>
-                      </div>
-                    </div>
-                    <p class="m-t-30">Completed my graduation in Arts from the well known and
-                      renowned institution
-                      of India – SARDAR PATEL ARTS COLLEGE, BARODA in 2000-01, which was
-                      affiliated
-                      to M.S. University. I ranker in University exams from the same
-                      university
-                      from 1996-01.</p>
-                    <p>Worked as Professor and Head of the department at Sarda Collage, Rajkot,
-                      Gujarat
-                      from 2003-2015 </p>
-                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting
-                      industry. Lorem
-                      Ipsum has been the industry's standard dummy text ever since the 1500s,
-                      when
-                      an unknown printer took a galley of type and scrambled it to make a
-                      type
-                      specimen book. It has survived not only five centuries, but also the
-                      leap
-                      into electronic typesetting, remaining essentially unchanged.</p>
-                    <br>
+                    <p *ngIf="profile?.bio; else noBio">{{ profile.bio }}</p>
+                    <ng-template #noBio><p>No bio available.</p></ng-template>
                   </div>
                 </div>
               </div>
-              <div class="col-lg-12 col-md-12 col-sm-12">
-                <div class="project_widget">
-                  <div class="header">
-                    <h2><strong>Education</strong></h2>
-                  </div>
-                  <div class="body">
-                    <ul>
-                      <li>B.A.,Gujarat University, Ahmedabad,India.</li>
-                      <li>M.A.,Gujarat University, Ahmedabad, India.</li>
-                      <li>P.H.D., Shaurashtra University, Rajkot</li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-              <div class="col-lg-12 col-md-12 col-sm-12">
+              <div class="col-lg-12 col-md-12 col-sm-12" *ngIf="profile?.experienceYears">
                 <div class="project_widget">
                   <div class="header">
                     <h2><strong>Experience</strong></h2>
                   </div>
                   <div class="body">
                     <ul>
-                      <li>One year experience as Jr. Professor from April-2009 to march-2010
-                        at B.
-                        J. Arts College, Ahmedabad.</li>
-                      <li>Three year experience as Jr. Professor at V.S. Arts &amp; Commerse
-                        Collage
-                        from April - 2008 to April - 2011.</li>
-                      <li>Lorem Ipsum is simply dummy text of the printing and typesetting
-                        industry.
-                      </li>
-                      <li>Lorem Ipsum is simply dummy text of the printing and typesetting
-                        industry.
-                      </li>
-                      <li>Lorem Ipsum is simply dummy text of the printing and typesetting
-                        industry.
-                      </li>
-                      <li>Lorem Ipsum is simply dummy text of the printing and typesetting
-                        industry.
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-              <div class="col-lg-12 col-md-12 col-sm-12">
-                <div class="project_widget">
-                  <div class="header">
-                    <h2><strong>Conferences, Cources &amp; Workshop Attended</strong></h2>
-                  </div>
-                  <div class="body">
-                    <ul>
-                      <li>Lorem Ipsum is simply dummy text of the printing and typesetting
-                        industry.
-                      </li>
-                      <li>Lorem Ipsum is simply dummy text of the printing and typesetting
-                        industry.
-                      </li>
-                      <li>Lorem Ipsum is simply dummy text of the printing and typesetting
-                        industry.
-                      </li>
-                      <li>Lorem Ipsum is simply dummy text of the printing and typesetting
-                        industry.
-                      </li>
-                      <li>Lorem Ipsum is simply dummy text of the printing and typesetting
-                        industry.
-                      </li>
-                      <li>Lorem Ipsum is simply dummy text of the printing and typesetting
-                        industry.
-                      </li>
-                      <li>Lorem Ipsum is simply dummy text of the printing and typesetting
-                        industry.
-                      </li>
+                      <li>{{ profile.experienceYears }} years of experience in the field.</li>
                     </ul>
                   </div>
                 </div>
               </div>
             </mat-tab>
-
             <mat-tab>
               <ng-template mat-tab-label>
                 <mat-icon class="example-tab-icon msr-2">settings</mat-icon>
                 Settings
               </ng-template>
               <div class="header">
-                <h2>
-                  <strong>Security</strong> Settings
-                </h2>
-              </div>
-              <div class="body">
-                <div class="example-container">
-                  <mat-form-field class="example-full-width" appearance="fill">
-                    <mat-label>Username</mat-label>
-                    <input matInput>
-                  </mat-form-field>
-                  <mat-form-field class="example-full-width" appearance="fill">
-                    <mat-label>Current Password</mat-label>
-                    <input matInput type="password">
-                  </mat-form-field>
-                  <mat-form-field class="example-full-width" appearance="fill">
-                    <mat-label>New Password</mat-label>
-                    <input matInput type="password">
-                  </mat-form-field>
-                </div>
-                <button mat-raised-button color="primary">Save</button>
-              </div>
-              <div class="header">
-                <h2>
-                  <strong>Account</strong> Settings
-                </h2>
+                <h2><strong>Account</strong> Details</h2>
               </div>
               <div class="body">
                 <div class="row clearfix">
-                  <div class="col-lg-6 col-md-12">
-                    <div class="form-group">
-                      <mat-form-field class="example-full-width" appearance="fill">
-                        <mat-label>First Name</mat-label>
-                        <input matInput>
-                      </mat-form-field>
-                    </div>
+                  <div class="col-lg-6 col-md-12" *ngIf="profile?.fullName">
+                    <mat-form-field class="example-full-width" appearance="fill">
+                      <mat-label>Full Name</mat-label>
+                      <input matInput [value]="profile.fullName" disabled>
+                    </mat-form-field>
                   </div>
-                  <div class="col-lg-6 col-md-12">
-                    <div class="form-group">
-                      <mat-form-field class="example-full-width" appearance="fill">
-                        <mat-label>Last Name</mat-label>
-                        <input matInput>
-                      </mat-form-field>
-                    </div>
+                  <div class="col-lg-6 col-md-12" *ngIf="profile?.email">
+                    <mat-form-field class="example-full-width" appearance="fill">
+                      <mat-label>Email</mat-label>
+                      <input matInput [value]="profile.email" disabled>
+                    </mat-form-field>
                   </div>
-                  <div class="col-lg-4 col-md-12">
-                    <div class="form-group">
-                      <mat-form-field class="example-full-width" appearance="fill">
-                        <mat-label>City</mat-label>
-                        <input matInput>
-                      </mat-form-field>
-                    </div>
+                  <div class="col-lg-6 col-md-12" *ngIf="profile?.phone">
+                    <mat-form-field class="example-full-width" appearance="fill">
+                      <mat-label>Phone</mat-label>
+                      <input matInput [value]="profile.phone" disabled>
+                    </mat-form-field>
                   </div>
-                  <div class="col-lg-4 col-md-12">
-                    <div class="form-group">
-                      <mat-form-field class="example-full-width" appearance="fill">
-                        <mat-label>Email</mat-label>
-                        <input matInput>
-                      </mat-form-field>
-                    </div>
+                  <div class="col-lg-6 col-md-12" *ngIf="profile?.dateOfBirth">
+                    <mat-form-field class="example-full-width" appearance="fill">
+                      <mat-label>Date of Birth</mat-label>
+                      <input matInput [value]="(profile.dateOfBirth | date:'yyyy-MM-dd')" disabled>
+                    </mat-form-field>
                   </div>
-                  <div class="col-lg-4 col-md-12">
-                    <div class="form-group">
-                      <mat-form-field class="example-full-width" appearance="fill">
-                        <mat-label>Country</mat-label>
-                        <input matInput>
-                      </mat-form-field>
-                    </div>
+                  <div class="col-md-12" *ngIf="profile?.address">
+                    <mat-form-field class="example-full-width" appearance="fill">
+                      <mat-label>Address</mat-label>
+                      <textarea matInput [value]="profile.address" disabled></textarea>
+                    </mat-form-field>
                   </div>
-                  <div class="col-md-12">
-                    <div class="form-group">
-                      <mat-form-field class="example-full-width" appearance="fill">
-                        <mat-label>Address</mat-label>
-                        <textarea matInput></textarea>
-                      </mat-form-field>
-                    </div>
+                  <div class="col-lg-6 col-md-12" *ngIf="profile?.specialization">
+                    <mat-form-field class="example-full-width" appearance="fill">
+                      <mat-label>Specialization</mat-label>
+                      <input matInput [value]="profile.specialization" disabled>
+                    </mat-form-field>
                   </div>
-                  <div class="col-md-12">
-                    <div class="form-group">
-                      <mat-checkbox class="example-margin">Profile Visibility For Everyone
-                      </mat-checkbox>
-                    </div>
-                    <div class="form-group">
-                      <mat-checkbox class="example-margin">New task notifications
-                      </mat-checkbox>
-                    </div>
-                    <div class="form-group">
-                      <mat-checkbox class="example-margin">New friend request notifications
-                      </mat-checkbox>
-                    </div>
-                  </div>
-                  <div class="col-md-12">
-                    <button mat-raised-button color="primary">Save Changes</button>
+                  <div class="col-lg-6 col-md-12" *ngIf="profile?.languages">
+                    <mat-form-field class="example-full-width" appearance="fill">
+                      <mat-label>Languages</mat-label>
+                      <input matInput [value]="profile.languages" disabled>
+                    </mat-form-field>
                   </div>
                 </div>
               </div>

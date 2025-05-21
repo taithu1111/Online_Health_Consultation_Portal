@@ -75,19 +75,6 @@ export class SigninComponent
 
     const returnUrl = this.authService.redirectUrl || this.getDefaultRoute(user.roles);
     this.router.navigateByUrl(returnUrl)
-
-    // const roles: string[] = user.roles || [];
-    // let targetRoute = '/authentication/signin';
-
-    // if (roles.includes(Role.Admin)) {
-    //   targetRoute = '/admin/dashboard/main';
-    // } else if (roles.includes(Role.Doctor)) {
-    //   targetRoute = '/doctor/dashboard';
-    // } else if (roles.includes(Role.Patient)) {
-    //   targetRoute = '/patient/dashboard';
-    // }
-
-    // this.router.navigate([targetRoute]);
   }
 
   get f() {

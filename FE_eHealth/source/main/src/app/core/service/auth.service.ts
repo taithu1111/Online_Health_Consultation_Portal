@@ -30,35 +30,40 @@ export class AuthService {
     return this.currentUserSubject.value;
   }
 
-  // isTokenExpired(): boolean {
-  //   const token = this.getToken();
-  //   if (!token) return true;
-
-  //   try {
-  //     const decoded = jwtDecode<JwtPayload>(token);
-  //     const now = Math.floor(Date.now() / 1000);
-  //     return decoded.exp <= now;
-  //   } catch {
-  //     return true;
-  //   }
-  // }
-
   isTokenExpired(): boolean {
     return !this.isLoggedIn;
   }
 
+  getCurrentUserRole(): string | null {
+    const user = this.getUserFromStorage();
+    if (!user?.token) return null;
+
+    try {
+      const decoded: JwtPayload = jwtDecode(user.token);
+      if (!decoded || !decoded.role) return null;
+
+      return Array.isArray(decoded.role) ? decoded.role[0] : decoded.role;
+    } catch {
+      return null;
+    }
+  }
+
   login(email: string, password: string, rememberMe: boolean = false): Observable<User> {
-    return this.http.post<User>(`${environment.apiUrl}/api/auth/login`, { email, password, })
-      .pipe(
-        tap(user => {
-          if (user?.token) {
-            const storage = rememberMe ? localStorage : sessionStorage;
-            storage.setItem('currentUser', JSON.stringify(user)),
-              this.currentUserSubject.next(user);
-          }
-        }),
-        catchError(err => throwError(() => new Error(err.error?.message || 'Login failed.')))
-      );
+    return this.http.post<User>(`${environment.apiUrl}/api/auth/login`, { email, password })
+        .pipe(
+            tap(user => {
+                if (user?.token) {
+                    const storage = rememberMe ? localStorage : sessionStorage;
+                    storage.setItem('currentUser', JSON.stringify(user));
+                    this.currentUserSubject.next(user);
+                }
+            }),
+            catchError(err => {
+                // Handle specific error messages from the server
+                const errorMsg = err.error?.message || 'Login failed. Please check your credentials.';
+                return throwError(() => new Error(errorMsg));
+            })
+        );
   }
 
   logout(): Observable<any> {
@@ -150,102 +155,3 @@ export class AuthService {
     return this.http.post(`${environment.apiUrl}/api/auth/forgot-password`, { email });
   }
 }
-
-
-// import { Injectable } from '@angular/core';
-// import { HttpClient, HttpResponse } from '@angular/common/http';
-// import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
-// import { User } from '../models/user';
-// import { Role } from '@core/models/role';
-
-// @Injectable({
-//   providedIn: 'root',
-// })
-// export class AuthService {
-//   private currentUserSubject: BehaviorSubject<User>;
-//   public currentUser: Observable<User>;
-
-//   private users = [
-//     {
-//       id: 1,
-//       img: 'assets/images/user/admin.jpg',
-//       username: 'admin@hospital.org',
-//       password: 'admin@123',
-//       firstName: 'Sarah',
-//       lastName: 'Smith',
-//       role: Role.Admin,
-//       token: 'admin-token',
-//     },
-//     {
-//       id: 2,
-//       img: 'assets/images/user/doctor.jpg',
-//       username: 'doctor@hospital.org',
-//       password: 'doctor@123',
-//       firstName: 'Ashton',
-//       lastName: 'Cox',
-//       role: Role.Doctor,
-//       token: 'doctor-token',
-//     },
-//     {
-//       id: 3,
-//       img: 'assets/images/user/patient.jpg',
-//       username: 'patient@hospital.org',
-//       password: 'patient@123',
-//       firstName: 'Cara',
-//       lastName: 'Stevens',
-//       role: Role.Patient,
-//       token: 'patient-token',
-//     },
-//   ];
-
-//   constructor(private http: HttpClient) {
-//     this.currentUserSubject = new BehaviorSubject<User>(
-//       JSON.parse(localStorage.getItem('currentUser') || '{}')
-//     );
-//     this.currentUser = this.currentUserSubject.asObservable();
-//   }
-
-//   public get currentUserValue(): User {
-//     return this.currentUserSubject.value;
-//   }
-
-//   login(username: string, password: string) {
-
-//     const user = this.users.find((u) => u.username === username && u.password === password);
-
-//     if (!user) {
-//       return this.error('Username or password is incorrect');
-//     } else {
-//       localStorage.setItem('currentUser', JSON.stringify(user));
-//       this.currentUserSubject.next(user);
-//       return this.ok({
-//         id: user.id,
-//         img: user.img,
-//         username: user.username,
-//         firstName: user.firstName,
-//         lastName: user.lastName,
-//         token: user.token,
-//       });
-//     }
-//   }
-//   ok(body?: {
-//     id: number;
-//     img: string;
-//     username: string;
-//     firstName: string;
-//     lastName: string;
-//     token: string;
-//   }) {
-//     return of(new HttpResponse({ status: 200, body }));
-//   }
-//   error(message: string) {
-//     return throwError(message);
-//   }
-
-//   logout() {
-//     // remove user from local storage to log user out
-//     localStorage.removeItem('currentUser');
-//     this.currentUserSubject.next(this.currentUserValue);
-//     return of({ success: false });
-//   }
-// }
