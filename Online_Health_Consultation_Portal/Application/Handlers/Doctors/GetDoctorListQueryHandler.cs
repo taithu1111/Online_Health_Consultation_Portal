@@ -4,18 +4,16 @@ using Microsoft.EntityFrameworkCore;
 using Online_Health_Consultation_Portal.Application.Dtos.Doctors;
 using Online_Health_Consultation_Portal.Application.Dtos.Pagination;
 using Online_Health_Consultation_Portal.Application.Queries.Doctors;
-using Online_Health_Consultation_Portal.Domain;
 using Online_Health_Consultation_Portal.Infrastructure;
-using Online_Health_Consultation_Portal.Infrastructure.Repository;
 
 namespace Online_Health_Consultation_Portal.Application.Handlers.Doctors
 {
     public class GetDoctorListQueryHandler : IRequestHandler<GetDoctorListQuery, PaginatedResponse<DoctorDto>>
     {
         private readonly AppDbContext _context;
-        private readonly IAutoMapper _mapper;
+        private readonly IMapper _mapper;
 
-        public GetDoctorListQueryHandler(AppDbContext context, IAutoMapper mapper)
+        public GetDoctorListQueryHandler(AppDbContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
@@ -30,10 +28,10 @@ namespace Online_Health_Consultation_Portal.Application.Handlers.Doctors
                 .AsQueryable();
 
             // Apply filters
-            //if (request.SpecializationId.HasValue)
-            //{
-            //    dbQuery = dbQuery.Where(d => d.SpecializationId == request.SpecializationId);
-            //}
+            if (request.SpecializationId.HasValue)
+            {
+                dbQuery = dbQuery.Where(d => d.SpecializationId == request.SpecializationId);
+            }
 
             if (request.MinExperienceYears.HasValue)
             {

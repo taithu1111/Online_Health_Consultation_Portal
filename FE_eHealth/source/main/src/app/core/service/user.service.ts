@@ -1,5 +1,3 @@
-// src/app/services/user.service.ts
-
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -28,10 +26,10 @@ export interface UpdateUserProfileDto {
     phone?: string;
     address?: string;
     bio?: string;
-    specialization?: string;
-    experienceYears?: number;
+    specialization?: string; // doctor field
+    experienceYears?: number; // doctor field
     languages?: string;
-    consultationFee?: number;
+    consultationFee?: number; // doctor field
 }
 
 @Injectable({
@@ -77,5 +75,12 @@ export class UserService {
         if (searchTerm) params.searchTerm = searchTerm;
 
         return this.http.get<{ items: User[]; totalCount: number }>(this.apiUrl, { params });
+    }
+
+    changePassword(currentPassword: string, newPassword: string): Observable<void> {
+        return this.http.post<void>(`${this.apiUrl}/change-password`, {
+            currentPassword,
+            newPassword
+        });
     }
 }

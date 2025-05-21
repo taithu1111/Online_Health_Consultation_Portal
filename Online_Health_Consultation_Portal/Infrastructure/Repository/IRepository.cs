@@ -1,4 +1,6 @@
-﻿namespace Online_Health_Consultation_Portal.Infrastructure.Repository
+﻿using Online_Health_Consultation_Portal.Domain;
+
+namespace Online_Health_Consultation_Portal.Infrastructure.Repository
 {
     public interface IRepository<T> where T : class
     {

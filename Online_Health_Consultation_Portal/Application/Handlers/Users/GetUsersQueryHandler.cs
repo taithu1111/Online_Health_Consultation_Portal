@@ -1,27 +1,23 @@
 using AutoMapper;
 using MediatR;
+using Online_Health_Consultation_Portal.Application.Dtos.Paginated;
 using Online_Health_Consultation_Portal.Application.Dtos.Users;
 using Online_Health_Consultation_Portal.Infrastructure.Repositories;
-using Online_Health_Consultation_Portal.Infrastructure.Repository;
 using Online_Health_Consultation_Portal.Infrastructure;
-using Microsoft.EntityFrameworkCore;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
-using Online_Health_Consultation_Portal.Application.Dtos.Pagination;
 
 public sealed class GetUsersQueryHandler : IRequestHandler<GetUsersQuery, PaginatedResponse<UserResponse>>
 {
-    private readonly AppDbContext _context;
-
     private readonly IUserRepository _userRepository;
-    private readonly IAutoMapper _mapper;
-    public GetUsersQueryHandler(IUserRepository userRepository, IAutoMapper mapper)
+    private readonly IMapper _mapper;
+
+    public GetUsersQueryHandler(IUserRepository userRepository, IMapper mapper)
     {
         _userRepository = userRepository;
         _mapper = mapper;
     }
 
     public async Task<PaginatedResponse<UserResponse>> Handle(
-        GetUsersQuery request,
+        GetUsersQuery request, 
         CancellationToken cancellationToken)
     {
         var paginatedResult = await _userRepository.GetPaginatedUsersAsync(

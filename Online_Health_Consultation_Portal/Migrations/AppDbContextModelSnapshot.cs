@@ -249,6 +249,7 @@ namespace Online_Health_Consultation_Portal.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("ConsultationFee")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("ExperienceYears")
@@ -333,7 +334,6 @@ namespace Online_Health_Consultation_Portal.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("UserId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -381,7 +381,14 @@ namespace Online_Health_Consultation_Portal.Migrations
 
                     b.Property<string>("Content")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
+
+                    b.Property<bool>("IsRead")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ReadAt")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("ReceiverId")
                         .HasColumnType("int");
@@ -392,7 +399,16 @@ namespace Online_Health_Consultation_Portal.Migrations
                     b.Property<DateTime>("SentAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("ReceiverId");
+
+                    b.HasIndex("SenderId");
+
+                    b.HasIndex("SenderId", "ReceiverId");
 
                     b.ToTable("Messages");
                 });
@@ -405,17 +421,37 @@ namespace Online_Health_Consultation_Portal.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int?>("AppointmentId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<bool>("IsRead")
                         .HasColumnType("bit");
 
                     b.Property<string>("Message")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("PaymentId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("PrescriptionId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AppointmentId");
+
+                    b.HasIndex("PaymentId");
+
+                    b.HasIndex("PrescriptionId");
 
                     b.HasIndex("UserId");
 
@@ -464,6 +500,7 @@ namespace Online_Health_Consultation_Portal.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<decimal>("Amount")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("AppointmentId")
@@ -659,6 +696,7 @@ namespace Online_Health_Consultation_Portal.Migrations
                         .HasColumnType("int");
 
                     b.Property<decimal>("TotalRevenue")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("StatisticId");
@@ -710,6 +748,10 @@ namespace Online_Health_Consultation_Portal.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
@@ -717,8 +759,10 @@ namespace Online_Health_Consultation_Portal.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime>("DateOfBirth")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Email")
-                        .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
@@ -751,6 +795,7 @@ namespace Online_Health_Consultation_Portal.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("PhoneNumberConfirmed")
@@ -940,13 +985,50 @@ namespace Online_Health_Consultation_Portal.Migrations
                     b.Navigation("Prescription");
                 });
 
+            modelBuilder.Entity("Online_Health_Consultation_Portal.Domain.Message", b =>
+                {
+                    b.HasOne("Online_Health_Consultation_Portal.Domain.User", "Receiver")
+                        .WithMany("ReceivedMessages")
+                        .HasForeignKey("ReceiverId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Online_Health_Consultation_Portal.Domain.User", "Sender")
+                        .WithMany("SentMessages")
+                        .HasForeignKey("SenderId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Receiver");
+
+                    b.Navigation("Sender");
+                });
+
             modelBuilder.Entity("Online_Health_Consultation_Portal.Domain.Notification", b =>
                 {
+                    b.HasOne("Online_Health_Consultation_Portal.Domain.Appointment", "Appointment")
+                        .WithMany()
+                        .HasForeignKey("AppointmentId");
+
+                    b.HasOne("Online_Health_Consultation_Portal.Domain.Payment", "Payment")
+                        .WithMany()
+                        .HasForeignKey("PaymentId");
+
+                    b.HasOne("Online_Health_Consultation_Portal.Domain.Prescription", "Prescription")
+                        .WithMany()
+                        .HasForeignKey("PrescriptionId");
+
                     b.HasOne("Online_Health_Consultation_Portal.Domain.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Appointment");
+
+                    b.Navigation("Payment");
+
+                    b.Navigation("Prescription");
 
                     b.Navigation("User");
                 });
@@ -1075,6 +1157,10 @@ namespace Online_Health_Consultation_Portal.Migrations
 
             modelBuilder.Entity("Online_Health_Consultation_Portal.Domain.User", b =>
                 {
+                    b.Navigation("ReceivedMessages");
+
+                    b.Navigation("SentMessages");
+
                     b.Navigation("UserRoles");
                 });
 #pragma warning restore 612, 618

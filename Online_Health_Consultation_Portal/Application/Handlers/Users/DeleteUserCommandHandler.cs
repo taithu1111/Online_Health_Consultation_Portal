@@ -21,5 +21,4 @@ public sealed class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand
         _logger.LogWarning($"Admin deleted user {request.UserId}");
         return Unit.Value;
     }
-
 }

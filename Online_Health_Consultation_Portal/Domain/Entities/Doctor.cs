@@ -7,8 +7,8 @@ namespace Online_Health_Consultation_Portal.Domain
         [Key]
         public int Id { get; set; } // FK to User
         
-
-        //public int SpecializationId { get; set; }
+        public int UserId { get; set; }
+        public int SpecializationId { get; set; }
         public int ExperienceYears { get; set; }
         public string Languages { get; set; }
         public string Bio { get; set; }

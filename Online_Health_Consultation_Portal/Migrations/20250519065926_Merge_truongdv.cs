@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Online_Health_Consultation_Portal.Migrations
 {
     /// <inheritdoc />
-    public partial class updateSchedule : Migration
+    public partial class Merge_truongdv : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

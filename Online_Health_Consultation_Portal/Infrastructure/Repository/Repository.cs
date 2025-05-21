@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Online_Health_Consultation_Portal.Domain;
 using System.Linq.Expressions;
 
 namespace Online_Health_Consultation_Portal.Infrastructure.Repository
@@ -58,6 +59,5 @@ namespace Online_Health_Consultation_Portal.Infrastructure.Repository
                 await _context.SaveChangesAsync();
             }
         }
-
     }
 }

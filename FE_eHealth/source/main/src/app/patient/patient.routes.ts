@@ -5,6 +5,7 @@ import { PrescriptionsComponent } from "./prescriptions/prescriptions.component"
 import { MedicalRecordsComponent } from "./health-records/health-records.component";
 import { BillingComponent } from "./billing/billing.component";
 import { SettingsComponent } from "./settings/settings.component";
+import { ProfileComponent } from "../extra-pages/profile/profile.component";
 export const PATIENT_ROUTE: Route[] = [
   {
     path: "dashboard",
@@ -32,6 +33,10 @@ export const PATIENT_ROUTE: Route[] = [
   {
     path: "settings",
     component: SettingsComponent,
+  },
+  {
+    path: "profile",
+    component: ProfileComponent
   },
   { path: "**", component: Page404Component },
 ];

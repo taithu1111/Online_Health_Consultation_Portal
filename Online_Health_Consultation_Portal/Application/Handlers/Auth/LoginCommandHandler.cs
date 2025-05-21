@@ -1,50 +1,51 @@
 ﻿using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Online_Health_Consultation_Portal.Application.Commands.Auth;
 using Online_Health_Consultation_Portal.Application.Dtos.Auth.LoginDto;
 using Online_Health_Consultation_Portal.Domain;
-using Online_Health_Consultation_Portal.Infrastructure.Repository;
+using Online_Health_Consultation_Portal.Infrastructure.Repositories;
 using Online_Health_Consultation_Portal.Infrastructure.Service;
-using System.Text;
+using Microsoft.AspNetCore.Identity;
 
 namespace Online_Health_Consultation_Portal.Application.Handlers.Auth
 {
     public class LoginCommandHandler : IRequestHandler<LoginCommand, LoginResponseDto>
     {
-        private readonly IRepository<User> _userRepository;
+        private readonly IUserRepository _userRepository;
         private readonly IJwtService _jwtService;
+        private readonly UserManager<User> _userManager;
 
-        public LoginCommandHandler(IRepository<User> userRepository, IJwtService jwtService)
+        public LoginCommandHandler(
+            IUserRepository userRepository,
+            IJwtService jwtService,
+            UserManager<User> userManager)
         {
             _userRepository = userRepository;
             _jwtService = jwtService;
+            _userManager = userManager;
         }
 
         public async Task<LoginResponseDto> Handle(LoginCommand request, CancellationToken cancellationToken)
         {
-            var user = await _userRepository.Get();
-            var userInclude = await user
-                .Include(e => e.UserRoles)
-                .ThenInclude(er => er.Role)
-                .FirstOrDefaultAsync(e => e.Email == request.LoginDto.Email);
+            var user = await _userRepository.GetUserByEmailAsync(request.LoginDto.Email);
 
-
-
-            //var userEmailCheck = await user.FirstOrDefaultAsync(e => e.Email == request.LoginDto.Email);
-
-
-            if (userInclude == null  /*||!BCrypt.Net.BCrypt.Verify(request.LoginDto.Password, Encoding.UTF8.GetString(userInclude.PasswordHash))*/)
-            {
+            if (user == null)
                 throw new UnauthorizedAccessException("Invalid email or password.");
-            }
 
-            List<String> roles = userInclude.Role.Split(',').ToList();
-            var token = _jwtService.GenerateToken(userInclude.Id, roles);
+            var passwordValid = await _userManager.CheckPasswordAsync(user, request.LoginDto.Password);
+            if (!passwordValid)
+                throw new UnauthorizedAccessException("Invalid email or password.");
+
+            // Wrap the single Role string as a list
+            var roles = !string.IsNullOrEmpty(user.Role)
+                ? new List<string> { user.Role }
+                : new List<string>();
+
+            var token = _jwtService.GenerateToken(user.Id, roles);
 
             return new LoginResponseDto
             {
                 Token = token,
-                Expires = DateTime.UtcNow.AddHours(1), // Token hết hạn sau 1 giờ
+                Expires = DateTime.UtcNow.AddHours(1),
                 Roles = roles
             };
         }

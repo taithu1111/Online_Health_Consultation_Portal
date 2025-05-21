@@ -38,6 +38,7 @@ interface Notifications {
 })
 export class HeaderComponent extends UnsubscribeOnDestroyAdapter implements OnInit {
   public config!: InConfiguration;
+  userRole?: string;
   userImg?: string;
   userEmail?: string;
   userName?: string;
@@ -72,6 +73,7 @@ export class HeaderComponent extends UnsubscribeOnDestroyAdapter implements OnIn
   notifications: Notifications[] = [];
 
   ngOnInit() {
+    this.userRole = this.authService.getCurrentUserRole()?.toLowerCase() || '';
     this.config = this.configService.configData;
     console.log('User image:', this.userImg);
     this.userService.getProfile().subscribe({

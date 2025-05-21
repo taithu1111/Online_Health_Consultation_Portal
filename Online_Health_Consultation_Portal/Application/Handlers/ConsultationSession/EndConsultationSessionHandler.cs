@@ -7,6 +7,10 @@ namespace Online_Health_Consultation_Portal.Application.Handlers.ConsultationSes
     public class EndConsultationSessionHandler : IRequestHandler<EndConsultationSessionCommand, bool>
     {
         private readonly AppDbContext _context;
+
+        public EndConsultationSessionHandler(AppDbContext context) {
+            _context = context;
+        }
         public async Task<bool> Handle(EndConsultationSessionCommand request, CancellationToken cancellationToken)
         {
             var session = await _context.ConsultationSessions.FindAsync(request.Id);

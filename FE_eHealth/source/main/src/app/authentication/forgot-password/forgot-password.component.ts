@@ -1,53 +1,81 @@
-import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute, RouterLink } from '@angular/router';
-import { UntypedFormBuilder, UntypedFormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
+import { Component } from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Router, ActivatedRoute, RouterModule } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { AuthService } from '@core';
+import { finalize } from 'rxjs/operators';
+import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatError, MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+
 @Component({
-    selector: 'app-forgot-password',
-    templateUrl: './forgot-password.component.html',
-    styleUrls: ['./forgot-password.component.scss'],
-    imports: [
-        FormsModule,
-        ReactiveFormsModule,
-        MatFormFieldModule,
-        MatInputModule,
-        MatIconModule,
-        MatButtonModule,
-        RouterLink,
-    ]
+  selector: 'app-forgot-password',
+  templateUrl: './forgot-password.component.html',
+  styleUrls: ['./forgot-password.component.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatIconModule,
+    MatInputModule,
+    MatError,
+    MatButtonModule,
+    RouterModule
+  ]
 })
-export class ForgotPasswordComponent implements OnInit {
-  authForm!: UntypedFormGroup;
-  submitted = false;
-  returnUrl!: string;
+export class ForgotPasswordComponent {
+  forgotPasswordForm: FormGroup;
+  isLoading = false;
+  isSubmitted = false;
+
   constructor(
-    private formBuilder: UntypedFormBuilder,
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private snackBar: MatSnackBar,
     private route: ActivatedRoute,
     private router: Router
-  ) { }
-  ngOnInit() {
-    this.authForm = this.formBuilder.group({
-      email: [
-        '',
-        [Validators.required, Validators.email, Validators.minLength(5)],
-      ],
+  ) {
+    this.forgotPasswordForm = this.fb.group({
+      email: ['', [Validators.required, Validators.email]],
     });
-    // get return url from route parameters or default to '/'
-    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
   }
+
   get f() {
-    return this.authForm.controls;
+    return this.forgotPasswordForm.controls;
   }
+
   onSubmit() {
-    this.submitted = true;
-    // stop here if form is invalid
-    if (this.authForm.invalid) {
+    this.isSubmitted = true;
+
+    if (this.forgotPasswordForm.invalid) {
       return;
-    } else {
-      this.router.navigate(['/dashboard/main']);
     }
+
+    this.isLoading = true;
+    
+    this.authService.forgotPassword(this.forgotPasswordForm.value.email)
+      .pipe(
+        finalize(() => this.isLoading = false)
+      )
+      .subscribe({
+        next: () => {
+          this.snackBar.open('Password reset link has been sent to your email', 'Close', {
+            duration: 5000,
+            panelClass: 'success-snackbar'
+          });
+          this.isSubmitted = false;
+          // this.forgotPasswordForm.reset();
+        },
+        error: (error) => {
+          const errorMessage = error.error?.message || 'Failed to send reset link';
+          this.snackBar.open(errorMessage, 'Close', {
+            duration: 5000,
+            panelClass: 'error-snackbar'
+          });
+        }
+      });
   }
 }

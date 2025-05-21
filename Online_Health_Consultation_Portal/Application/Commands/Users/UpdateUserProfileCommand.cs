@@ -6,7 +6,7 @@ using System.Text.Json.Serialization;
 
 namespace Online_Health_Consultation_Portal.Application.Commands.Users
 {
-    public class UpdateUserProfileCommand : IRequest<Unit>
+    public class UpdateUserProfileCommand : IRequest<bool>
     {
         [JsonIgnore]
         public ClaimsPrincipal? User { get; set; }

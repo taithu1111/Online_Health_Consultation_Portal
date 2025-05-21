@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -10,16 +10,16 @@ using Online_Health_Consultation_Portal.Infrastructure.Repository;
 
 namespace Online_Health_Consultation_Portal.Application.Handlers.Users
 {
-    public class GetUserProfileQueryHandler : IRequestHandler<GetUserProfileQuery, UserProfileDto>
+    public class GetUserProfileQueryHandler : IRequestHandler<GetUserProfileQuery, UserProfileDto?>
     {
         private readonly UserManager<User> _userManager;
         private readonly AppDbContext _context;
-        private readonly IAutoMapper _mapper;
+        private readonly IMapper _mapper;
 
         public GetUserProfileQueryHandler(
             UserManager<User> userManager,
             AppDbContext context,
-            IAutoMapper mapper)
+            IMapper mapper)
         {
             _userManager = userManager;
             _context = context;
@@ -31,8 +31,7 @@ namespace Online_Health_Consultation_Portal.Application.Handlers.Users
             var user = await _userManager.GetUserAsync(request.User);
             if (user == null)
             {
-                // Không throw, trả null cho controller xử lý
-                return null;
+                return null;  // Let controller handle null case
             }
 
             var roles = await _userManager.GetRolesAsync(user);
@@ -45,7 +44,7 @@ namespace Online_Health_Consultation_Portal.Application.Handlers.Users
             {
                 doctor = await _context.Doctors
                     .Include(d => d.Specialization)
-                    .FirstOrDefaultAsync(d => d.Id == user.Id, cancellationToken);
+                    .FirstOrDefaultAsync(d => d.UserId == user.Id, cancellationToken);
             }
             else if (role == "Patient")
             {
@@ -61,7 +60,7 @@ namespace Online_Health_Consultation_Portal.Application.Handlers.Users
             };
 
             var dto = _mapper.Map<UserProfileDto>(wrapper);
-
+            
             if (role != null)
             {
                 dto.Role = role;
@@ -69,6 +68,5 @@ namespace Online_Health_Consultation_Portal.Application.Handlers.Users
 
             return dto;
         }
-
     }
 }

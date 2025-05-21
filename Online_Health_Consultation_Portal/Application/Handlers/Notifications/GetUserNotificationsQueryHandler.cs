@@ -3,16 +3,15 @@ using MediatR;
 using Online_Health_Consultation_Portal.Application.Dtos.Notifications;
 using Online_Health_Consultation_Portal.Application.Queries.Notifications;
 using Online_Health_Consultation_Portal.Infrastructure.Repositories;
-using Online_Health_Consultation_Portal.Infrastructure.Repository;
 
 namespace Online_Health_Consultation_Portal.Application.Handlers.Notifications
 {
     public class GetUserNotificationsQueryHandler : IRequestHandler<GetUserNotificationsQuery, IEnumerable<NotificationDto>>
     {
         private readonly INotificationRepository _notificationRepository;
-        private readonly IAutoMapper _mapper;
+        private readonly IMapper _mapper;
 
-        public GetUserNotificationsQueryHandler(INotificationRepository notificationRepository, IAutoMapper mapper)
+        public GetUserNotificationsQueryHandler(INotificationRepository notificationRepository, IMapper mapper)
         {
             _notificationRepository = notificationRepository;
             _mapper = mapper;

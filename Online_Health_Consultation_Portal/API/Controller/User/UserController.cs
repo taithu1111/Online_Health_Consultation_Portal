@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -9,7 +10,7 @@ namespace Online_Health_Consultation_Portal.API.Controllers.User
 {
     [ApiController]
     [Route("api/users")]
-    //[Authorize]
+    [Authorize]
     public class UserController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -22,16 +23,23 @@ namespace Online_Health_Consultation_Portal.API.Controllers.User
         [HttpGet("profile")]
         public async Task<IActionResult> GetProfile()
         {
-            var query = new GetUserProfileQuery { User = User };
-            var result = await _mediator.Send(query);
+            try
+            {
+                var query = new GetUserProfileQuery { User = User };
+                var result = await _mediator.Send(query);
 
-            if (result == null)
-                return NotFound("User profile not found.");
+                if (result == null)
+                {
+                    return NotFound("User profile not found.");
+                }
 
-            return Ok(result);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
-
-
 
         [HttpPut("profile")]
         public async Task<IActionResult> UpdateProfile([FromBody] UpdateUserProfileDto profile)
@@ -47,8 +55,51 @@ namespace Online_Health_Consultation_Portal.API.Controllers.User
                     Profile = profile
                 };
 
-                await _mediator.Send(command);
-                return NoContent();
+                var result = await _mediator.Send(command);
+
+                if (result)
+                {
+                    return NoContent(); // 204 on success
+                }
+                else
+                {
+                    // Could mean user not found, concurrency failure, or validation failure
+                    // You can customize the message or use Conflict for concurrency issues
+                    return Conflict("Failed to update profile. The data may be out of date or invalid.");
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    error = "Update failed",
+                    details = ex.Message
+                });
+            }
+        }
+
+        [HttpPost("change-password")]
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDto dto)
+        {
+            try
+            {
+                if (dto == null || string.IsNullOrEmpty(dto.CurrentPassword) || string.IsNullOrEmpty(dto.NewPassword))
+                {
+                    return BadRequest("Current and new password must be provided.");
+                }
+
+                var command = new ChangePasswordCommand
+                {
+                    User = User,
+                    changePasswordDto = dto
+                };
+
+                var result = await _mediator.Send(command);
+
+                if (!result)
+                    return BadRequest("Incorrect current password or failed to update.");
+
+                return Ok("Password changed successfully.");
             }
             catch (Exception ex)
             {
@@ -57,7 +108,7 @@ namespace Online_Health_Consultation_Portal.API.Controllers.User
         }
 
         [HttpDelete("{userId}")]
-        //[Authorize(Policy = "AdminOnly")]
+        [Authorize(Policy = "AdminOnly")]
         public async Task<IActionResult> DeleteUser(int userId)
         {
             try
@@ -83,7 +134,7 @@ namespace Online_Health_Consultation_Portal.API.Controllers.User
 
 
         [HttpGet]
-        //[Authorize(Policy = "AdminOnly")]
+        [Authorize(Policy = "AdminOnly")]
         public async Task<IActionResult> GetUsers([FromQuery] GetUsersQuery query)
         {
             try

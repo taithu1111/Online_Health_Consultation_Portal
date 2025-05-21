@@ -23,6 +23,11 @@ namespace Online_Health_Consultation_Portal.Application.Handlers.Notifications
                 UserId = request.NotificationDto.UserId,
                 Message = request.NotificationDto.Message,
                 IsRead = false,
+                Type = request.NotificationDto.Type,
+                AppointmentId = request.NotificationDto.AppointmentId,
+                PrescriptionId = request.NotificationDto.PrescriptionId,
+                PaymentId = request.NotificationDto.PaymentId,
+                CreatedAt = DateTime.UtcNow
             };
 
             await _notificationRepository.CreateAsync(notification);
