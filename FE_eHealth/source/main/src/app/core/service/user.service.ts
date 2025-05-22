@@ -22,7 +22,8 @@ export interface User {
 export interface UpdateUserProfileDto {
     fullName?: string;
     gender?: string;
-    dateOfBirth?: string;
+    imageUrl?: string;
+    dateOfBirth?: Date;
     phone?: string;
     address?: string;
     bio?: string;
