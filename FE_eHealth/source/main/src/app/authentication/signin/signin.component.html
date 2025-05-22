@@ -14,7 +14,7 @@
           <h6 class="welcome-msg role-choose"> Login with </h6>
           <div class="d-flex justify-content-between lbl-alert mb-3">
             <div>
-              <button mat-flat-button [class]="selectedRole === Role.Admin ? 'doctorBtn' : 'not-selected'"
+              <button mat-flat-button [class]="selectedRole === Role.Admin ? 'adminBtn' : 'not-selected'"
                 (click)="setRole(Role.Admin)">
                 Admin
               </button>

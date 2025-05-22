@@ -187,6 +187,6 @@ export class CalendarComponent implements OnInit {
   }
 
   private getCurrentDoctorId(): number {
-    return 1;  // TODO: lấy từ auth/route
+    return 2;  // TODO: lấy từ auth/route
   }
 }

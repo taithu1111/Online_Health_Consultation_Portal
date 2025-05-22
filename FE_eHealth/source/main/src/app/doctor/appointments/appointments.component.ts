@@ -101,7 +101,7 @@ export class AppointmentsComponent implements OnInit, OnDestroy {
   }
 
   loadData(): void {
-    const doctorId = 1; // Hard-coded doctorId
+    const doctorId = 2; // Hard-coded doctorId
     this.isLoading = true;
     this.appointmentService.getAppointmentsByDoctorId(doctorId)
       .subscribe({
