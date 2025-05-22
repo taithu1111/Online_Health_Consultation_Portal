@@ -15,6 +15,8 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
+import { MatSelectModule } from '@angular/material/select';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { Subject } from 'rxjs';
 // import { rowsAnimation } from '@shared/animations';
 import { formatDate } from '@angular/common';
@@ -43,6 +45,8 @@ import { Action } from 'rxjs/internal/scheduler/Action';
     MatIconModule,
     MatTooltipModule,
     MatMenuModule,
+    MatSelectModule,
+    MatCheckboxModule,
     MatProgressSpinnerModule,
     BreadcrumbComponent,
     DoctorAppointmentFormComponent,
@@ -55,7 +59,7 @@ import { Action } from 'rxjs/internal/scheduler/Action';
 })
 export class AppointmentsComponent implements OnInit, OnDestroy {
   columnDefinitions = [
-    { def: 'id', label: 'ID', type: 'string', visible: false },
+    // { def: 'id', label: 'ID', type: 'string', visible: false },
     { def: 'patientName', label: 'Patient Name', type: 'text', visible: true },
     { def: 'gender', label: 'Gender', type: 'string', visible: true },
     { def: 'appointmentDate', label: 'Appointment Date', type: 'date', visible: true },
@@ -97,13 +101,14 @@ export class AppointmentsComponent implements OnInit, OnDestroy {
   }
 
   loadData(): void {
-    const doctorId = 1; // Hard-coded doctorId
+    const doctorId = 2; // Hard-coded doctorId
     this.isLoading = true;
     this.appointmentService.getAppointmentsByDoctorId(doctorId)
       .subscribe({
         next: (list) => {
           const mapped = list.map(a => ({
             ...a,
+            phoneNumber: a.phone || '',
             appointmentDate: formatDate(a.appointmentDateTime, 'yyyy-MM-dd', 'en-GB'),
             appointmentTime: formatDate(a.appointmentDateTime, 'HH:mm', 'en-GB'),
           }));

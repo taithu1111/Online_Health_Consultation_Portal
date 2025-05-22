@@ -32,8 +32,7 @@ namespace Online_Health_Consultation_Portal.Domain
         [ForeignKey("ReceiverId")]
         public virtual User Receiver { get; set; }
 
-        // Optional - for tracking message status
-        public MessageStatus Status { get; set; } = MessageStatus.Sent;
+        // Optional - for tracking message statu
         public bool SentMessages;
 
         public Message()
@@ -41,7 +40,7 @@ namespace Online_Health_Consultation_Portal.Domain
 
         }
 
-        public Message(int id, int senderId, int receiverId, string content, DateTime sentAt, bool isRead, DateTime? readAt, User sender, User receiver, MessageStatus status)
+        public Message(int id, int senderId, int receiverId, string content, DateTime sentAt, bool isRead, DateTime? readAt, User sender, User receive)
         {
             Id = id;
             SenderId = senderId;
@@ -51,8 +50,7 @@ namespace Online_Health_Consultation_Portal.Domain
             IsRead = isRead;
             ReadAt = readAt;
             Sender = sender;
-            Receiver = receiver;
-            Status = status;
+            Receiver = receive;
         }
     }
 

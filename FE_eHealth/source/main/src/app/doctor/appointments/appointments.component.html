@@ -13,19 +13,29 @@
             <li class="tbl-title">
               <h2>Appointments</h2>
             </li>
-            <!-- <li class="tbl-search-box">
-              <label for="search-input">
-                <mat-icon class="search-icon">search</mat-icon>
-              </label>
-              <input #filter id="search-input" (keyup)="applyFilter($event)" placeholder="Search"
-                class="browser-default search-field" aria-label="Search box" />
-            </li> -->
             <li class="tbl-search-box">
               <label for="search-input"><i class="material-icons search-icon">search</i></label>
               <input placeholder="Search" type="text" #filter (keyup)="applyFilter($event)"
                 class="browser-default search-field" aria-label="Search box">
             </li>
           </ul>
+        </div>
+        <div class="m-l-10">
+          <button mat-icon-button color="primary" (click)="select.open()" matTooltip="Show/Hide Column">
+            <mat-icon>filter_list</mat-icon>
+            <mat-select #select [(ngModel)]="filter.value" style="width: 200px; display: table;" class="column-filter">
+              <span class="table-column-label">Show/Hide Column</span>
+              @for (cd of columnDefinitions; track cd; let i = $index) {
+              <div>
+                <mat-option>
+                  <mat-checkbox (click)="$event.stopPropagation()" [(ngModel)]="cd.visible" color="primary">
+                    {{cd.label}}
+                  </mat-checkbox>
+                </mat-option>
+              </div>
+              }
+            </mat-select>
+          </button>
         </div>
         <div class="right">
           <ul class="tbl-export-btn">
@@ -87,7 +97,8 @@
               <mat-header-cell *matHeaderCellDef mat-sort-header>
                 Email
               </mat-header-cell>
-              <mat-cell *matCellDef="let row" class="email-cell">
+              <mat-cell *matCellDef="let row" class="email-cell" matTooltip="{{row.email}}">
+                <mat-icon class="tbl-icon material-icons-outlined col-red" aria-hidden="true">mail</mat-icon>
                 {{ row.email }}
               </mat-cell>
             </ng-container>
@@ -98,6 +109,7 @@
                 Phone Number
               </mat-header-cell>
               <mat-cell *matCellDef="let row">
+                <mat-icon class="tbl-icon material-icons-outlined col-green" aria-hidden="true">call</mat-icon>
                 {{ row.phoneNumber }}
               </mat-cell>
             </ng-container>

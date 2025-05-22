@@ -399,9 +399,6 @@ namespace Online_Health_Consultation_Portal.Migrations
                     b.Property<DateTime>("SentAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("ReceiverId");

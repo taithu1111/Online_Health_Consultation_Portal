@@ -29,7 +29,6 @@ using Online_Health_Consultation_Portal.Application.Queries.Appointment;
 using Online_Health_Consultation_Portal.Application.Queries.ConsultationSession;
 using Online_Health_Consultation_Portal.Application.Queries.HealthRecord;
 using Online_Health_Consultation_Portal.Application.Queries.Schedule;
-using Online_Health_Consultation_Portal.Application.Services.Interfaces.Logging;
 using Online_Health_Consultation_Portal.Domain;
 using Online_Health_Consultation_Portal.Infrastructure;
 using Online_Health_Consultation_Portal.Infrastructure.Repositories;
@@ -44,6 +43,9 @@ using Online_Health_Consultation_Portal.Application.Dtos.Doctors;
 using Online_Health_Consultation_Portal.Infrastructure.Services;
 using Online_Health_Consultation_Portal.Application.Dtos.Users;
 using Online_Health_Consultation_Portal.Infrastructure.Repositories;
+using Online_Health_Consultation_Portal.Application.Commands.Payment;
+using Online_Health_Consultation_Portal.Application.Dtos.Payment;
+using Online_Health_Consultation_Portal.Application.Queries.Payment;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -172,16 +174,16 @@ builder.Services.AddCors(options =>
 
 // Autofac Configuration
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
-builder.Host.ConfigureContainer<ContainerBuilder>(container =>
-{
-    var isEf = AppDomain.CurrentDomain.FriendlyName.Contains("ef");
+//builder.Host.ConfigureContainer<ContainerBuilder>(container =>
+//{
+//    var isEf = AppDomain.CurrentDomain.FriendlyName.Contains("ef");
 
-    if (!isEf)
-    {
-        container.AddGenericHandlers();
-        Console.WriteLine("AddGenericHandlers success");
-    }
-});
+//    if (!isEf)
+//    {
+//        container.AddGenericHandlers();
+//        Console.WriteLine("AddGenericHandlers success");
+//    }
+//});
 
 // AutoMapper Configuration
 builder.Services.AddAutoMapper(typeof(UserProfile).Assembly);
@@ -224,7 +226,7 @@ builder.Services.AddScoped<ILogService, LogService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<ILogRepository, LogRepository>();
 builder.Services.AddScoped<IJwtService, JwtService>();
-builder.Services.AddScoped(typeof(IApplogger<>), typeof(SeriLoggerAdapter<>));
+//builder.Services.AddScoped(typeof(IApplogger<>), typeof(SeriLoggerAdapter<>));
 
 // Command Handlers
 builder.Services.AddScoped<IRequestHandler<CreateAppointmentCommand, int>, CreateAppointmentHandler>();
@@ -243,6 +245,8 @@ builder.Services.AddScoped<IRequestHandler<LoginCommand, LoginResponseDto>, Logi
 builder.Services.AddScoped<IRequestHandler<ForgotPasswordCommand, bool>, ForgotPasswordCommandHandler>();
 builder.Services.AddScoped<IRequestHandler<ResetPasswordCommand, bool>, ResetPasswordCommandHandler>();
 builder.Services.AddScoped<IRequestHandler<RegisterCommand, bool>, RegisterCommandHandler>();
+//Payment
+builder.Services.AddScoped<IRequestHandler<CreatePaymentCommand, PaymentDto>, Online_Health_Consultation_Portal.Application.Handlers.Payment.CreatePaymentHandler>();
 
 // Query Handlers
 builder.Services.AddScoped<IRequestHandler<GetAppointmentDetailQuery, AppointmentDto>, GetAppointmentDetailHandler>();

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FullCalendarModule } from '@fullcalendar/angular';
 import dayGridPlugin from '@fullcalendar/daygrid';
@@ -14,6 +14,7 @@ import { ScheduleDto, AvailableSlotDto, CreateScheduleCommand, UpdateScheduleCom
 import { FormDialogComponent } from './dialogs/form-dialog/form-dialog.component';
 import { DateSelectArg, EventClickArg, EventInput, CalendarOptions } from '@fullcalendar/core';
 import { BreadcrumbComponent } from '../shared/components/breadcrumb/breadcrumb.component';
+import { FullCalendarComponent } from '@fullcalendar/angular';
 
 @Component({
   selector: 'app-calendar',
@@ -32,6 +33,7 @@ import { BreadcrumbComponent } from '../shared/components/breadcrumb/breadcrumb.
   styleUrls: ['./calendar.component.scss']
 })
 export class CalendarComponent implements OnInit {
+  @ViewChild('fullcalendar') calendarComponent!: FullCalendarComponent;
   calendarOptions: CalendarOptions = {
     plugins: [
       dayGridPlugin,
@@ -61,8 +63,7 @@ export class CalendarComponent implements OnInit {
     events: []
   };
 
-
-
+  showAvailable = true;
   filters = [
     { value: 'Available', checked: true },
     { value: 'Unavailable', checked: true }
@@ -106,7 +107,10 @@ export class CalendarComponent implements OnInit {
 
   changeCategory(e: MatCheckboxChange, f: { value: string, checked: boolean }) {
     f.checked = e.checked;
+    this.showAvailable = this.filters.find(x => x.value === 'Available')!.checked;
     this.renderEvents();
+    // bắt calendar rerender để dayCellDidMount chạy lại
+    this.calendarComponent.getApi().render();
   }
   trackByFilter(i: number, f: any) { return f.value; }
 
@@ -183,6 +187,6 @@ export class CalendarComponent implements OnInit {
   }
 
   private getCurrentDoctorId(): number {
-    return 1;  // TODO: lấy từ auth/route
+    return 2;  // TODO: lấy từ auth/route
   }
 }

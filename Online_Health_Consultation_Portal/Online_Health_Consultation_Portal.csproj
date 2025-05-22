@@ -46,4 +46,8 @@
     </EmbeddedResource>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Application\Commands\Presscription\" />
+  </ItemGroup>
+
 </Project>

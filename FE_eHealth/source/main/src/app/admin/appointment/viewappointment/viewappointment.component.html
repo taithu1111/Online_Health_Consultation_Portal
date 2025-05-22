@@ -118,7 +118,7 @@
                   <mat-cell *matCellDef="let row" (contextmenu)="onContextMenu($event, row)">
                     <span class="mobile-label">{{ column.label }}:</span>
                     <span class="truncate-text">
-                      {{ row[column.def] | date: 'MM/dd/yyyy' }}
+                      {{ row['appointmentDateTime'] | date: 'dd/MM/yyyy' }}
                     </span>
                   </mat-cell>
                 </ng-container>

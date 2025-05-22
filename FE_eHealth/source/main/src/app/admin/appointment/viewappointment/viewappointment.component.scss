@@ -1,9 +1,22 @@
 :host ::ng-deep .column-filter .mat-mdc-select-arrow {
   display: none;
 }
+
 :host ::ng-deep .advance-table .mat-mdc-header-cell {
   font-weight: 500;
 }
+
 :host ::ng-deep .mat-column-name {
   min-width: 150px;
+}
+
+.truncate-text {
+  white-space: normal !important;
+  /* Cho phép xuống dòng */
+  word-wrap: break-word;
+  /* Cho phép ngắt từ khi xuống dòng */
+  overflow-wrap: break-word;
+  /* tương tự để đảm bảo */
+  max-width: 200px;
+  /* Giới hạn chiều rộng ô (tuỳ chỉnh) */
 }

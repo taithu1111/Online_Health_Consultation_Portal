@@ -75,7 +75,7 @@ import { AppointmentService } from '../appointment-v1.service';
 })
 export class UpcomingAppointmentComponent implements OnInit, OnDestroy {
   columnDefinitions = [
-    { def: 'select', label: '', type: 'check', visible: true },
+    { def: 'select', label: 'Checkbox', type: 'check', visible: true },
     { def: 'id', label: 'ID', type: 'number', visible: false },
     // { def: 'patientId', label: 'Patient ID', type: 'number', visible: true },
     // { def: 'doctorId', label: 'Doctor ID', type: 'number', visible: true },

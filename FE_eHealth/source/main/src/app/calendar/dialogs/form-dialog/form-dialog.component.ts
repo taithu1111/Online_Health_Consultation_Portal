@@ -128,7 +128,7 @@ export class FormDialogComponent {
     } else {
       const date: Date = f.startDate;
       const cmd: CreateScheduleCommand = {
-        doctorId: this.calendar.doctorId || 1,  // hoặc truyền doctorId qua data
+        doctorId: this.calendar.doctorId || 2,  // hoặc truyền doctorId qua data
         date: f.startDate.toISOString().split('T')[0],
         startTime: f.startDate.toTimeString().slice(0, 8),
         endTime: f.endDate.toTimeString().slice(0, 8),

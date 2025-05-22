@@ -2,7 +2,7 @@ using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Online_Health_Consultation_Portal.Application.Dtos.Doctors;
-using Online_Health_Consultation_Portal.Application.Dtos.Paginated;
+using Online_Health_Consultation_Portal.Application.Dtos.Pagination;
 using Online_Health_Consultation_Portal.Application.Queries.Doctors;
 using Online_Health_Consultation_Portal.Infrastructure;
 
