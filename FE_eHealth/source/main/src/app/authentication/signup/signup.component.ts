@@ -9,6 +9,7 @@ import { AuthService, Role } from '@core';
 import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-signup',
   templateUrl: './signup.component.html',
@@ -23,7 +24,8 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
     MatButtonModule,
     MatSelectModule,
     MatOptionModule,
-    MatDatepickerModule
+    MatDatepickerModule,
+    CommonModule
   ]
 })
 export class SignupComponent implements OnInit {
@@ -32,6 +34,8 @@ export class SignupComponent implements OnInit {
   returnUrl!: string;
   hide = true;
   chide = true;
+
+  allCriteriaMet = false; // Password validating on front-end
   constructor(
     private formBuilder: UntypedFormBuilder,
     private route: ActivatedRoute,
@@ -45,15 +49,32 @@ export class SignupComponent implements OnInit {
         '',
         [Validators.required, Validators.email, Validators.minLength(5)],
       ],
-      password: ['', Validators.required],
+      password: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(6),
+          Validators.pattern(/[A-Z]/), // at least one uppercase
+          Validators.pattern(/[a-z]/), // at least one lowercase
+          Validators.pattern(/[0-9]/), // at least one number
+          Validators.pattern(/[\W_]/)  // at least one special character
+        ]
+      ],
       cpassword: ['', Validators.required],
       gender: ['', Validators.required],
       role: [Role.Patient, Validators.required],
       dateOfBirth: ['', Validators.required],
       address: ['', Validators.required]
-    });
+    }, { validator: this.passwordsMatchValidator });
     // get return url from route parameters or default to '/'
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+  }
+  passwordsMatchValidator(form: UntypedFormGroup) {
+    const pass = form.get('password')?.value;
+    const cpass = form.get('cpassword')?.value;
+
+    if (!pass || !cpass) return null; // Skip if either is empty
+    return pass === cpass ? null : { mismatch: true };
   }
   get f() {
     return this.authForm.controls;
@@ -88,5 +109,44 @@ export class SignupComponent implements OnInit {
         alert(err.message);
       }
     });
+  }
+
+  hasMinLength() {
+    const pass = this.authForm.get('password')?.value || '';
+    return pass.length >= 6;
+  }
+
+  hasUpperCase() {
+    return /[A-Z]/.test(this.authForm.get('password')?.value || '');
+  }
+
+  hasLowerCase() {
+    return /[a-z]/.test(this.authForm.get('password')?.value || '');
+  }
+
+  hasNumber() {
+    return /[0-9]/.test(this.authForm.get('password')?.value || '');
+  }
+
+  hasSpecialChar() {
+    return /[\W_]/.test(this.authForm.get('password')?.value || '');
+  }
+
+  ngDoCheck() {
+    const passwordControl = this.authForm.get('password');
+    if (passwordControl?.dirty) {
+      const allValid = this.hasMinLength() && 
+                      this.hasUpperCase() && 
+                      this.hasLowerCase() && 
+                      this.hasNumber() && 
+                      this.hasSpecialChar();
+      
+      if (allValid && !this.allCriteriaMet) {
+        this.allCriteriaMet = true;
+        setTimeout(() => {
+          this.allCriteriaMet = false;
+        }, 1500);
+      }
+    }
   }
 }
