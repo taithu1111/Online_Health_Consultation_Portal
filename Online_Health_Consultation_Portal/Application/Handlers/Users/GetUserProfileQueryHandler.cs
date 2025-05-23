@@ -34,8 +34,7 @@ namespace Online_Health_Consultation_Portal.Application.Handlers.Users
                 return null;  // Let controller handle null case
             }
 
-            var roles = await _userManager.GetRolesAsync(user);
-            var role = roles.FirstOrDefault();
+            var role = user.Role;
 
             Doctor? doctor = null;
             Patient? patient = null;

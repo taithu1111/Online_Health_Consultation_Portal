@@ -10,6 +10,7 @@ namespace Online_Health_Consultation_Portal.Application.Mappings
         {
             // Mapping cho người dùng xem hồ sơ cá nhân
             CreateMap<UserWithProfile, UserProfileDto>()
+                .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.User.Email))
                 .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.User.FullName))
                 .ForMember(dest => dest.Gender, opt => opt.MapFrom(src => src.User.Gender))
                 .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.User.ImageUrl ?? null))

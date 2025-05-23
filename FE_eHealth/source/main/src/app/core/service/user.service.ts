@@ -13,10 +13,10 @@ export interface User {
     phone?: string;
     address?: string;
     bio?: string;
-    specialization?: string;
-    experienceYears?: number;
+    specialization?: string; // doctor field
+    experienceYears?: number; // doctor field
     languages?: string;
-    consultationFee?: number;
+    consultationFee?: number; // doctor field
 }
 
 export interface UpdateUserProfileDto {
