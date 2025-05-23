@@ -9,5 +9,7 @@
         public string Gender { get; set; }
         public string Role { get; set; }
         public DateTime CreatedAt { get; set; }
+        public DateTime DateOfBirth { get; set; }
+        public string Address { get; set; }
     }
 }

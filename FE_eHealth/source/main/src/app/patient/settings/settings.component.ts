@@ -41,10 +41,7 @@ export class SettingsComponent {
       email: ['', [Validators.required, Validators.email]],
       mobile: [''],
       address: [''],
-      city: [''],
-      country: [''],
-      dateOfBirth: [null],
-      bloodGroup: ['']
+      dateOfBirth: [null]
     });
 
     this.passwordForm = this.fb.group({
@@ -64,8 +61,9 @@ export class SettingsComponent {
 
   loadUserProfile(): void {
     this.userService.getProfile().subscribe(profile => {
-      const [firstName, lastName] = profile.fullName?.split(' ') || ['', ''];
-      
+      const [firstName, ...rest] = profile.fullName?.split(' ') || ['', ''];
+      const lastName = rest.join(' ');
+
       this.profileForm.patchValue({
         firstName: firstName,
         lastName: lastName,
@@ -86,13 +84,18 @@ export class SettingsComponent {
   saveProfile(): void {
     if (this.profileForm.invalid) return;
 
-    // const dateOfBirth = this.profileForm.value.dateOfBirth || null;
-
     const profileData: UpdateUserProfileDto = {
-      fullName: `${this.profileForm.value.firstName} ${this.profileForm.value.lastName}`,
+      fullName: `${this.profileForm.value.firstName} ${this.profileForm.value.lastName}`.trim(),
       phone: this.profileForm.value.mobile,
       address: this.profileForm.value.address,
-      dateOfBirth: this.profileForm.value.dateOfBirth?.toISOString() || null
+      dateOfBirth: this.profileForm.value.dateOfBirth,
+      gender: undefined,
+      imageUrl: undefined,
+      bio: undefined,
+      languages: undefined,
+      specialization: undefined,
+      experienceYears: undefined,
+      consultationFee: undefined
     };
 
     this.userService.updateProfile(profileData).subscribe({

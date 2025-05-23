@@ -9,8 +9,8 @@
           <div class="m-b-20">
             <div class="contact-grid">
               <div class="profile-header bg-dark">
-                <div class="user-name">{{ profile?.fullName }}</div>
                 <div class="name-center">{{ profile?.role }}</div>
+                <div class="user-name">{{ profile?.fullName }}</div>
               </div>
               <img src="assets/images/user/usrbig3.jpg" class="user-img" alt="">
               <p *ngIf="profile?.address">{{ profile?.address }}</p>
@@ -54,11 +54,11 @@
                   <p>{{ profile.gender }}</p>
                   <hr>
                 </ng-container>
-                <ng-container *ngIf="profile?.role">
+                <!-- <ng-container *ngIf="profile?.role">
                   <small class="text-muted">Role:</small>
                   <p>{{ profile.role }}</p>
                   <hr>
-                </ng-container>
+                </ng-container> -->
                 <ng-container *ngIf="profile?.dateOfBirth">
                   <small class="text-muted">Date of Birth:</small>
                   <p>{{ profile.dateOfBirth | date:'longDate' }}</p>
@@ -126,61 +126,6 @@
                     <ul>
                       <li>{{ profile.experienceYears }} years of experience in the field.</li>
                     </ul>
-                  </div>
-                </div>
-              </div>
-            </mat-tab>
-            <mat-tab>
-              <ng-template mat-tab-label>
-                <mat-icon class="example-tab-icon msr-2">settings</mat-icon>
-                Settings
-              </ng-template>
-              <div class="header">
-                <h2><strong>Account</strong> Details</h2>
-              </div>
-              <div class="body">
-                <div class="row clearfix">
-                  <div class="col-lg-6 col-md-12" *ngIf="profile?.fullName">
-                    <mat-form-field class="example-full-width" appearance="fill">
-                      <mat-label>Full Name</mat-label>
-                      <input matInput [value]="profile.fullName" disabled>
-                    </mat-form-field>
-                  </div>
-                  <div class="col-lg-6 col-md-12" *ngIf="profile?.email">
-                    <mat-form-field class="example-full-width" appearance="fill">
-                      <mat-label>Email</mat-label>
-                      <input matInput [value]="profile.email" disabled>
-                    </mat-form-field>
-                  </div>
-                  <div class="col-lg-6 col-md-12" *ngIf="profile?.phone">
-                    <mat-form-field class="example-full-width" appearance="fill">
-                      <mat-label>Phone</mat-label>
-                      <input matInput [value]="profile.phone" disabled>
-                    </mat-form-field>
-                  </div>
-                  <div class="col-lg-6 col-md-12" *ngIf="profile?.dateOfBirth">
-                    <mat-form-field class="example-full-width" appearance="fill">
-                      <mat-label>Date of Birth</mat-label>
-                      <input matInput [value]="(profile.dateOfBirth | date:'yyyy-MM-dd')" disabled>
-                    </mat-form-field>
-                  </div>
-                  <div class="col-md-12" *ngIf="profile?.address">
-                    <mat-form-field class="example-full-width" appearance="fill">
-                      <mat-label>Address</mat-label>
-                      <textarea matInput [value]="profile.address" disabled></textarea>
-                    </mat-form-field>
-                  </div>
-                  <div class="col-lg-6 col-md-12" *ngIf="profile?.specialization">
-                    <mat-form-field class="example-full-width" appearance="fill">
-                      <mat-label>Specialization</mat-label>
-                      <input matInput [value]="profile.specialization" disabled>
-                    </mat-form-field>
-                  </div>
-                  <div class="col-lg-6 col-md-12" *ngIf="profile?.languages">
-                    <mat-form-field class="example-full-width" appearance="fill">
-                      <mat-label>Languages</mat-label>
-                      <input matInput [value]="profile.languages" disabled>
-                    </mat-form-field>
                   </div>
                 </div>
               </div>

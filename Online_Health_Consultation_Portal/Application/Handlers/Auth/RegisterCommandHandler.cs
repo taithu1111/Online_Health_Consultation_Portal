@@ -10,11 +10,12 @@ namespace Online_Health_Consultation_Portal.Application.Handlers.Auth
     public class RegisterCommandHandler : IRequestHandler<RegisterCommand, bool>
     {
         private readonly UserManager<User> _userManager;
-        
+        private readonly AppDbContext _context;
 
-        public RegisterCommandHandler(UserManager<User> userManager)
+        public RegisterCommandHandler(UserManager<User> userManager, AppDbContext context)
         {
             _userManager = userManager;
+            _context = context;
         }
 
         public async Task<bool> Handle(RegisterCommand request, CancellationToken cancellationToken)
@@ -31,12 +32,29 @@ namespace Online_Health_Consultation_Portal.Application.Handlers.Auth
                 FullName = dto.FullName,
                 Gender = dto.Gender,
                 Role = dto.Role,
-                CreatedAt = dto.CreatedAt
+                CreatedAt = dto.CreatedAt,
+                ImageUrl = null
             };
 
             var result = await _userManager.CreateAsync(user, dto.Password);
 
-            return result.Succeeded;
+            if (!result.Succeeded) return false;
+
+            if (user.Role == "Patient")
+            {
+                var patient = new Patient
+                {
+                    UserId = user.Id,
+                    Gender = dto.Gender,
+                    DateOfBirth = dto.DateOfBirth,
+                    Address = dto.Address
+                };
+
+                _context.Patients.Add(patient);
+                await _context.SaveChangesAsync(cancellationToken);
+            }
+
+            return true;
         }
     }
 }

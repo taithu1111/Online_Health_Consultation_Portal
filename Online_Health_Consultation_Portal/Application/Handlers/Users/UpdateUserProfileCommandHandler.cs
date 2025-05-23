@@ -50,9 +50,6 @@ namespace Online_Health_Consultation_Portal.Application.Handlers.Users
                 if (!string.IsNullOrWhiteSpace(profile.FullName))
                     user.FullName = profile.FullName;
 
-                if (!string.IsNullOrWhiteSpace(profile.Gender))
-                    user.Gender = profile.Gender;
-
                 // Update phone number through proper Identity method
                 if (!string.IsNullOrWhiteSpace(profile.Phone))
                 {
@@ -107,22 +104,20 @@ namespace Online_Health_Consultation_Portal.Application.Handlers.Users
                 patient = new Patient
                 {
                     UserId = userId,
-                    Phone = profile.Phone,
                     Address = profile.Address,
-                    DateOfBirth = profile.DateOfBirth ?? default // Direct DateTime? assignment
+                    DateOfBirth = profile.DateOfBirth ?? default
                 };
                 _context.Patients.Add(patient);
                 _logger.LogInformation("Created new patient profile for user {UserId}", userId);
             }
             else
             {
-                if (!string.IsNullOrWhiteSpace(profile.Phone))
-                    patient.Phone = profile.Phone;
-
                 if (!string.IsNullOrWhiteSpace(profile.Address))
                     patient.Address = profile.Address;
 
-                patient.DateOfBirth = profile.DateOfBirth ?? DateTime.MinValue;
+                if (profile.DateOfBirth.HasValue)
+                    patient.DateOfBirth = profile.DateOfBirth.Value;
+                
                 _logger.LogInformation("Updated existing patient profile for user {UserId}", userId);
             }
         }

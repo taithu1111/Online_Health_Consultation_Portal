@@ -41,7 +41,7 @@ namespace Online_Health_Consultation_Portal.Application.Handlers.Appointment
                 AppointmentDateTime = a.AppointmentDateTime,
                 Gender = a.Patient?.Gender ?? "Unknown",
                 Email = a.Patient?.User.Email ?? "No Email",
-                Phone = a.Patient?.Phone ?? "No Phone",
+                Phone = a.Patient?.User.PhoneNumber ?? "No Phone",
                 Address = a.Patient?.Address ?? "No Address",
                 Type = a.Type,
                 Notes = a.Notes,

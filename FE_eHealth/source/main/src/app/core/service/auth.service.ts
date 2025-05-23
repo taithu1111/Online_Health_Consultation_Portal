@@ -134,6 +134,8 @@ export class AuthService {
     gender: string;
     role: Role;
     createdAt: string;
+    dateOfBirth: Date;
+    address: string;
   }): Observable<boolean> {
     return this.http.post<boolean>(`${environment.apiUrl}/api/auth/register`, {
       ...registerData,
