@@ -4,16 +4,14 @@ import { BehaviorSubject, catchError, Observable, of, tap, throwError } from 'rx
 import { User } from '../models/user';
 import { JwtPayload } from '../models/jwtPayload';
 import { jwtDecode } from 'jwt-decode';
-import { environment } from 'environments/environment';
-import { Role } from '@core/models/role';
-
+import { environment } from '../../../environments/environment';
+import { Role } from '../models/role';
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   private currentUserSubject: BehaviorSubject<User | null>;
   public currentUser: Observable<User | null>;
-
   public redirectUrl: string | null = null;
 
   constructor(private http: HttpClient) {
@@ -50,20 +48,20 @@ export class AuthService {
 
   login(email: string, password: string, rememberMe: boolean = false): Observable<User> {
     return this.http.post<User>(`${environment.apiUrl}/api/auth/login`, { email, password })
-        .pipe(
-            tap(user => {
-                if (user?.token) {
-                    const storage = rememberMe ? localStorage : sessionStorage;
-                    storage.setItem('currentUser', JSON.stringify(user));
-                    this.currentUserSubject.next(user);
-                }
-            }),
-            catchError(err => {
-                // Handle specific error messages from the server
-                const errorMsg = err.error?.message || 'Login failed. Please check your credentials.';
-                return throwError(() => new Error(errorMsg));
-            })
-        );
+      .pipe(
+        tap(user => {
+          if (user?.token) {
+            const storage = rememberMe ? localStorage : sessionStorage;
+            storage.setItem('currentUser', JSON.stringify(user));
+            this.currentUserSubject.next(user);
+          }
+        }),
+        catchError(err => {
+          // Handle specific error messages from the server
+          const errorMsg = err.error?.message || 'Login failed. Please check your credentials.';
+          return throwError(() => new Error(errorMsg));
+        })
+      );
   }
 
   logout(): Observable<any> {

@@ -42,6 +42,7 @@ import { FormDialogComponent } from './dialogs/form-dialog/form-dialog.component
 import { UpcomingAppointmentDeleteComponent } from './dialogs/delete/delete.component';
 import { Direction } from '@angular/cdk/bidi';
 import { AppointmentService } from '../appointment-v1.service';
+import { AuthService } from '../../../core/service/auth.service';
 
 @Component({
   selector: 'app-upcoming-appointment',
@@ -105,7 +106,8 @@ export class UpcomingAppointmentComponent implements OnInit, OnDestroy {
     private appointmentService: AppointmentService,
     public dialog: MatDialog,
     private snackBar: MatSnackBar,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private authService: AuthService
   ) { }
 
   ngOnInit() {
@@ -127,7 +129,7 @@ export class UpcomingAppointmentComponent implements OnInit, OnDestroy {
   }
 
   loadData() {
-    const patientId = 1; // hoặc dynamic
+    const patientId = Number(this.authService.getDecodedToken()?.nameid); // Get current user ID from decoded token
     this.isLoading = true;
     this.appointmentService.getAppointmentsByPatientId(patientId).subscribe({
       next: apiData => {
