@@ -1,9 +1,9 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Online_Health_Consultation_Portal.Application.Commands.Auth;
 using Online_Health_Consultation_Portal.Application.Dtos.Auth.LoginDto;
 using Online_Health_Consultation_Portal.Application.Dtos.Auth;
+using Online_Health_Consultation_Portal.Application.Commands.Auth.RefreshToken;
 
 namespace Online_Health_Consultation_Portal.API.Controller.Auth
 {
@@ -80,5 +80,18 @@ namespace Online_Health_Consultation_Portal.API.Controller.Auth
             else
                 return BadRequest("Registration failed.");
         }
+
+
+
+        [HttpPost("refresh-token")]
+        public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenCommand command)
+        {
+            var result = await _mediator.Send(command);
+            if (result is null)
+                return Unauthorized("Invalid refresh token.");
+
+            return Ok(result);
+        }
+
     }
 }

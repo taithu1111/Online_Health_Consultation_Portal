@@ -17,7 +17,7 @@ namespace Online_Health_Consultation_Portal.Application.Handlers.Appointment
         }
         public async Task<int> Handle(CreateAppointmentCommand request, CancellationToken cancellationToken)
         {
-            var appointment = _mapper.Map<Domain.Appointment, CreateAppointmentCommand>(request);
+            var appointment = _mapper.Map<Domain.Entities.Appointment, CreateAppointmentCommand>(request);
             appointment.Status = "Pending";  // Mặc định là Pending
 
             _context.Appointments.Add(appointment);

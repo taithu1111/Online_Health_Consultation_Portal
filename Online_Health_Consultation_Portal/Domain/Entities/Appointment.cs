@@ -1,6 +1,6 @@
 ﻿using System.Numerics;
 
-namespace Online_Health_Consultation_Portal.Domain
+namespace Online_Health_Consultation_Portal.Domain.Entities
 {
     public class Appointment
     {

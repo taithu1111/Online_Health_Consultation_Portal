@@ -24,7 +24,7 @@ namespace Online_Health_Consultation_Portal.Application.Handlers.HealthRecord
                 return false;
             }
 
-            _mapper.Map<Domain.HealthRecord>(request); // Map từ UpdateHealthRecordCommand sang entity HealthRecord
+            _mapper.Map<Domain.Entities.HealthRecord>(request); // Map từ UpdateHealthRecordCommand sang entity HealthRecord
             await _context.SaveChangesAsync(cancellationToken);
 
             return true; 

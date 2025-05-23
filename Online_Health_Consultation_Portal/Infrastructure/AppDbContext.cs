@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Online_Health_Consultation_Portal.Domain;
+using Online_Health_Consultation_Portal.Domain.Entities;
 
 namespace Online_Health_Consultation_Portal.Infrastructure
 {
@@ -39,23 +39,14 @@ namespace Online_Health_Consultation_Portal.Infrastructure
             // Patient 1 - 1 User
             modelBuilder.Entity<Patient>()
                 .HasOne(p => p.User);
-            //.WithOne(u => u.Patient)
-            //.HasForeignKey<Patient>(p => p.UserId)
-            //.OnDelete(DeleteBehavior.Restrict);
 
             // Doctor 1 - 1 User
             modelBuilder.Entity<Doctor>()
                 .HasOne(d => d.User);
-            //.WithOne(u => u.Doctor)
-            //.HasForeignKey<Doctor>(d => d.UserId)
-            //.OnDelete(DeleteBehavior.Restrict);
 
             // Doctor - Specialization
             modelBuilder.Entity<Doctor>()
                 .HasOne(d => d.Specialization);
-            //.WithMany(s => s.Doctors)
-            //.HasForeignKey(d => d.SpecializationId)
-            //.OnDelete(DeleteBehavior.Cascade);
 
             // Appointment - Doctor
             modelBuilder.Entity<Appointment>()

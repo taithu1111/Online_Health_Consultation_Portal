@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Online_Health_Consultation_Portal.Application.Commands.Auth;
-using Online_Health_Consultation_Portal.Domain;
+using Online_Health_Consultation_Portal.Domain.Entities;
 using Online_Health_Consultation_Portal.Infrastructure.Repository;
 using Online_Health_Consultation_Portal.Infrastructure.Service;
 
@@ -10,17 +10,20 @@ namespace Online_Health_Consultation_Portal.Application.Handlers.Auth
     public class ForgotPasswordCommandHandler : IRequestHandler<ForgotPasswordCommand, bool>
     {
         private readonly IRepository<User> _userRepository;
+        private readonly UserManager<User> _userManager;
         private readonly IEmailService _emailService;
         private readonly ILogService _logService;
 
         public ForgotPasswordCommandHandler(
             IRepository<User> userRepository,
             IEmailService emailService,
-            ILogService logService)
+            ILogService logService,
+            UserManager<User> userManager)
         {
-            _userRepository = userRepository;   
+            _userRepository = userRepository;
             _emailService = emailService;
             _logService = logService;
+            _userManager = userManager;
         }
 
         public async Task<bool> Handle(ForgotPasswordCommand request, CancellationToken cancellationToken)

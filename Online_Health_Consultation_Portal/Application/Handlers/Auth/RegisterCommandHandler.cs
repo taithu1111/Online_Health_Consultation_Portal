@@ -2,7 +2,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Online_Health_Consultation_Portal.Application.Commands.Auth;
-using Online_Health_Consultation_Portal.Domain;
+using Online_Health_Consultation_Portal.Domain.Entities;
 using Online_Health_Consultation_Portal.Infrastructure;
 
 namespace Online_Health_Consultation_Portal.Application.Handlers.Auth
@@ -10,7 +10,7 @@ namespace Online_Health_Consultation_Portal.Application.Handlers.Auth
     public class RegisterCommandHandler : IRequestHandler<RegisterCommand, bool>
     {
         private readonly UserManager<User> _userManager;
-        
+
 
         public RegisterCommandHandler(UserManager<User> userManager)
         {
@@ -24,6 +24,10 @@ namespace Online_Health_Consultation_Portal.Application.Handlers.Auth
             if (dto.Password != dto.ConfirmPassword)
                 throw new Exception("Passwords do not match.");
 
+            var existingUser = await _userManager.FindByEmailAsync(dto.Email);
+            if (existingUser != null)
+                throw new Exception("Email is already registered.");
+
             var user = new User
             {
                 UserName = dto.Email,
@@ -36,7 +40,18 @@ namespace Online_Health_Consultation_Portal.Application.Handlers.Auth
 
             var result = await _userManager.CreateAsync(user, dto.Password);
 
-            return result.Succeeded;
+            if (!result.Succeeded)
+            {
+                var errors = string.Join(", ", result.Errors.Select(e => e.Description));
+                throw new Exception($"Registration failed: {errors}");
+            }
+
+            //return result.Succeeded;
+
+            return true;
+
+
+
         }
     }
 }

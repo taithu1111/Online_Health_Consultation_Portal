@@ -1,4 +1,5 @@
 ﻿using Online_Health_Consultation_Portal.Domain;
+using Online_Health_Consultation_Portal.Domain.Entities;
 using Online_Health_Consultation_Portal.Infrastructure.Repository;
 
 namespace Online_Health_Consultation_Portal.Infrastructure.Service
@@ -14,7 +15,7 @@ namespace Online_Health_Consultation_Portal.Infrastructure.Service
 
         public async Task LogInformationAsync(string message, string userId, string action, string entity, int entityId)
         {
-            var log = new Log
+            var log = new Domain.Entities.Log
             {
                 Message = message,
                 Level = "Information",

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace Online_Health_Consultation_Portal.Domain
+namespace Online_Health_Consultation_Portal.Domain.Entities
 {
     public class User : IdentityUser<int>
     {
@@ -11,13 +11,13 @@ namespace Online_Health_Consultation_Portal.Domain
         public DateTime CreatedAt { get; set; }
         public string Role { get; set; } // Admin, Doctor, Patient
         public ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();
-        //public ICollection<Notification> Notifications { get; set; } = new List<Notification>();
-        //public Patient Patient { get; set; }
-        //public Doctor Doctor { get; set; }
-
-        //2 trường data mới 
+        // password
         public string? ResetPasswordToken { get; set; }
         public DateTime? ResetPasswordTokenExpiry { get; set; }
+
+        // token 
+        public string? RefreshToken { get; set; }
+        public DateTime? RefreshTokenExpiryTime { get; set; }
 
     }
 }

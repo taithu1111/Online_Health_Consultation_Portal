@@ -14,7 +14,7 @@ namespace Online_Health_Consultation_Portal.Application.Handlers.ConsultationSes
 
         public async Task<int> Handle(CreateConsultationSessionCommand request, CancellationToken cancellationToken)
         {
-            var session = new Domain.ConsultationSession // Tạo mới một buổi tư vấn
+            var session = new Domain.Entities.ConsultationSession // Tạo mới một buổi tư vấn
             {
                 AppointmentId = request.AppointmentId,
                 StartTime = request.StartTime,

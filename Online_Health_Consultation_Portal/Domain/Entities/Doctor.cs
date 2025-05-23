@@ -1,12 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Online_Health_Consultation_Portal.Domain
+namespace Online_Health_Consultation_Portal.Domain.Entities
 {
     public class Doctor
     {
         [Key]
         public int Id { get; set; } // FK to User
-        
+
 
         //public int SpecializationId { get; set; }
         public int ExperienceYears { get; set; }

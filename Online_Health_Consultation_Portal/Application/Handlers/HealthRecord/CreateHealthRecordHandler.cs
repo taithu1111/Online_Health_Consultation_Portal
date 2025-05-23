@@ -15,7 +15,7 @@ namespace Online_Health_Consultation_Portal.Application.Handlers.HealthRecord
 
         public async Task<int> Handle(CreateHealthRecordCommand request, CancellationToken cancellationToken)
         {
-            var healthRecord = new Domain.HealthRecord
+            var healthRecord = new Domain.Entities.HealthRecord
             {
                 PatientId = request.PatientId,
                 RecordType = request.RecordType,

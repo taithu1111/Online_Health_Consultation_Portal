@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace Online_Health_Consultation_Portal.Domain
+namespace Online_Health_Consultation_Portal.Domain.Entities
 {
     public class Role : IdentityRole<int>
     {

@@ -1,4 +1,4 @@
-﻿using Online_Health_Consultation_Portal.Domain;
+﻿using Online_Health_Consultation_Portal.Domain.Entities;
 
 namespace Online_Health_Consultation_Portal.Infrastructure.Repository
 {

@@ -16,7 +16,7 @@ namespace Online_Health_Consultation_Portal.Application.Handlers.Schedule
         }
         public async Task<int> Handle(CreateScheduleCommand request, CancellationToken cancellationToken)
         {
-            var schedule = _mapper.Map<Domain.Schedule, CreateScheduleCommand>(request); // Map từ CreateScheduleCommand sang  entity Schedule
+            var schedule = _mapper.Map<Domain.Entities.Schedule, CreateScheduleCommand>(request); // Map từ CreateScheduleCommand sang  entity Schedule
             _context.Schedules.Add(schedule);
 
 

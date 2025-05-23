@@ -1,8 +1,8 @@
-﻿namespace Online_Health_Consultation_Portal.Application.Dtos.Auth.LoginDto
+﻿namespace Online_Health_Consultation_Portal.Application.Dtos.Auth
 {
     public class RegisterDto
     {
-        public string FullName { get; set; } // hoặc FirstName + LastName nếu bạn tách
+        public string FullName { get; set; } 
         public string Email { get; set; }
         public string Password { get; set; }
         public string ConfirmPassword { get; set; }

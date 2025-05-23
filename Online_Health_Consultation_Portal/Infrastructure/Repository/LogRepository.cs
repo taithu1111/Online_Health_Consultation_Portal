@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Online_Health_Consultation_Portal.Domain;
+using Online_Health_Consultation_Portal.Domain.Entities;
 using System;
 
 namespace Online_Health_Consultation_Portal.Infrastructure.Repository

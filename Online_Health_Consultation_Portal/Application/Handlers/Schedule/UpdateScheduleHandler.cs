@@ -26,7 +26,7 @@ namespace Online_Health_Consultation_Portal.Application.Handlers.Schedule
                 return false;
             }
             
-            _mapper.Map<Domain.Schedule>(request); // Map từ UpdateScheduleCommand sang entity Schedule
+            _mapper.Map<Domain.Entities.Schedule>(request); // Map từ UpdateScheduleCommand sang entity Schedule
             await _context.SaveChangesAsync(cancellationToken);
 
             return true;

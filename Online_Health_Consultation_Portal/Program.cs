@@ -6,24 +6,19 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Online_Health_Consultation_Portal.Application.Command.Appointment;
 using Online_Health_Consultation_Portal.Application.Commands.ConsultationSession;
 using Online_Health_Consultation_Portal.Application.Commands.HealthRecord;
 using Online_Health_Consultation_Portal.Application.Commands.Schedule;
-using Online_Health_Consultation_Portal.Application.Commands.Auth;
 using Online_Health_Consultation_Portal.Application.Dtos.Appointment;
 using Online_Health_Consultation_Portal.Application.Dtos.Auth.LoginDto;
-using Online_Health_Consultation_Portal.Application.Handlers.Auth;
 using Online_Health_Consultation_Portal.Application.Dtos.ConsultationSession;
 using Online_Health_Consultation_Portal.Application.Dtos.HealthRecord;
 using Online_Health_Consultation_Portal.Application.Dtos.Schedule;
-using Online_Health_Consultation_Portal.Application.Handlers.Appointment;
 using Online_Health_Consultation_Portal.Application.Queries.Appointment;
 using Online_Health_Consultation_Portal.Application.Services.Interfaces.Logging;
-using Online_Health_Consultation_Portal.Domain;
 using Online_Health_Consultation_Portal.Application.Queries.ConsultationSession;
 using Online_Health_Consultation_Portal.Application.Queries.HealthRecord;
 using Online_Health_Consultation_Portal.Application.Queries.Schedule;
@@ -35,6 +30,14 @@ using System;
 using System.Text;
 using Serilog;
 using Log = Serilog.Log;
+using Online_Health_Consultation_Portal.Domain.Entities;
+using Online_Health_Consultation_Portal.Application.Interfaces.Repository;
+using Online_Health_Consultation_Portal.Application.Interfaces.Service;
+using Online_Health_Consultation_Portal.Application.Commands.Auth;
+using Online_Health_Consultation_Portal.Application.Handlers.Auth;
+using FluentValidation.AspNetCore;
+using FluentValidation;
+using Online_Health_Consultation_Portal.Application.Validator;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -151,8 +154,8 @@ builder.Services.AddScoped<IRepository<ConsultationSession>, Repository<Consulta
 builder.Services.AddScoped<IRepository<Doctor>, Repository<Doctor>>();
 builder.Services.AddScoped<IRepository<HealthRecord>, Repository<HealthRecord>>();
 builder.Services.AddScoped<
-    IRepository<Online_Health_Consultation_Portal.Domain.Log>,
-    Repository<Online_Health_Consultation_Portal.Domain.Log>>();
+    IRepository<Online_Health_Consultation_Portal.Domain.Entities.Log>,
+    Repository<Online_Health_Consultation_Portal.Domain.Entities.Log>>();
 builder.Services.AddScoped<IRepository<MedicationDetail>, Repository<MedicationDetail>>();
 builder.Services.AddScoped<IRepository<Message>, Repository<Message>>();
 builder.Services.AddScoped<IRepository<Notification>, Repository<Notification>>();
@@ -167,15 +170,6 @@ builder.Services.AddScoped<IRepository<Statistic>, Repository<Statistic>>();
 builder.Services.AddScoped<IRepository<SystemLog>, Repository<SystemLog>>();
 builder.Services.AddScoped<IRepository<User>, Repository<User>>();
 
-
-//builder.Services.AddIdentity<User,IdentityRole>().AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
-
-builder.Services.AddIdentity<User, Role>()
-    .AddEntityFrameworkStores<AppDbContext>()
-    .AddDefaultTokenProviders();
-
-
-
 // Đăng ký các dịch vụ
 builder.Services.AddScoped<ILogService, LogService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
@@ -185,36 +179,50 @@ builder.Services.AddScoped(typeof(IApplogger<>), typeof(SeriLoggerAdapter<>));
 
 // Đăng ký JwtService
 builder.Services.AddScoped<IJwtService, JwtService>();
+builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
+builder.Services.AddScoped<IAuthBusinessRule, AuthBusinessRule>();
+
 
 
 // cấu hình JWT
-var jwtSettings = builder.Configuration.GetSection("Jwt");
-builder.Services.AddAuthentication(options =>
-{
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-})
-    .AddJwtBearer(options =>
-    {
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            //ValidateIssuer = false,
-            //ValidateAudience = false,
-            //ValidateLifetime = false,
-            //ValidIssuer = builder.Configuration["Jwt:Issuer"],
-            //ValidAudience = builder.Configuration["Jwt:Audience"],
-            //IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!))
+var jwtSettings = builder.Configuration.GetSection("JWT");
 
+builder.Services.AddIdentity<User, Role>(options =>
+    {
+        options.SignIn.RequireConfirmedEmail = true;
+
+        // Cấu hình yêu cầu mật khẩu mạnh
+        options.Password.RequireDigit = true;
+        options.Password.RequiredLength = 8;
+        options.Password.RequireNonAlphanumeric = true;
+        options.Password.RequireLowercase = true;
+        options.Password.RequireUppercase = true;
+        options.Password.RequiredUniqueChars = 1;
+    })
+    .AddRoles<Role>() // Thêm hỗ trợ role
+    .AddEntityFrameworkStores<AppDbContext>(); // DbContext 
+
+// Cấu hình JWT Authentication
+builder.Services.AddAuthentication(options =>
+    {
+        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    })
+    .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
+    {
+        options.SaveToken = true;
+        options.TokenValidationParameters = new TokenValidationParameters()
+        {
             ValidateIssuer = false,
             ValidateAudience = false,
             ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Secret"]!)),
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["Secret"]!)),
             ValidateLifetime = false,
-            ValidIssuer = builder.Configuration["JWT:Issuer"],
-            ValidAudience = builder.Configuration["JWT:Audience"],
-            ClockSkew = TimeSpan.Zero
+            ValidIssuer = jwtSettings["Issuer"],
         };
     });
+
 
 //------------- add handler ---------------
 //appointment
@@ -256,8 +264,11 @@ builder.Services.AddScoped<IRequestHandler<GetConsultationsByPatientQuery, List<
 builder.Services.AddScoped<IRequestHandler<GetDoctorSchedulesQuery, List<ScheduleDto>>, Online_Health_Consultation_Portal.Application.Handlers.Schedule.GetDoctorSchedulesQueryHandler>();
 builder.Services.AddScoped<IRequestHandler<GetAvailableSlotsQuery, List<AvailableSlotDto>>, Online_Health_Consultation_Portal.Application.Handlers.Schedule.GetAvailableSlotsQueryHandler>();
 
+//add validator 
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddValidatorsFromAssemblyContaining<LoginCommandValidator>();
 
-
+builder.Services.AddHttpContextAccessor();
 
 
 // Đăng ký các dịch vụ
@@ -280,22 +291,6 @@ try
         app.UseSwaggerUI();
     }
 
-    // cấu hình swagger
-    //builder.Services.AddEndpointsApiExplorer();
-    //builder.Services.AddSwaggerGen(c =>
-    //{
-    //    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Online Health Consultation API", Version = "v1" });
-    //});
-
-    // Kích hoạt Swagger UI
-    //if (app.Environment.IsDevelopment())
-    //{
-    //    app.UseSwagger();
-    //    app.UseSwaggerUI(c =>
-    //    {
-    //        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Online Health Consultation API v1");
-    //    });
-    //}
     app.UseAuthentication();
 
     app.UseHttpsRedirection();
