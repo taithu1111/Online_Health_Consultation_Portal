@@ -10,6 +10,7 @@ export interface User {
     gender: string;
     role: string;
     dateOfBirth?: string;
+    bloodGroup?: string;
     phone?: string;
     address?: string;
     bio?: string;
@@ -24,6 +25,7 @@ export interface UpdateUserProfileDto {
     gender?: string;
     imageUrl?: string;
     dateOfBirth?: Date;
+    bloodGroup?: string;
     phone?: string;
     address?: string;
     bio?: string;

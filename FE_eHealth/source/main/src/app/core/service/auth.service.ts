@@ -6,6 +6,7 @@ import { JwtPayload } from '../models/jwtPayload';
 import { jwtDecode } from 'jwt-decode';
 import { environment } from 'environments/environment';
 import { Role } from '@core/models/role';
+import { BloodType } from '@core/models/bloodType';
 
 @Injectable({
   providedIn: 'root',
@@ -138,6 +139,7 @@ export class AuthService {
     createdAt: string;
     dateOfBirth: Date;
     address: string;
+    bloodType: BloodType;
   }): Observable<boolean> {
     return this.http.post<boolean>(`${environment.apiUrl}/api/auth/register`, {
       ...registerData,

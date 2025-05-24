@@ -1,129 +1,71 @@
-import {
-  Component,
-  ElementRef,
-  OnDestroy,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
-import { MatSort, MatSortModule } from '@angular/material/sort';
-import {
-  MatSnackBar,
-  MatSnackBarHorizontalPosition,
-  MatSnackBarVerticalPosition,
-} from '@angular/material/snack-bar';
+import { MatSort } from '@angular/material/sort';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { SelectionModel } from '@angular/cdk/collections';
-import { fromEvent, Subject } from 'rxjs';
-import {
-  MAT_DATE_LOCALE,
-  MatOptionModule,
-  MatRippleModule,
-} from '@angular/material/core';
-import { PatientService } from './patient.service';
+import { Subject, of } from 'rxjs';
 import { Patient } from './patient.model';
-import { formatDate, DatePipe, CommonModule, NgClass } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
-import { BreadcrumbComponent } from '@shared/components/breadcrumb/breadcrumb.component';
-import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
-import { MatMenuModule, MatMenuTrigger } from '@angular/material/menu';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatSelectModule } from '@angular/material/select';
-import { MatTooltipModule } from '@angular/material/tooltip';
-import { rowsAnimation, TableExportUtil } from '@shared';
-import { AllPatientDeleteComponent } from './dialog/delete/delete.component';
+import { PatientService } from './patient.service';
+import { CommonModule, formatDate } from '@angular/common';
 import { AllPatientFormDialogComponent } from './dialog/form-dialog/form-dialog.component';
+import { AllPatientDeleteComponent } from './dialog/delete/delete.component';
+import { TableExportUtil } from '@shared';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { FeatherIconsComponent } from '@shared/components/feather-icons/feather-icons.component';
-import { Direction } from '@angular/cdk/bidi';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { FormsModule } from '@angular/forms';
+import { MatOptionModule } from '@angular/material/core';
+import { BreadcrumbComponent } from '@shared/components/breadcrumb/breadcrumb.component';
+import { MatSelect } from '@angular/material/select';
 
 @Component({
-    selector: 'app-allpatients',
-    templateUrl: './allpatients.component.html',
-    styleUrls: ['./allpatients.component.scss'],
-    providers: [{ provide: MAT_DATE_LOCALE, useValue: 'en-GB' }],
-    animations: [rowsAnimation],
-    imports: [
-        BreadcrumbComponent,
-        FeatherIconsComponent,
-        CommonModule,
-        MatCardModule,
-        MatFormFieldModule,
-        MatInputModule,
-        MatIconModule,
-        MatButtonModule,
-        MatTooltipModule,
-        MatSelectModule,
-        ReactiveFormsModule,
-        FormsModule,
-        MatOptionModule,
-        MatCheckboxModule,
-        MatTableModule,
-        MatSortModule,
-        NgClass,
-        MatRippleModule,
-        MatProgressSpinnerModule,
-        MatMenuModule,
-        MatPaginatorModule,
-        DatePipe,
-    ]
+  selector: 'app-allpatients',
+  templateUrl: './allpatients.component.html',
+  styleUrls: ['./allpatients.component.scss'],
+  imports:[
+    BreadcrumbComponent,
+    MatPaginatorModule,
+    MatProgressSpinnerModule,
+    MatTableModule,
+    FeatherIconsComponent,
+    CommonModule,
+    MatIconModule,
+    MatTooltipModule,
+    MatCheckboxModule,
+    FormsModule,
+    MatOptionModule
+  ]
 })
 export class AllpatientsComponent implements OnInit, OnDestroy {
   columnDefinitions = [
     { def: 'select', label: 'Checkbox', type: 'check', visible: true },
-    { def: 'name', label: 'Name', type: 'text', visible: true },
-    { def: 'treatment', label: 'Treatment', type: 'text', visible: true },
+    { def: 'fullName', label: 'Name', type: 'text', visible: true },
+    { def: 'email', label: 'Email', type: 'email', visible: true },
     { def: 'gender', label: 'Gender', type: 'text', visible: true },
-    { def: 'mobile', label: 'Mobile', type: 'phone', visible: true },
-    {
-      def: 'admissionDate',
-      label: 'Admission Date',
-      type: 'date',
-      visible: true,
-    },
-    {
-      def: 'doctorAssigned',
-      label: 'Doctor Assigned',
-      type: 'text',
-      visible: true,
-    },
+    { def: 'phone', label: 'Phone', type: 'phone', visible: true },
+    { def: 'bloodGroup', label: 'Blood Group', type: 'text', visible: true },
     { def: 'address', label: 'Address', type: 'address', visible: true },
-    { def: 'bGroup', label: 'Blood Group', type: 'text', visible: true },
-    { def: 'age', label: 'Age', type: 'number', visible: false },
-    { def: 'email', label: 'Email', type: 'email', visible: false },
-
-    {
-      def: 'dischargeDate',
-      label: 'Discharge Date',
-      type: 'date',
-      visible: true,
-    },
-
-    { def: 'status', label: 'Status', type: 'text', visible: true },
+    { def: 'dateOfBirth', label: 'Date of Birth', type: 'date', visible: true },
     { def: 'actions', label: 'Actions', type: 'actionBtn', visible: true },
   ];
 
-  dataSource = new MatTableDataSource<Patient>([]);
+  dataSource = new MatTableDataSource<Patient>();
   selection = new SelectionModel<Patient>(true, []);
-  contextMenuPosition = { x: '0px', y: '0px' };
   isLoading = true;
   private destroy$ = new Subject<void>();
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild('filter') filter!: ElementRef;
-  @ViewChild(MatMenuTrigger) contextMenu?: MatMenuTrigger;
+  @ViewChild('columnSelect') columnSelect!: MatSelect;
 
   constructor(
-    public httpClient: HttpClient,
     public dialog: MatDialog,
-    public patientService: PatientService,
+    private patientService: PatientService,
     private snackBar: MatSnackBar
   ) {}
 
@@ -136,6 +78,37 @@ export class AllpatientsComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
+  loadData() {
+    this.isLoading = true;
+    this.patientService.getAllPatients(1, 100, '').subscribe({
+      next: (patients) => {
+        this.dataSource.data = patients;
+        this.isLoading = false;
+        this.refreshTable();
+        this.setupFilter();
+      },
+      error: (err) => {
+        console.error(err);
+        this.isLoading = false;
+      }
+    });
+  }
+
+  openColumnSelect() {
+    this.columnSelect.open();
+  }
+
+  private setupFilter() {
+    this.dataSource.filterPredicate = (data: Patient, filter: string) => {
+      const dataStr = Object.keys(data)
+        .reduce((currentTerm, key) => {
+          return currentTerm + (data as any)[key] + '◬';
+        }, '')
+        .toLowerCase();
+      return dataStr.indexOf(filter) !== -1;
+    };
+  }
+
   refresh() {
     this.loadData();
   }
@@ -146,110 +119,88 @@ export class AllpatientsComponent implements OnInit, OnDestroy {
       .map((cd) => cd.def);
   }
 
-  loadData() {
-    this.patientService.getAllPatients().subscribe({
-      next: (data) => {
-        this.dataSource.data = data;
-        this.isLoading = false;
-        this.refreshTable();
-        this.dataSource.filterPredicate = (data: Patient, filter: string) =>
-          Object.values(data).some((value) =>
-            value.toString().toLowerCase().includes(filter)
-          );
-      },
-      error: (err) => console.error(err),
-    });
-  }
-
-  private refreshTable() {
-    this.paginator.pageIndex = 0;
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
-  }
-
   applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value
-      .trim()
-      .toLowerCase();
+    const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
     this.dataSource.filter = filterValue;
   }
 
   addNew() {
-    this.openDialog('add');
-  }
-
-  editCall(row: Patient) {
-    this.openDialog('edit', row);
-  }
-
-  openDialog(action: 'add' | 'edit', data?: Patient) {
-    let varDirection: Direction;
-    if (localStorage.getItem('isRtl') === 'true') {
-      varDirection = 'rtl';
-    } else {
-      varDirection = 'ltr';
-    }
     const dialogRef = this.dialog.open(AllPatientFormDialogComponent, {
-      width: '60vw',
-      maxWidth: '100vw',
-      data: { patient: data, action },
-      direction: varDirection,
-      autoFocus: false,
+      data: { action: 'add' },
+      width: '600px'
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        if (action === 'add') {
-          this.dataSource.data = [result, ...this.dataSource.data];
-        } else {
-          this.updateRecord(result);
-        }
-        this.refreshTable();
-        this.showNotification(
-          action === 'add' ? 'snackbar-success' : 'black',
-          `${action === 'add' ? 'Add' : 'Edit'} Record Successfully...!!!`,
-          'bottom',
-          'center'
-        );
+        this.patientService.addPatient(result).subscribe({
+          next: (newPatient) => {
+            this.dataSource.data = [newPatient, ...this.dataSource.data];
+            this.showNotification('snackbar-success', 'Patient added successfully', 'bottom', 'center');
+          },
+          error: (err) => {
+            this.showNotification('snackbar-error', 'Failed to add patient', 'bottom', 'center');
+          }
+        });
       }
     });
   }
 
-  private updateRecord(updatedRecord: Patient) {
-    const index = this.dataSource.data.findIndex(
-      (record) => record.id === updatedRecord.id
-    );
-    if (index !== -1) {
-      this.dataSource.data[index] = updatedRecord;
-      this.dataSource._updateChangeSubscription();
-    }
+  editCall(row: Patient) {
+    const dialogRef = this.dialog.open(AllPatientFormDialogComponent, {
+      data: { patient: row, action: 'edit' },
+      width: '600px'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.patientService.updatePatient(result).subscribe({
+          next: (updatedPatient) => {
+            const index = this.dataSource.data.findIndex(p => p.id === updatedPatient.id);
+            if (index !== -1) {
+              this.dataSource.data[index] = updatedPatient;
+              this.dataSource._updateChangeSubscription();
+            }
+            this.showNotification('snackbar-success', 'Patient updated successfully', 'bottom', 'center');
+          },
+          error: (err) => {
+            this.showNotification('snackbar-error', 'Failed to update patient', 'bottom', 'center');
+          }
+        });
+      }
+    });
   }
 
   deleteItem(row: Patient) {
     const dialogRef = this.dialog.open(AllPatientDeleteComponent, {
       data: row,
+      width: '400px'
     });
-    dialogRef.afterClosed().subscribe((result) => {
+
+    dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.dataSource.data = this.dataSource.data.filter(
-          (record) => record.id !== row.id
-        );
-        this.refreshTable();
-        this.showNotification(
-          'snackbar-danger',
-          'Delete Record Successfully...!!!',
-          'bottom',
-          'center'
-        );
+        this.patientService.deletePatient(row.id).subscribe({
+          next: () => {
+            this.dataSource.data = this.dataSource.data.filter(p => p.id !== row.id);
+            this.showNotification('snackbar-success', 'Patient deleted successfully', 'bottom', 'center');
+          },
+          error: (err) => {
+            this.showNotification('snackbar-error', 'Failed to delete patient', 'bottom', 'center');
+          }
+        });
       }
     });
+  }
+
+  private refreshTable() {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
   }
 
   showNotification(
     colorName: string,
     text: string,
-    placementFrom: MatSnackBarVerticalPosition,
-    placementAlign: MatSnackBarHorizontalPosition
+    placementFrom: 'top' | 'bottom',
+    placementAlign: 'left' | 'center' | 'right'
   ) {
     this.snackBar.open(text, '', {
       duration: 2000,
@@ -264,55 +215,53 @@ export class AllpatientsComponent implements OnInit, OnDestroy {
   }
 
   masterToggle() {
-    this.isAllSelected()
-      ? this.selection.clear()
-      : this.dataSource.data.forEach((row) => this.selection.select(row));
+    this.isAllSelected() ?
+      this.selection.clear() :
+      this.dataSource.data.forEach(row => this.selection.select(row));
   }
 
   removeSelectedRows() {
-    const totalSelect = this.selection.selected.length;
-    this.dataSource.data = this.dataSource.data.filter(
-      (item) => !this.selection.selected.includes(item)
-    );
-    this.selection.clear();
-    this.showNotification(
-      'snackbar-danger',
-      `${totalSelect} Record(s) Deleted Successfully...!!!`,
-      'bottom',
-      'center'
-    );
+    const selectedIds = this.selection.selected.map(p => p.id);
+    this.patientService.deletePatient(selectedIds[0]).subscribe({
+      next: () => {
+        this.dataSource.data = this.dataSource.data.filter(p => !selectedIds.includes(p.id));
+        this.selection.clear();
+        this.showNotification('snackbar-success', `${selectedIds.length} patient(s) deleted`, 'bottom', 'center');
+      },
+      error: (err) => {
+        this.showNotification('snackbar-error', 'Failed to delete patients', 'bottom', 'center');
+      }
+    });
   }
+
   exportExcel() {
-    const exportData = this.dataSource.filteredData.map((x) => ({
-      Name: x.name,
-      Email: x.email,
-      Gender: x.gender,
-      'Blood Group': x.bGroup,
-      Address: x.address,
-      Mobile: x.mobile,
-      'Admission Date':
-        formatDate(new Date(x.admissionDate), 'yyyy-MM-dd', 'en') || '',
-      'Discharge Date':
-        formatDate(new Date(x.dischargeDate), 'yyyy-MM-dd', 'en') || '',
-      'Doctor Assigned': x.doctorAssigned,
-      Treatment: x.treatment,
-      Status: x.status,
-      Age: x.age,
+    const exportData = this.dataSource.filteredData.map(patient => ({
+      'Name': patient.fullName,
+      'Email': patient.email,
+      'Phone': patient.phone,
+      'Gender': patient.gender,
+      'Blood Group': patient.bloodGroup,
+      'Address': patient.address,
+      'Date of Birth': patient.dateOfBirth ? formatDate(patient.dateOfBirth, 'yyyy-MM-dd', 'en') : '',
+      'Age': patient.age
     }));
-
-    TableExportUtil.exportToExcel(exportData, 'excel');
+    TableExportUtil.exportToExcel(exportData, 'patients');
   }
 
+  contextMenuPosition = { x: '0px', y: '0px' };
+
+  // Add this method to handle context menu events
   onContextMenu(event: MouseEvent, item: Patient) {
     event.preventDefault();
     this.contextMenuPosition = {
       x: `${event.clientX}px`,
-      y: `${event.clientY}px`,
+      y: `${event.clientY}px`
     };
-    if (this.contextMenu) {
-      this.contextMenu.menuData = { item };
-      this.contextMenu.menu?.focusFirstItem('mouse');
-      this.contextMenu.openMenu();
-    }
+    
+    // If you want to actually show a context menu, you would need to:
+    // 1. Add @ViewChild(MatMenuTrigger) contextMenu!: MatMenuTrigger;
+    // 2. Implement the menu trigger logic here
+    // this.contextMenu.menuData = { item };
+    // this.contextMenu.openMenu();
   }
 }

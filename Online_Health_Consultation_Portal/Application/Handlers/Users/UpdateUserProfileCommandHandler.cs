@@ -105,7 +105,8 @@ namespace Online_Health_Consultation_Portal.Application.Handlers.Users
                 {
                     UserId = userId,
                     Address = profile.Address,
-                    DateOfBirth = profile.DateOfBirth ?? default
+                    DateOfBirth = profile.DateOfBirth ?? default,
+                    BloodType = profile.BloodType
                 };
                 _context.Patients.Add(patient);
                 _logger.LogInformation("Created new patient profile for user {UserId}", userId);
@@ -117,6 +118,9 @@ namespace Online_Health_Consultation_Portal.Application.Handlers.Users
 
                 if (profile.DateOfBirth.HasValue)
                     patient.DateOfBirth = profile.DateOfBirth.Value;
+
+                if (!string.IsNullOrWhiteSpace(profile.BloodType))
+                    patient.BloodType = profile.BloodType;
                 
                 _logger.LogInformation("Updated existing patient profile for user {UserId}", userId);
             }

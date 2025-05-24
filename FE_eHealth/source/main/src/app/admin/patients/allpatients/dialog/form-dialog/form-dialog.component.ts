@@ -62,7 +62,7 @@ export class AllPatientFormDialogComponent {
   ) {
     this.action = data.action;
     this.dialogTitle =
-      this.action === 'edit' ? `Edit ${data.patient.name}` : 'New Patient';
+      this.action === 'edit' ? `Edit ${data.patient.fullName}` : 'New Patient';
     this.patient = this.action === 'edit' ? data.patient : new Patient({});
     this.patientForm = this.createPatientForm();
   }
@@ -71,22 +71,22 @@ export class AllPatientFormDialogComponent {
     return this.fb.group({
       id: [this.patient.id],
       img: [this.patient.img],
-      name: [this.patient.name, [Validators.required]],
+      name: [this.patient.fullName, [Validators.required]],
       gender: [this.patient.gender],
-      bGroup: [this.patient.bGroup],
-      mobile: [this.patient.mobile, [Validators.required]],
+      bGroup: [this.patient.bloodGroup],
+      mobile: [this.patient.phone, [Validators.required]],
       address: [this.patient.address],
-      treatment: [this.patient.treatment],
-      age: [this.patient.age, [Validators.required]],
-      email: [this.patient.email, [Validators.required, Validators.email]],
-      admissionDate: [
-        formatDate(this.patient.admissionDate, 'yyyy-MM-dd', 'en'),
-      ],
-      dischargeDate: [
-        formatDate(this.patient.dischargeDate, 'yyyy-MM-dd', 'en'),
-      ],
-      doctorAssigned: [this.patient.doctorAssigned],
-      status: [this.patient.status],
+      // treatment: [this.patient.treatment],
+      // age: [this.patient.age, [Validators.required]],
+      // email: [this.patient.email, [Validators.required, Validators.email]],
+      // admissionDate: [
+      //   formatDate(this.patient.admissionDate, 'yyyy-MM-dd', 'en'),
+      // ],
+      // dischargeDate: [
+      //   formatDate(this.patient.dischargeDate, 'yyyy-MM-dd', 'en'),
+      // ],
+      // doctorAssigned: [this.patient.doctorAssigned],
+      // status: [this.patient.status],
     });
   }
 
