@@ -44,35 +44,35 @@ import { FeatherIconsComponent } from '@shared/components/feather-icons/feather-
 import { Direction } from '@angular/cdk/bidi';
 
 @Component({
-    selector: 'app-allpatients',
-    templateUrl: './allpatients.component.html',
-    styleUrls: ['./allpatients.component.scss'],
-    providers: [{ provide: MAT_DATE_LOCALE, useValue: 'en-GB' }],
-    animations: [rowsAnimation],
-    imports: [
-        BreadcrumbComponent,
-        FeatherIconsComponent,
-        CommonModule,
-        MatCardModule,
-        MatFormFieldModule,
-        MatInputModule,
-        MatIconModule,
-        MatButtonModule,
-        MatTooltipModule,
-        MatSelectModule,
-        ReactiveFormsModule,
-        FormsModule,
-        MatOptionModule,
-        MatCheckboxModule,
-        MatTableModule,
-        MatSortModule,
-        NgClass,
-        MatRippleModule,
-        MatProgressSpinnerModule,
-        MatMenuModule,
-        MatPaginatorModule,
-        DatePipe,
-    ]
+  selector: 'app-allpatients',
+  templateUrl: './allpatients.component.html',
+  styleUrls: ['./allpatients.component.scss'],
+  providers: [{ provide: MAT_DATE_LOCALE, useValue: 'en-GB' }],
+  animations: [rowsAnimation],
+  imports: [
+    BreadcrumbComponent,
+    FeatherIconsComponent,
+    CommonModule,
+    MatCardModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatIconModule,
+    MatButtonModule,
+    MatTooltipModule,
+    MatSelectModule,
+    ReactiveFormsModule,
+    FormsModule,
+    MatOptionModule,
+    MatCheckboxModule,
+    MatTableModule,
+    MatSortModule,
+    NgClass,
+    MatRippleModule,
+    MatProgressSpinnerModule,
+    MatMenuModule,
+    MatPaginatorModule,
+    DatePipe,
+  ]
 })
 export class AllpatientsComponent implements OnInit, OnDestroy {
   columnDefinitions = [
@@ -94,7 +94,6 @@ export class AllpatientsComponent implements OnInit, OnDestroy {
       visible: true,
     },
     { def: 'address', label: 'Address', type: 'address', visible: true },
-    { def: 'bGroup', label: 'Blood Group', type: 'text', visible: true },
     { def: 'age', label: 'Age', type: 'number', visible: false },
     { def: 'email', label: 'Email', type: 'email', visible: false },
 
@@ -125,7 +124,7 @@ export class AllpatientsComponent implements OnInit, OnDestroy {
     public dialog: MatDialog,
     public patientService: PatientService,
     private snackBar: MatSnackBar
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.loadData();
@@ -287,7 +286,6 @@ export class AllpatientsComponent implements OnInit, OnDestroy {
       Name: x.name,
       Email: x.email,
       Gender: x.gender,
-      'Blood Group': x.bGroup,
       Address: x.address,
       Mobile: x.mobile,
       'Admission Date':

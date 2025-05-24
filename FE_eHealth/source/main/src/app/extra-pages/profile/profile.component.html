@@ -1,138 +1,141 @@
+<p>profile works!</p>
 <section class="content">
-  <div class="content-block">
-    <div class="block-header">
-      <app-breadcrumb [title]="'Profile'" [items]="['Extra']" [active_item]="'Profile'"></app-breadcrumb>
-    </div>
-    <div class="row clearfix">
-      <div class="col-lg-4 col-md-12">
-        <div class="card">
-          <div class="m-b-20">
-            <div class="contact-grid">
-              <div class="profile-header bg-dark">
-                <div class="name-center">{{ profile?.role }}</div>
-                <div class="user-name">{{ profile?.fullName }}</div>
-              </div>
-              <img src="assets/images/user/usrbig3.jpg" class="user-img" alt="">
-              <p *ngIf="profile?.address">{{ profile?.address }}</p>
-              <div *ngIf="profile?.phone">
-                <span class="phone">
-                  <i class="material-icons">phone</i>{{ profile?.phone }}</span>
-              </div>
-              <div class="row">
-                <div class="col-4">
-                  <p class="font-16 font-b-600">--</p>
-                  <small>Following</small>
-                </div>
-                <div class="col-4">
-                  <p class="font-16 font-b-600">--</p>
-                  <small>Followers</small>
-                </div>
-                <div class="col-4">
-                  <p class="font-16 font-b-600">--</p>
-                  <small>Post</small>
-                </div>
-              </div>
-            </div>
-          </div>
+    <div class="content-block">
+        <div class="block-header">
+            <app-breadcrumb [title]="'Profile'" [items]="['Extra']" [active_item]="'Profile'"></app-breadcrumb>
         </div>
-        <div class="card">
-          <mat-tab-group mat-align-tabs="start">
-            <mat-tab label="About">
-              <div class="p-4">
-                <ng-container *ngIf="profile?.email">
-                  <small class="text-muted">Email:</small>
-                  <p>{{ profile.email }}</p>
-                  <hr>
-                </ng-container>
-                <ng-container *ngIf="profile?.fullName">
-                  <small class="text-muted">Full Name:</small>
-                  <p>{{ profile.fullName }}</p>
-                  <hr>
-                </ng-container>
-                <ng-container *ngIf="profile?.gender">
-                  <small class="text-muted">Gender:</small>
-                  <p>{{ profile.gender }}</p>
-                  <hr>
-                </ng-container>
-                <!-- <ng-container *ngIf="profile?.role">
+        <div class="row clearfix">
+            <div class="col-lg-4 col-md-12">
+                <div class="card">
+                    <div class="m-b-20">
+                        <div class="contact-grid">
+                            <div class="profile-header bg-dark">
+                                <div class="name-center">{{ profile?.role }}</div>
+                                <div class="user-name">{{ profile?.fullName }}</div>
+                            </div>
+                            <img src="assets/images/user/usrbig3.jpg" class="user-img" alt="">
+                            <p *ngIf="profile?.address">{{ profile?.address }}</p>
+                            <div *ngIf="profile?.phone">
+                                <span class="phone">
+                                    <i class="material-icons">phone</i>{{ profile?.phone }}</span>
+                            </div>
+                            <div class="row">
+                                <div class="col-4">
+                                    <p class="font-16 font-b-600">--</p>
+                                    <small>Following</small>
+                                </div>
+                                <div class="col-4">
+                                    <p class="font-16 font-b-600">--</p>
+                                    <small>Followers</small>
+                                </div>
+                                <div class="col-4">
+                                    <p class="font-16 font-b-600">--</p>
+                                    <small>Post</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <mat-tab-group mat-align-tabs="start">
+                        <mat-tab label="About">
+                            <div class="p-4">
+                                <ng-container *ngIf="profile?.email">
+                                    <small class="text-muted">Email:</small>
+                                    <p>{{ profile.email }}</p>
+                                    <hr>
+                                </ng-container>
+                                <ng-container *ngIf="profile?.fullName">
+                                    <small class="text-muted">Full Name:</small>
+                                    <p>{{ profile.fullName }}</p>
+                                    <hr>
+                                </ng-container>
+                                <ng-container *ngIf="profile?.gender">
+                                    <small class="text-muted">Gender:</small>
+                                    <p>{{ profile.gender }}</p>
+                                    <hr>
+                                </ng-container>
+                                <!-- <ng-container *ngIf="profile?.role">
                   <small class="text-muted">Role:</small>
                   <p>{{ profile.role }}</p>
                   <hr>
                 </ng-container> -->
-                <ng-container *ngIf="profile?.dateOfBirth">
-                  <small class="text-muted">Date of Birth:</small>
-                  <p>{{ profile.dateOfBirth | date:'longDate' }}</p>
-                  <hr>
-                </ng-container>
-                <ng-container *ngIf="profile?.phone">
-                  <small class="text-muted">Phone:</small>
-                  <p>{{ profile.phone }}</p>
-                  <hr>
-                </ng-container>
-                <ng-container *ngIf="profile?.address">
-                  <small class="text-muted">Address:</small>
-                  <p>{{ profile.address }}</p>
-                  <hr>
-                </ng-container>
-                <ng-container *ngIf="profile?.languages">
-                  <small class="text-muted">Languages:</small>
-                  <p>{{ profile.languages }}</p>
-                  <hr>
-                </ng-container>
-                <ng-container *ngIf="profile?.specialization">
-                  <small class="text-muted">Specialization:</small>
-                  <p>{{ profile.specialization }}</p>
-                  <hr>
-                </ng-container>
-                <ng-container *ngIf="profile?.consultationFee">
-                  <small class="text-muted">Consultation Fee:</small>
-                  <p>{{ profile.consultationFee | currency }}</p>
-                  <hr>
-                </ng-container>
-                <ng-container *ngIf="profile?.experienceYears">
-                  <small class="text-muted">Experience:</small>
-                  <p>{{ profile.experienceYears }} years</p>
-                </ng-container>
-              </div>
-            </mat-tab>
-          </mat-tab-group>
-        </div>
-      </div>
-      <div class="col-lg-8 col-md-12">
-        <div class="card">
-          <mat-tab-group>
-            <mat-tab>
-              <ng-template mat-tab-label>
-                <mat-icon class="example-tab-icon msr-2">face</mat-icon>
-                About Me
-              </ng-template>
-              <div class="col-lg-12 col-md-12 col-sm-12">
-                <div class="project_widget">
-                  <div class="header">
-                    <h2><strong>Bio</strong></h2>
-                  </div>
-                  <div class="body">
-                    <p *ngIf="profile?.bio; else noBio">{{ profile.bio }}</p>
-                    <ng-template #noBio><p>No bio available.</p></ng-template>
-                  </div>
+                                <ng-container *ngIf="profile?.dateOfBirth">
+                                    <small class="text-muted">Date of Birth:</small>
+                                    <p>{{ profile.dateOfBirth | date:'longDate' }}</p>
+                                    <hr>
+                                </ng-container>
+                                <ng-container *ngIf="profile?.phone">
+                                    <small class="text-muted">Phone:</small>
+                                    <p>{{ profile.phone }}</p>
+                                    <hr>
+                                </ng-container>
+                                <ng-container *ngIf="profile?.address">
+                                    <small class="text-muted">Address:</small>
+                                    <p>{{ profile.address }}</p>
+                                    <hr>
+                                </ng-container>
+                                <ng-container *ngIf="profile?.languages">
+                                    <small class="text-muted">Languages:</small>
+                                    <p>{{ profile.languages }}</p>
+                                    <hr>
+                                </ng-container>
+                                <ng-container *ngIf="profile?.specialization">
+                                    <small class="text-muted">Specialization:</small>
+                                    <p>{{ profile.specialization }}</p>
+                                    <hr>
+                                </ng-container>
+                                <ng-container *ngIf="profile?.consultationFee">
+                                    <small class="text-muted">Consultation Fee:</small>
+                                    <p>{{ profile.consultationFee | currency }}</p>
+                                    <hr>
+                                </ng-container>
+                                <ng-container *ngIf="profile?.experienceYears">
+                                    <small class="text-muted">Experience:</small>
+                                    <p>{{ profile.experienceYears }} years</p>
+                                </ng-container>
+                            </div>
+                        </mat-tab>
+                    </mat-tab-group>
                 </div>
-              </div>
-              <div class="col-lg-12 col-md-12 col-sm-12" *ngIf="profile?.experienceYears">
-                <div class="project_widget">
-                  <div class="header">
-                    <h2><strong>Experience</strong></h2>
-                  </div>
-                  <div class="body">
-                    <ul>
-                      <li>{{ profile.experienceYears }} years of experience in the field.</li>
-                    </ul>
-                  </div>
+            </div>
+            <div class="col-lg-8 col-md-12">
+                <div class="card">
+                    <mat-tab-group>
+                        <mat-tab>
+                            <ng-template mat-tab-label>
+                                <mat-icon class="example-tab-icon msr-2">face</mat-icon>
+                                About Me
+                            </ng-template>
+                            <div class="col-lg-12 col-md-12 col-sm-12">
+                                <div class="project_widget">
+                                    <div class="header">
+                                        <h2><strong>Bio</strong></h2>
+                                    </div>
+                                    <div class="body">
+                                        <p *ngIf="profile?.bio; else noBio">{{ profile.bio }}</p>
+                                        <ng-template #noBio>
+                                            <p>No bio available.</p>
+                                        </ng-template>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12 col-md-12 col-sm-12" *ngIf="profile?.experienceYears">
+                                <div class="project_widget">
+                                    <div class="header">
+                                        <h2><strong>Experience</strong></h2>
+                                    </div>
+                                    <div class="body">
+                                        <ul>
+                                            <li>{{ profile.experienceYears }} years of experience in the field.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </mat-tab>
+                    </mat-tab-group>
                 </div>
-              </div>
-            </mat-tab>
-          </mat-tab-group>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
 </section>

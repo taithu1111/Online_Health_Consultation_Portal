@@ -15,7 +15,8 @@
           <mat-form-field class="example-full-width mb-3" appearance="outline">
             <mat-label>Current Password</mat-label>
             <input matInput type="password" formControlName="currentPassword" />
-            <mat-error *ngIf="passwordForm.controls['currentPassword']?.invalid && passwordForm.controls['currentPassword']?.touched">
+            <mat-error
+              *ngIf="passwordForm.controls['currentPassword']?.invalid && passwordForm.controls['currentPassword']?.touched">
               Current password is required
             </mat-error>
           </mat-form-field>
@@ -23,7 +24,8 @@
           <mat-form-field class="example-full-width mb-3" appearance="outline">
             <mat-label>New Password</mat-label>
             <input matInput type="password" formControlName="newPassword" />
-            <mat-error *ngIf="passwordForm.controls['newPassword']?.invalid && passwordForm.controls['newPassword']?.touched">
+            <mat-error
+              *ngIf="passwordForm.controls['newPassword']?.invalid && passwordForm.controls['newPassword']?.touched">
               New password is required (min 6 characters)
             </mat-error>
           </mat-form-field>
@@ -52,7 +54,8 @@
               <mat-form-field class="example-full-width mb-3" appearance="outline">
                 <mat-label>First Name</mat-label>
                 <input matInput formControlName="firstName" />
-                <mat-error *ngIf="profileForm.controls['firstName']?.invalid && profileForm.controls['firstName']?.touched">
+                <mat-error
+                  *ngIf="profileForm.controls['firstName']?.invalid && profileForm.controls['firstName']?.touched">
                   First Name is required
                 </mat-error>
               </mat-form-field>
@@ -63,7 +66,8 @@
               <mat-form-field class="example-full-width mb-3" appearance="outline">
                 <mat-label>Last Name</mat-label>
                 <input matInput formControlName="lastName" />
-                <mat-error *ngIf="profileForm.controls['lastName']?.invalid && profileForm.controls['lastName']?.touched">
+                <mat-error
+                  *ngIf="profileForm.controls['lastName']?.invalid && profileForm.controls['lastName']?.touched">
                   Last Name is required
                 </mat-error>
               </mat-form-field>
@@ -88,49 +92,17 @@
               </mat-form-field>
             </div>
           </div>
-          <!-- <div class="col-lg-4 col-md-12">
-            <div class="form-group">
-              <mat-form-field class="example-full-width mb-3" appearance="outline">
-                <mat-label>City</mat-label>
-                <input matInput formControlName="city" />
-              </mat-form-field>
-            </div>
-          </div>
-          <div class="col-lg-4 col-md-12">
-            <div class="form-group">
-              <mat-form-field class="example-full-width mb-3" appearance="outline">
-                <mat-label>Country</mat-label>
-                <input matInput formControlName="country" />
-              </mat-form-field>
-            </div>
-          </div> -->
           <div class="col-lg-4 col-md-12">
             <div class="form-group">
               <mat-form-field class="example-full-width mb-3" appearance="outline">
                 <mat-label>Date Of Birth</mat-label>
-                <input matInput [matDatepicker]="picker" formControlName="dateOfBirth" (dateChange)="onDateChange($event)" />
+                <input matInput [matDatepicker]="picker" formControlName="dateOfBirth"
+                  (dateChange)="onDateChange($event)" />
                 <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                 <mat-datepicker #picker></mat-datepicker>
               </mat-form-field>
             </div>
           </div>
-          <!-- <div class="col-lg-4 col-md-12">
-            <div class="form-group">
-              <mat-form-field class="example-full-width mb-3" appearance="outline">
-                <mat-label>Blood Group</mat-label>
-                <mat-select formControlName="bloodGroup">
-                  <mat-option [value]="'A-'">A-</mat-option>
-                  <mat-option [value]="'A+'">A+</mat-option>
-                  <mat-option [value]="'B-'">B-</mat-option>
-                  <mat-option [value]="'B+'">B+</mat-option>
-                  <mat-option [value]="'AB-'">AB-</mat-option>
-                  <mat-option [value]="'AB+'">AB+</mat-option>
-                  <mat-option [value]="'O-'">O-</mat-option>
-                  <mat-option [value]="'O+'">O+</mat-option>
-                </mat-select>
-              </mat-form-field>
-            </div>
-          </div> -->
           <div class="col-md-12">
             <div class="form-group">
               <mat-form-field class="example-full-width mb-3" appearance="outline">
@@ -140,7 +112,8 @@
             </div>
           </div>
           <div class="col-md-12">
-            <button mat-raised-button color="primary" type="submit" [disabled]="profileForm.invalid">Save Changes</button>
+            <button mat-raised-button color="primary" type="submit" [disabled]="profileForm.invalid">Save
+              Changes</button>
           </div>
         </div>
       </div>

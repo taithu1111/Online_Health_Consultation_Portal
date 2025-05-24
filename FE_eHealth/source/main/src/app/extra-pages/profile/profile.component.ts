@@ -30,7 +30,7 @@ export class ProfileComponent implements OnInit {
   loading = true;
   error: string | null = null;
 
-  constructor(private userService: UserService) {}
+  constructor(private userService: UserService) { }
 
   ngOnInit(): void {
     this.userService.getProfile().subscribe({
