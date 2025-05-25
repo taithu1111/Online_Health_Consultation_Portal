@@ -11,6 +11,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TodayDeleteComponent, DialogData } from './dialogs/delete/delete.component';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { AuthService } from '../../../core/service/auth.service';
 
 interface UiAppointment {
   id: number;
@@ -49,13 +50,14 @@ export class TodayAppointmentComponent implements OnInit {
   filterDate: Date | null = null;
 
   constructor(
+    private authService: AuthService,
     private svc: AppointmentService,
     private datePipe: DatePipe,
     private dialog: MatDialog
   ) { }
 
   ngOnInit() {
-    const patientId = 1; // hoặc lấy dynamic từ context
+    const patientId = Number(this.authService.getCurrentUser()?.userId); // hoặc lấy dynamic từ context
     this.svc.getAppointmentsByPatientId(patientId).subscribe(arr => {
       // Map dữ liệu trả về về UiAppointment
       this.allAppointments = arr.map((item: any) => {

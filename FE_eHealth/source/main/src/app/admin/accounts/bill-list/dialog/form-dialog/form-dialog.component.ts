@@ -30,22 +30,22 @@ export interface DialogData {
 }
 
 @Component({
-    selector: 'app-bill-list-form',
-    templateUrl: './form-dialog.component.html',
-    styleUrls: ['./form-dialog.component.scss'],
-    imports: [
-        MatButtonModule,
-        MatIconModule,
-        MatDialogContent,
-        FormsModule,
-        ReactiveFormsModule,
-        MatFormFieldModule,
-        MatInputModule,
-        MatSelectModule,
-        MatOptionModule,
-        MatDatepickerModule,
-        MatDialogClose,
-    ]
+  selector: 'app-bill-list-form',
+  templateUrl: './form-dialog.component.html',
+  styleUrls: ['./form-dialog.component.scss'],
+  imports: [
+    MatButtonModule,
+    MatIconModule,
+    MatDialogContent,
+    FormsModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatOptionModule,
+    MatDatepickerModule,
+    MatDialogClose,
+  ]
 })
 export class BillListFormComponent {
   action: string;
@@ -74,7 +74,6 @@ export class BillListFormComponent {
       id: [this.billList.id],
       img: [this.billList.img],
       patientName: [this.billList.patientName, [Validators.required]],
-      admissionID: [this.billList.admissionID, [Validators.required]],
       doctorName: [this.billList.doctorName, [Validators.required]],
       status: [this.billList.status, [Validators.required]],
       date: [this.billList.date, [Validators.required]],
@@ -95,8 +94,9 @@ export class BillListFormComponent {
   submit() {
     if (this.billListForm.valid) {
       const billData = this.billListForm.getRawValue();
+      const { id, status } = billData;
       if (this.action === 'edit') {
-        this.billListService.updateBillList(billData).subscribe({
+        this.billListService.updateBill(billData).subscribe({
           next: (response) => {
             this.dialogRef.close(response);
           },
@@ -106,7 +106,7 @@ export class BillListFormComponent {
           },
         });
       } else {
-        this.billListService.addBillList(billData).subscribe({
+        this.billListService.createBill(billData).subscribe({
           next: (response) => {
             this.dialogRef.close(response);
           },

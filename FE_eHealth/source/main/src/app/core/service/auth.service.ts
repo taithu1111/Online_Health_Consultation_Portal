@@ -51,6 +51,7 @@ export class AuthService {
       .pipe(
         tap(user => {
           if (user?.token) {
+            (user as any).id = (user as any).userId;
             const storage = rememberMe ? localStorage : sessionStorage;
             storage.setItem('currentUser', JSON.stringify(user));
             this.currentUserSubject.next(user);
@@ -78,6 +79,12 @@ export class AuthService {
     try {
       const user: User = JSON.parse(userJson);
       if (!user || !user.token) return null;
+
+      const decoded: any = jwtDecode<JwtPayload>(user.token);
+      // mapping userId to id if id is not present
+      if (!decoded.id && decoded.userId) {
+        decoded.id = decoded.userId;
+      }
       return jwtDecode<JwtPayload>(user.token);
     } catch {
       return null;
@@ -154,4 +161,9 @@ export class AuthService {
   forgotPassword(email: string): Observable<any> {
     return this.http.post(`${environment.apiUrl}/api/auth/forgot-password`, { email });
   }
+
+  getCurrentUser(): User | null {
+    return this.getUserFromStorage();
+  }
+
 }

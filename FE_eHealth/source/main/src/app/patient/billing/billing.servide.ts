@@ -37,4 +37,20 @@ export class PaymentService {
         const url = `${this.baseUrl}/appointment/${appointmentId}`;
         return this.http.get<PaymentDto[]>(url);
     }
+
+    /**
+    * Lấy danh sách payments theo patientId
+    * GET api/payments/patient/{patientId}
+    */
+    getPaymentsByPatientId(patientId: number): Observable<PaymentDto[]> {
+        const url = `${this.baseUrl}/patient/${patientId}`;
+        return this.http.get<PaymentDto[]>(url);
+    }
+
+    /**
+     * Lấy toàn bộ danh sách payments (dành cho admin)
+     */
+    getAllPayments(): Observable<PaymentDto[]> {
+        return this.http.get<PaymentDto[]>(this.baseUrl);
+    }
 }

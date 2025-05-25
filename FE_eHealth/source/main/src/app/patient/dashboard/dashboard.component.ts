@@ -32,6 +32,8 @@ import { UpcomingAppointmentComponent } from '../appointments/upcoming-appointme
 import { AppointmentService } from '../appointments/appointment-v1.service';
 import { DatePipe } from '@angular/common';
 import { AuthService } from '../../core/service/auth.service';
+import { PaymentService } from '../billing/billing.servide';
+import { forkJoin } from 'rxjs';
 
 export type areaChartOptions = {
   series: ApexAxisChartSeries;
@@ -115,18 +117,22 @@ export class DashboardComponent implements OnInit {
   public restRateChartOptions!: Partial<restRateChartOptions>;
   public performanceRateChartOptions!: Partial<performanceRateChartOptions>;
   upcomingAppointments: any[] = [];
+  billingData: { invoiceNo: string; date: Date; total: number }[] = [];
   constructor(
     private appointmentService: AppointmentService,
     private datePipe: DatePipe,
-    private authService: AuthService
+    private authService: AuthService,
+    private paymentService: PaymentService
   ) { }
   ngOnInit() {
     this.loadUpcomingAppointments();
+    this.loadBilling();
   }
 
   loadUpcomingAppointments() {
     // const patientId = Number(this.authService.getDecodedToken()?.nameid || 0);
-    const patientId = 1;
+    const patient = this.authService.getCurrentUser();
+    const patientId = patient?.userId ?? 0;
     if (!patientId) {
       this.upcomingAppointments = [];
       return;
@@ -155,29 +161,35 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  // reports list
-  reports = [
-    { title: 'Blood Report', icon: 'far fa-file-pdf', colorClass: 'col-red' },
-    {
-      title: 'Mediclaim Documents',
-      icon: 'far fa-file-word',
-      colorClass: 'col-blue',
-    },
-    {
-      title: 'Doctor Prescription',
-      icon: 'far fa-file-alt',
-      colorClass: 'col-black',
-    },
-    {
-      title: 'X-Ray Files',
-      icon: 'far fa-file-archive',
-      colorClass: 'col-purple',
-    },
-    { title: 'Urine Report', icon: 'far fa-file-pdf', colorClass: 'col-red' },
-    {
-      title: 'Scanned Documents',
-      icon: 'far fa-file-image',
-      colorClass: 'col-teal',
-    },
-  ];
+  loadBilling() {
+    const patientId = this.authService.getCurrentUser()?.userId ?? 0;
+    if (!patientId) return;
+
+    this.paymentService.getPaymentsByPatientId(patientId).subscribe({
+      next: payments => {
+        const appointmentCalls = payments.map(p =>
+          this.appointmentService.getAppointmentById(p.appointmentId)
+        );
+
+        forkJoin(appointmentCalls).subscribe(appointments => {
+          this.billingData = payments.map((p, idx) => {
+            const appt = appointments[idx];
+            const tax = p.amount * 0.1;
+            const discount = 5;
+            const total = +(p.amount + tax - discount).toFixed(2);
+
+            return {
+              invoiceNo: `P${p.id}`,
+              date: new Date(appt?.appointmentDateTime ?? new Date()),
+              total
+            };
+          });
+        });
+      },
+      error: err => {
+        console.error('Failed to load billing data', err);
+      }
+    });
+  }
+
 }

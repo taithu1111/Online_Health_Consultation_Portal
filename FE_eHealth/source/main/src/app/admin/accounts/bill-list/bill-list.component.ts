@@ -22,7 +22,7 @@ import {
   MatRippleModule,
 } from '@angular/material/core';
 import { BillListService } from './bill-list.service';
-import { BillList } from './bill-list.model';
+import { BillList, PaymentDto } from './bill-list.model';
 import { formatDate, DatePipe, CommonModule, NgClass } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { BreadcrumbComponent } from '@shared/components/breadcrumb/breadcrumb.component';
@@ -42,46 +42,55 @@ import { FeatherIconsComponent } from '@shared/components/feather-icons/feather-
 import { BillListFormComponent } from './dialog/form-dialog/form-dialog.component';
 import { BillListDeleteComponent } from './dialog/delete/delete.component';
 import { Direction } from '@angular/cdk/bidi';
+import { AppointmentService } from '../../appointment/bookappointment/appointment.service';
+import { forkJoin } from 'rxjs';
+import { AuthService } from '../../../core/service/auth.service';
+
+export interface AppointmentDto {
+  doctorName: string;
+  patientName: string;
+  appointmentDateTime: string;
+}
 
 @Component({
-    selector: 'app-bill-list',
-    templateUrl: './bill-list.component.html',
-    styleUrls: ['./bill-list.component.scss'],
-    providers: [{ provide: MAT_DATE_LOCALE, useValue: 'en-GB' }],
-    animations: [rowsAnimation],
-    imports: [
-        BreadcrumbComponent,
-        FeatherIconsComponent,
-        CommonModule,
-        MatCardModule,
-        MatFormFieldModule,
-        MatInputModule,
-        MatIconModule,
-        MatButtonModule,
-        MatTooltipModule,
-        MatSelectModule,
-        ReactiveFormsModule,
-        FormsModule,
-        MatOptionModule,
-        MatCheckboxModule,
-        MatTableModule,
-        MatSortModule,
-        NgClass,
-        MatRippleModule,
-        MatProgressSpinnerModule,
-        MatMenuModule,
-        MatPaginatorModule,
-        DatePipe,
-    ]
+  selector: 'app-bill-list',
+  templateUrl: './bill-list.component.html',
+  styleUrls: ['./bill-list.component.scss'],
+  providers: [{ provide: MAT_DATE_LOCALE, useValue: 'en-GB' }],
+  animations: [rowsAnimation],
+  imports: [
+    BreadcrumbComponent,
+    FeatherIconsComponent,
+    CommonModule,
+    MatCardModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatIconModule,
+    MatButtonModule,
+    MatTooltipModule,
+    MatSelectModule,
+    ReactiveFormsModule,
+    FormsModule,
+    MatOptionModule,
+    MatCheckboxModule,
+    MatTableModule,
+    MatSortModule,
+    NgClass,
+    MatRippleModule,
+    MatProgressSpinnerModule,
+    MatMenuModule,
+    MatPaginatorModule,
+    DatePipe,
+  ]
 })
 export class BillListComponent implements OnInit, OnDestroy {
   columnDefinitions = [
     { def: 'select', label: 'Checkbox', type: 'check', visible: true },
     { def: 'patientName', label: 'Patient Name', type: 'text', visible: true },
-    { def: 'admissionID', label: 'Admission ID', type: 'text', visible: true },
     { def: 'doctorName', label: 'Doctor Name', type: 'text', visible: true },
     { def: 'status', label: 'Status', type: 'text', visible: true },
     { def: 'date', label: 'Admission Date', type: 'date', visible: true },
+    { def: 'initialAmount', label: 'Initial Amount', type: 'text', visible: true },
     { def: 'tax', label: 'Tax', type: 'text', visible: true },
     { def: 'discount', label: 'Discount', type: 'text', visible: true },
     { def: 'total', label: 'Total Amount', type: 'text', visible: true },
@@ -93,6 +102,7 @@ export class BillListComponent implements OnInit, OnDestroy {
   contextMenuPosition = { x: '0px', y: '0px' };
   isLoading = true;
   private destroy$ = new Subject<void>();
+  readonly DISCOUNT_AMT = 5;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -103,8 +113,10 @@ export class BillListComponent implements OnInit, OnDestroy {
     public httpClient: HttpClient,
     public dialog: MatDialog,
     public billListService: BillListService,
-    private snackBar: MatSnackBar
-  ) {}
+    private snackBar: MatSnackBar,
+    private appointmentService: AppointmentService,
+    private authService: AuthService
+  ) { }
 
   ngOnInit() {
     this.loadData();
@@ -127,16 +139,44 @@ export class BillListComponent implements OnInit, OnDestroy {
 
   loadData() {
     this.billListService.getAllBillLists().subscribe({
-      next: (data) => {
-        this.dataSource.data = data;
-        this.isLoading = false;
-        this.refreshTable();
-        this.dataSource.filterPredicate = (data: BillList, filter: string) =>
-          Object.values(data).some((value) =>
-            value.toString().toLowerCase().includes(filter)
-          );
+      next: (payments: PaymentDto[]) => {
+        const appointmentCalls = payments.map(p =>
+          this.appointmentService.getAppointmentById(p.appointmentId)
+        );
+
+        forkJoin(appointmentCalls).subscribe({
+          next: appointments => {
+            this.dataSource.data = payments.map((p, idx) => {
+              const appt = appointments[idx];
+              const taxRate = 0.1;
+              const taxAmt = +(p.amount * taxRate);
+              const total = +(p.amount + taxAmt - this.DISCOUNT_AMT);
+
+              return {
+                id: p.id.toString(),
+                img: 'assets/images/user/user1.jpg',
+                patientName: appt?.patientName ?? 'N/A',
+                doctorName: appt?.doctorName ?? 'Unknown',
+                status: p.status ?? 'N/A',
+                initialAmount: p.amount.toFixed(2),
+                tax: `${((p.amount * taxRate) / p.amount * 100).toFixed(0)}%`,
+                date: new Date(appt?.appointmentDateTime ?? new Date()).toISOString(),
+                discount: this.DISCOUNT_AMT.toFixed(2),
+                total: total.toFixed(2),
+              };
+            }) as BillList[];
+
+            this.isLoading = false; // Set loading to false after data is loaded
+          },
+          error: (err) => {
+            console.error('Failed to load appointments', err);
+          }
+        });
       },
-      error: (err) => console.error(err),
+      error: (err) => {
+        console.error('Failed to load payments', err);
+        this.isLoading = false;
+      }
     });
   }
 
@@ -264,10 +304,10 @@ export class BillListComponent implements OnInit, OnDestroy {
   exportExcel() {
     const exportData = this.dataSource.filteredData.map((x) => ({
       'Patient Name': x.patientName,
-      'Admission ID': x.admissionID,
       'Doctor Name': x.doctorName,
       Status: x.status,
       'Admission Date': formatDate(new Date(x.date), 'yyyy-MM-dd', 'en') || '',
+      'Initial Amount': x.initialAmount,
       Tax: x.tax,
       Discount: x.discount,
       'Total Amount': x.total,

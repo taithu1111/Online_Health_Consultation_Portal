@@ -28,6 +28,7 @@ import { Appointments } from './appointments.model';
 import { DoctorAppointmentFormComponent } from './dialogs/form/form.component';
 import { AppointmentDelete } from './dialogs/delete/delete.component';
 import { Action } from 'rxjs/internal/scheduler/Action';
+import { AuthService } from '@core';
 @Component({
   selector: 'app-appointments',
   standalone: true,
@@ -80,6 +81,7 @@ export class AppointmentsComponent implements OnInit, OnDestroy {
   @ViewChild('filter') filter!: ElementRef<HTMLInputElement>;
 
   constructor(
+    private authService: AuthService,
     private appointmentService: AppointmentService,
     private dialog: MatDialog,
     private snackBar: MatSnackBar
@@ -101,7 +103,9 @@ export class AppointmentsComponent implements OnInit, OnDestroy {
   }
 
   loadData(): void {
-    const doctorId = 2; // Hard-coded doctorId
+    // const doctorId = 2;
+    const doctor = this.authService.getCurrentUser();
+    const doctorId = doctor?.userId ?? 0;
     this.isLoading = true;
     this.appointmentService.getAppointmentsByDoctorId(doctorId)
       .subscribe({

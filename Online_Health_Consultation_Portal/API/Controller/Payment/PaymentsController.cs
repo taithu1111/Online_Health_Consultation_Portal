@@ -24,6 +24,14 @@ namespace Online_Health_Consultation_Portal.API.Controller.Payment
             return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
         }
 
+        // GET: api/payments
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<PaymentDto>>> GetAll()
+        {
+            var result = await _mediator.Send(new GetAllPaymentsQuery());
+            return Ok(result);
+        }
+
         // GET: api/payments/{id}
         [HttpGet("{id}")]
         public async Task<ActionResult<PaymentDto>> GetById(int id)
@@ -33,11 +41,43 @@ namespace Online_Health_Consultation_Portal.API.Controller.Payment
             return Ok(result);
         }
 
+        // PUT: api/payments/{id}/status
+        [HttpPut("{id}/status")]
+        public async Task<ActionResult<PaymentDto>> UpdateStatus(int id, [FromBody] string status)
+        {
+            var command = new UpdatePaymentStatusCommand
+            {
+                PaymentId = id,
+                Status = status
+            };
+
+            var result = await _mediator.Send(command);
+            if (result == null) return NotFound();
+            return Ok(result);
+        }
+
+        // DELETE: api/payments/{id}
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> Delete(int id)
+        {
+            var result = await _mediator.Send(new DeletePaymentCommand { PaymentId = id });
+            if (!result) return NotFound();
+            return NoContent();
+        }
+
         // GET: api/payments/appointment/{appointmentId}
         [HttpGet("appointment/{appointmentId}")]
         public async Task<ActionResult<IEnumerable<PaymentDto>>> GetByAppointmentId(int appointmentId)
         {
             var result = await _mediator.Send(new GetPaymentsByAppointmentQuery { AppointmentId = appointmentId });
+            return Ok(result);
+        }
+
+        // GET: api/payments/patient/{patientId}
+        [HttpGet("patient/{patientId}")]
+        public async Task<ActionResult<IEnumerable<PaymentDto>>> GetByPatientId(int patientId)
+        {
+            var result = await _mediator.Send(new GetPaymentsByPatientQuery { PatientId = patientId });
             return Ok(result);
         }
     }
