@@ -15,7 +15,6 @@ export class PatientRecords {
   doctorsNotes: string;
   status: string;
   emergencyContact: string;
-  insuranceProvider: string;
 
   constructor(patientRecords: Partial<PatientRecords> = {}) {
     this.patientId = patientRecords.patientId || this.getRandomID();
@@ -36,7 +35,6 @@ export class PatientRecords {
     this.doctorsNotes = patientRecords.doctorsNotes || '';
     this.status = patientRecords.status || 'In Treatment';
     this.emergencyContact = patientRecords.emergencyContact || '';
-    this.insuranceProvider = patientRecords.insuranceProvider || '';
   }
 
   public getRandomID(): string {

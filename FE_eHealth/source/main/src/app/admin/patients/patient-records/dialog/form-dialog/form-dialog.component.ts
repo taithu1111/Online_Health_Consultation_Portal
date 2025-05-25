@@ -31,22 +31,22 @@ export interface DialogData {
 }
 
 @Component({
-    selector: 'app-all-patients-form-dialog',
-    templateUrl: './form-dialog.component.html',
-    styleUrls: ['./form-dialog.component.scss'],
-    imports: [
-        MatButtonModule,
-        MatIconModule,
-        MatDialogContent,
-        FormsModule,
-        ReactiveFormsModule,
-        MatFormFieldModule,
-        MatInputModule,
-        MatSelectModule,
-        MatRadioModule,
-        MatDatepickerModule,
-        MatDialogClose
-    ]
+  selector: 'app-all-patients-form-dialog',
+  templateUrl: './form-dialog.component.html',
+  styleUrls: ['./form-dialog.component.scss'],
+  imports: [
+    MatButtonModule,
+    MatIconModule,
+    MatDialogContent,
+    FormsModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatRadioModule,
+    MatDatepickerModule,
+    MatDialogClose
+  ]
 })
 export class AllPatientFormDialogComponent {
   action: string;
@@ -98,7 +98,6 @@ export class AllPatientFormDialogComponent {
         this.patientRecords.emergencyContact,
         [Validators.required],
       ],
-      insuranceProvider: [this.patientRecords.insuranceProvider],
     });
   }
 

@@ -24,7 +24,10 @@ namespace Online_Health_Consultation_Portal.Application.Handlers.Schedule
             var schedules = await _context.Schedules
                 .Where(s =>
                     s.DoctorId == request.DoctorId &&
-                    s.Date == date.Date &&
+                    //s.Date == date.Date &&
+                    //s.IsAvailable)
+                    s.Date >= date.Date &&
+                    s.Date < date.Date.AddDays(1) &&
                     s.IsAvailable)
                 .ToListAsync(cancellationToken);
 

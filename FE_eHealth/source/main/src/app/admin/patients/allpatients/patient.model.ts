@@ -10,7 +10,7 @@ export class Patient {
   dateOfBirth: Date | string;
   gender: string;
   address: string;
-  bloodGroup: string;
+  bloodType: string;
   age?: number;
   img?: string;
   user?: User;
@@ -24,7 +24,7 @@ export class Patient {
     this.dateOfBirth = patient.dateOfBirth || formatDate(new Date(), 'yyyy-MM-dd', 'en');
     this.gender = patient.gender || 'male';
     this.address = patient.address || '';
-    this.bloodGroup = patient.bloodGroup || '';
+    this.bloodType = patient.bloodType || '';
     this.img = patient.img || 'assets/images/user/user1.jpg';
     this.user = patient.user;
 
@@ -37,4 +37,12 @@ export class Patient {
       this.age = 0;
     }
   }
+}
+
+export interface PatientProfile {
+  phone?: string;
+  address?: string;
+  bloodType?: string;
+  dateOfBirth?: string;
+  gender?: string;
 }

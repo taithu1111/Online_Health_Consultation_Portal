@@ -4,6 +4,7 @@ import { Observable, of, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { Patient } from './patient.model';
 import { UserService } from '@core/service/user.service';
+import { UserWithProfile } from '@core/models/userWithProfile';
 
 @Injectable({
   providedIn: 'root',
@@ -13,29 +14,20 @@ export class PatientService {
 
   getAllPatients(page: number, pageSize: number, searchTerm: string): Observable<Patient[]> {
     return this.userService.getUsers(page, pageSize, 'Patient', searchTerm).pipe(
-      map(response => response.items.map(user => 
+      map(response => response.items.map(userWithProfile => 
         new Patient({
-          id: user.id,
-          userId: user.id,
-          fullName: user.fullName,
-          email: user.email,
-          phone: user.phone,
-          gender: user.gender,
-          dateOfBirth: user.dateOfBirth,
-          bloodGroup: user.bloodGroup,
-          address: user.address,
-          user: user
+          id: userWithProfile.user.id,
+          userId: userWithProfile.user.id,
+          fullName: userWithProfile.user.fullName,
+          email: userWithProfile.user.email,
+          phone: userWithProfile.patient?.phone || '',
+          gender: userWithProfile.patient?.gender || '',
+          dateOfBirth: userWithProfile.patient?.dateOfBirth || '',
+          bloodType: userWithProfile.patient?.bloodType || '',
+          address: userWithProfile.patient?.address || '',
+          user: userWithProfile.user
         })
       )),
-      catchError(this.handleError)
-    );
-  }
-
-  addPatient(patient: Patient): Observable<Patient> {
-    // In a real implementation, you would call userService.createUser()
-    // For now, we'll just add to the local array
-    patient.id = this.generateId();
-    return of(patient).pipe(
       catchError(this.handleError)
     );
   }

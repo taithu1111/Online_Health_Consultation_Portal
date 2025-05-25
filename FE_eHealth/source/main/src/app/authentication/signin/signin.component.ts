@@ -82,6 +82,7 @@ export class SigninComponent
   }
   setRole(roles: Role) {
     this.selectedRole = roles;
+
   }
   getDefaultRoute(roles?: string[]): string {
     const role = roles?.[0] || this.selectedRole;

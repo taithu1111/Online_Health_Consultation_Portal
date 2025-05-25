@@ -6,8 +6,8 @@ describe("ProfileComponent", () => {
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
-    imports: [ProfileComponent],
-}).compileComponents();
+        imports: [ProfileComponent],
+      }).compileComponents();
     })
   );
   beforeEach(() => {

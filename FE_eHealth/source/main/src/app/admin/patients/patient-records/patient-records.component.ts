@@ -40,34 +40,34 @@ import { PatientRecords } from './patient-records.model';
 import { PatientRecordsService } from './patient-records.service';
 
 @Component({
-    selector: 'app-patientRecords-records',
-    animations: [rowsAnimation],
-    imports: [
-        BreadcrumbComponent,
-        FeatherIconsComponent,
-        CommonModule,
-        MatCardModule,
-        MatFormFieldModule,
-        MatInputModule,
-        MatIconModule,
-        MatButtonModule,
-        MatTooltipModule,
-        MatSelectModule,
-        ReactiveFormsModule,
-        FormsModule,
-        MatOptionModule,
-        MatCheckboxModule,
-        MatTableModule,
-        MatSortModule,
-        NgClass,
-        MatRippleModule,
-        MatProgressSpinnerModule,
-        MatMenuModule,
-        MatPaginatorModule,
-        DatePipe,
-    ],
-    templateUrl: './patient-records.component.html',
-    styleUrl: './patient-records.component.scss'
+  selector: 'app-patientRecords-records',
+  animations: [rowsAnimation],
+  imports: [
+    BreadcrumbComponent,
+    FeatherIconsComponent,
+    CommonModule,
+    MatCardModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatIconModule,
+    MatButtonModule,
+    MatTooltipModule,
+    MatSelectModule,
+    ReactiveFormsModule,
+    FormsModule,
+    MatOptionModule,
+    MatCheckboxModule,
+    MatTableModule,
+    MatSortModule,
+    NgClass,
+    MatRippleModule,
+    MatProgressSpinnerModule,
+    MatMenuModule,
+    MatPaginatorModule,
+    DatePipe,
+  ],
+  templateUrl: './patient-records.component.html',
+  styleUrl: './patient-records.component.scss'
 })
 export class PatientRecordsComponent implements OnInit, OnDestroy {
   columnDefinitions = [
@@ -121,12 +121,6 @@ export class PatientRecordsComponent implements OnInit, OnDestroy {
       type: 'phone',
       visible: false,
     },
-    {
-      def: 'insuranceProvider',
-      label: 'Insurance Provider',
-      type: 'text',
-      visible: false,
-    },
     { def: 'actions', label: 'Actions', type: 'actionBtn', visible: true },
   ];
 
@@ -146,7 +140,7 @@ export class PatientRecordsComponent implements OnInit, OnDestroy {
     public dialog: MatDialog,
     public patientRecordsService: PatientRecordsService,
     private snackBar: MatSnackBar
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.loadData();
@@ -321,8 +315,7 @@ export class PatientRecordsComponent implements OnInit, OnDestroy {
       'Next Follow-Up': x.nextFollowUp,
       "Doctor's Notes": x.doctorsNotes,
       Status: x.status,
-      'Emergency Contact': x.emergencyContact,
-      'Insurance Provider': x.insuranceProvider,
+      'Emergency Contact': x.emergencyContact
     }));
 
     TableExportUtil.exportToExcel(exportData, 'patient_management_export');

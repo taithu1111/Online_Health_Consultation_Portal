@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { UserEnviroment } from 'environments/environment';
+import { UserWithProfile } from '@core/models/userWithProfile';
 
 export interface User {
     id: number;
@@ -69,7 +70,7 @@ export class UserService {
         pageSize: number,
         roleFilter?: string,
         searchTerm?: string
-    ): Observable<{ items: User[]; totalCount: number }> {
+    ): Observable<{ items: UserWithProfile[]; totalCount: number }> {
         const params: any = {
             page: page.toString(),
             pageSize: pageSize.toString(),
@@ -77,7 +78,7 @@ export class UserService {
         if (roleFilter) params.roleFilter = roleFilter;
         if (searchTerm) params.searchTerm = searchTerm;
 
-        return this.http.get<{ items: User[]; totalCount: number }>(this.apiUrl, { params });
+        return this.http.get<{ items: UserWithProfile[]; totalCount: number }>(this.apiUrl, { params });
     }
 
     changePassword(currentPassword: string, newPassword: string): Observable<void> {

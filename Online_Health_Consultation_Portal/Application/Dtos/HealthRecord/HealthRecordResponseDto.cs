@@ -1,4 +1,6 @@
-﻿namespace Online_Health_Consultation_Portal.Application.Dtos.HealthRecord
+﻿using Online_Health_Consultation_Portal.Domain;
+
+namespace Online_Health_Consultation_Portal.Application.Dtos.HealthRecord
 {
     //trả về dữ liệu hồ sơ sức khỏe
     public class HealthRecordResponseDto

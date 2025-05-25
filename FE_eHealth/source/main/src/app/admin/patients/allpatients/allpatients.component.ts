@@ -67,7 +67,7 @@ export class AllpatientsComponent implements OnInit, OnDestroy {
     public dialog: MatDialog,
     private patientService: PatientService,
     private snackBar: MatSnackBar
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.loadData();
@@ -122,27 +122,6 @@ export class AllpatientsComponent implements OnInit, OnDestroy {
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
     this.dataSource.filter = filterValue;
-  }
-
-  addNew() {
-    const dialogRef = this.dialog.open(AllPatientFormDialogComponent, {
-      data: { action: 'add' },
-      width: '600px'
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.patientService.addPatient(result).subscribe({
-          next: (newPatient) => {
-            this.dataSource.data = [newPatient, ...this.dataSource.data];
-            this.showNotification('snackbar-success', 'Patient added successfully', 'bottom', 'center');
-          },
-          error: (err) => {
-            this.showNotification('snackbar-error', 'Failed to add patient', 'bottom', 'center');
-          }
-        });
-      }
-    });
   }
 
   editCall(row: Patient) {
@@ -240,10 +219,9 @@ export class AllpatientsComponent implements OnInit, OnDestroy {
       'Email': patient.email,
       'Phone': patient.phone,
       'Gender': patient.gender,
-      'Blood Group': patient.bloodGroup,
+      'Blood Group': patient.bloodType,
       'Address': patient.address,
-      'Date of Birth': patient.dateOfBirth ? formatDate(patient.dateOfBirth, 'yyyy-MM-dd', 'en') : '',
-      'Age': patient.age
+      'Date of Birth': patient.dateOfBirth ? formatDate(patient.dateOfBirth, 'yyyy-MM-dd', 'en') : ''
     }));
     TableExportUtil.exportToExcel(exportData, 'patients');
   }

@@ -73,7 +73,7 @@ export class AllPatientFormDialogComponent {
       img: [this.patient.img],
       name: [this.patient.fullName, [Validators.required]],
       gender: [this.patient.gender],
-      bGroup: [this.patient.bloodGroup],
+      bGroup: [this.patient.bloodType],
       mobile: [this.patient.phone, [Validators.required]],
       address: [this.patient.address],
       // treatment: [this.patient.treatment],
@@ -114,17 +114,7 @@ export class AllPatientFormDialogComponent {
             },
           });
       } else {
-        this.patientService
-          .addPatient(this.patientForm.getRawValue())
-          .subscribe({
-            next: (response) => {
-              this.dialogRef.close(response);
-            },
-            error: (error) => {
-              console.error('Add Error:', error);
-              // Optionally display an error message to the user
-            },
-          });
+        alert("Illegal action");
       }
     }
   }

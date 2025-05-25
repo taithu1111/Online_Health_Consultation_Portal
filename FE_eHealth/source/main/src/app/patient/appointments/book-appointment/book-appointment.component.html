@@ -23,8 +23,8 @@
                   <mat-form-field class="example-full-width" appearance="outline">
                     <mat-label>Consulting Doctor</mat-label>
                     <mat-select formControlName="doctorId" required>
-                      <mat-option [value]="2">Nguyen Phan Tai Thu</mat-option>
-                      <mat-option [value]="5">Tran ba Quan</mat-option>
+                      <mat-option [value]="1">Nguyen Phan Tai Thu</mat-option>
+                      <mat-option [value]="2">Tran ba Quan</mat-option>
                       <mat-option value="other">Other</mat-option>
                     </mat-select>
                     <mat-error *ngIf="f['doctorId'].invalid && f['doctorId'].touched">
@@ -68,6 +68,18 @@
                       Please select a time
                     </mat-error>
                   </mat-form-field>
+                  <!-- <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label>Time Of Appointment</mat-label>
+                    <mat-select formControlName="timeSlot" [disabled]="availableSlots.length===0" required>
+                      <mat-option *ngFor="let slot of availableSlots" [value]="slot.slotStart">
+                        {{ slot.slotStart | date:'HH:mm' }} - {{ slot.slotEnd | date:'HH:mm' }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-hint *ngIf="availableSlots.length===0">Chưa có khung giờ trống</mat-hint>
+                    <mat-error *ngIf="f['timeSlot'].invalid && f['timeSlot'].touched">
+                      Vui lòng chọn khung giờ
+                    </mat-error>
+                  </mat-form-field> -->
                 </div>
 
                 <!-- Chọn loại appointment -->
