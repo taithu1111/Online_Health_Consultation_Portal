@@ -42,7 +42,7 @@ namespace Online_Health_Consultation_Portal.API.Controllers.User
         }
 
         [HttpPut("profile")]
-        public async Task<IActionResult> UpdateProfile([FromBody] UpdateUserProfileDto profile)
+        public async Task<IActionResult> UpdateProfile([FromBody] UpdateUserProfileDto profile, [FromQuery] int? userId = null)
         {
             try
             {
@@ -52,21 +52,16 @@ namespace Online_Health_Consultation_Portal.API.Controllers.User
                 var command = new UpdateUserProfileCommand
                 {
                     User = User,
+                    TargetUserId = userId,
                     Profile = profile
                 };
 
                 var result = await _mediator.Send(command);
 
                 if (result)
-                {
                     return NoContent(); // 204 on success
-                }
-                else
-                {
-                    // Could mean user not found, concurrency failure, or validation failure
-                    // You can customize the message or use Conflict for concurrency issues
-                    return Conflict("Failed to update profile. The data may be out of date or invalid.");
-                }
+
+                return Conflict("Failed to update profile. The data may be out of date or invalid.");
             }
             catch (Exception ex)
             {

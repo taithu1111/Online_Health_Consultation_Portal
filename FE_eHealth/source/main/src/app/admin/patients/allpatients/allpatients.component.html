@@ -22,8 +22,8 @@
             </div>
             <div class="right">
               <ul class="tbl-export-btn">
-                <li class="tbl-header-btn">
-                  <!-- <div class="m-l-10">
+                <!-- <li class="tbl-header-btn">
+                  <div class="m-l-10">
                     <button mat-icon-button color="primary" (click)="openColumnSelect()" matTooltip="Show/Hide Column">
                       <mat-icon>filter_list</mat-icon>
                       <mat-select #columnSelect [(ngModel)]="filter.value" style="width: 200px; display: table;"
@@ -40,8 +40,8 @@
                         }
                       </mat-select>
                     </button>
-                  </div> -->
-                </li>
+                  </div>
+                </li> -->
                 <li class="tbl-header-btn">
                   <div class="m-l-10">
                     <button mat-icon-button (click)="refresh()" matTooltip="Refresh">
@@ -118,12 +118,12 @@
                   </mat-header-cell>
                   <mat-cell *matCellDef="let row" (contextmenu)="onContextMenu($event, row)">
                     <span class="mobile-label">Gender:</span>
-                    @if (row.gender?.toLowerCase() === 'male') {
+                    @if (row.gender.toLowerCase() === 'male') {
                       <span class="badge badge-solid-green">Male</span>
-                    } @else if (row.gender?.toLowerCase() === 'female') {
+                    } @else if (row.gender.toLowerCase() === 'female') {
                       <span class="badge badge-solid-purple">Female</span>
                     } @else {
-                      <span class="badge">{{ row.gender || 'N/A' }}</span>
+                      <span class="badge">N/A</span>
                     }
                   </mat-cell>
                 </ng-container>
@@ -141,12 +141,12 @@
                 </ng-container>
 
                 <!-- Blood Group Column -->
-                <ng-container matColumnDef="bloodGroup">
+                <ng-container matColumnDef="bloodType">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>
-                    <span class="truncate-text">Blood Group</span>
+                    <span class="truncate-text">Blood Type</span>
                   </mat-header-cell>
                   <mat-cell *matCellDef="let row" (contextmenu)="onContextMenu($event, row)">
-                    <span class="mobile-label">Blood Group:</span>
+                    <span class="mobile-label">Blood Type:</span>
                     <span class="truncate-text">{{ row.bloodType || 'N/A' }}</span>
                   </mat-cell>
                 </ng-container>
@@ -171,7 +171,7 @@
                   <mat-cell *matCellDef="let row" (contextmenu)="onContextMenu($event, row)">
                     <span class="mobile-label">Date of Birth:</span>
                     <span class="truncate-text">
-                      {{ row.dateOfBirth || 'N/A' }}
+                      {{ row.dateOfBirth ? (row.dateOfBirth | date: 'yyyy-MM-dd') : 'N/A' }}
                     </span>
                   </mat-cell>
                 </ng-container>

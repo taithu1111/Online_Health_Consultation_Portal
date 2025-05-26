@@ -7,7 +7,7 @@ export class Patient {
   fullName: string;
   email: string;
   phone: string;
-  dateOfBirth: Date | string;
+  dateOfBirth: string;
   gender: string;
   address: string;
   bloodType: string;
@@ -21,7 +21,7 @@ export class Patient {
     this.fullName = patient.fullName || '';
     this.email = patient.email || '';
     this.phone = patient.phone || '';
-    this.dateOfBirth = patient.dateOfBirth || formatDate(new Date(), 'yyyy-MM-dd', 'en');
+    this.dateOfBirth = patient.dateOfBirth || '';
     this.gender = patient.gender || 'male';
     this.address = patient.address || '';
     this.bloodType = patient.bloodType || '';

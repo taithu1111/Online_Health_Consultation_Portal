@@ -68,7 +68,7 @@ export class SettingsComponent {
         firstName: firstName,
         lastName: lastName,
         email: profile.email,
-        mobile: profile.phone,
+        mobile: profile.phoneNumber,
         address: profile.address,
         dateOfBirth: profile.dateOfBirth || null
       });

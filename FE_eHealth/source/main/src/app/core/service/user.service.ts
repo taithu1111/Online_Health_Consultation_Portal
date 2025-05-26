@@ -6,13 +6,14 @@ import { UserWithProfile } from '@core/models/userWithProfile';
 
 export interface User {
     id: number;
+    imageUrl: string;
     email: string;
     fullName: string;
     gender: string;
     role: string;
     dateOfBirth?: string;
-    bloodGroup?: string;
-    phone?: string;
+    bloodType?: string;
+    phoneNumber?: string;
     address?: string;
     bio?: string;
     specialization?: string; // doctor field
@@ -25,8 +26,8 @@ export interface UpdateUserProfileDto {
     fullName?: string;
     gender?: string;
     imageUrl?: string;
-    dateOfBirth?: Date;
-    bloodGroup?: string;
+    dateOfBirth?: string;
+    bloodType?: string;
     phone?: string;
     address?: string;
     bio?: string;
