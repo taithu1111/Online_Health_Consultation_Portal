@@ -22,7 +22,7 @@
             </div>
             <div class="right">
               <ul class="tbl-export-btn">
-                <li class="tbl-header-btn">
+                <!-- <li class="tbl-header-btn">
                   <div class="m-l-10">
                     <button mat-icon-button color="primary" (click)="openColumnSelect()" matTooltip="Show/Hide Column">
                       <mat-icon>filter_list</mat-icon>
@@ -41,14 +41,7 @@
                       </mat-select>
                     </button>
                   </div>
-                </li>
-                <li class="tbl-header-btn">
-                  <div class="m-l-10">
-                    <button mat-icon-button (click)="addNew()" class="col-green" matTooltip="Add">
-                      <mat-icon>add_circle_outline</mat-icon>
-                    </button>
-                  </div>
-                </li>
+                </li> -->
                 <li class="tbl-header-btn">
                   <div class="m-l-10">
                     <button mat-icon-button (click)="refresh()" matTooltip="Refresh">
@@ -101,7 +94,7 @@
                     <span class="mobile-label">Name:</span>
                     <img [src]="row.img || 'assets/images/user/user1.jpg'" class="table-img" alt="image" />
                     <span class="truncate-text">
-                      {{ row.fullName }}
+                      {{ row.fullName || 'N/A' }}
                     </span>
                   </mat-cell>
                 </ng-container>
@@ -114,7 +107,7 @@
                   <mat-cell *matCellDef="let row" (contextmenu)="onContextMenu($event, row)" [matTooltip]="row.email">
                     <span class="mobile-label">Email:</span>
                     <mat-icon class="tbl-icon material-icons-outlined col-red">mail</mat-icon>
-                    <span class="truncate-text">{{ row.email }}</span>
+                    <span class="truncate-text">{{ row.email || 'N/A' }}</span>
                   </mat-cell>
                 </ng-container>
 
@@ -125,12 +118,12 @@
                   </mat-header-cell>
                   <mat-cell *matCellDef="let row" (contextmenu)="onContextMenu($event, row)">
                     <span class="mobile-label">Gender:</span>
-                    @if (row.gender === 'male') {
-                      <span class="badge badge-solid-green">{{ row.gender }}</span>
-                    } @else if (row.gender === 'female') {
-                      <span class="badge badge-solid-purple">{{ row.gender }}</span>
+                    @if (row.gender.toLowerCase() === 'male') {
+                      <span class="badge badge-solid-green">Male</span>
+                    } @else if (row.gender.toLowerCase() === 'female') {
+                      <span class="badge badge-solid-purple">Female</span>
                     } @else {
-                      <span class="badge">{{ row.gender }}</span>
+                      <span class="badge">N/A</span>
                     }
                   </mat-cell>
                 </ng-container>
@@ -143,18 +136,18 @@
                   <mat-cell *matCellDef="let row" (contextmenu)="onContextMenu($event, row)" [matTooltip]="row.phone">
                     <span class="mobile-label">Phone:</span>
                     <mat-icon class="tbl-icon material-icons-outlined col-green">call</mat-icon>
-                    <span class="truncate-text">{{ row.phone }}</span>
+                    <span class="truncate-text">{{ row.phone || 'N/A' }}</span>
                   </mat-cell>
                 </ng-container>
 
                 <!-- Blood Group Column -->
-                <ng-container matColumnDef="bloodGroup">
+                <ng-container matColumnDef="bloodType">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>
-                    <span class="truncate-text">Blood Group</span>
+                    <span class="truncate-text">Blood Type</span>
                   </mat-header-cell>
                   <mat-cell *matCellDef="let row" (contextmenu)="onContextMenu($event, row)">
-                    <span class="mobile-label">Blood Group:</span>
-                    <span class="truncate-text">{{ row.bloodGroup }}</span>
+                    <span class="mobile-label">Blood Type:</span>
+                    <span class="truncate-text">{{ row.bloodType || 'N/A' }}</span>
                   </mat-cell>
                 </ng-container>
 
@@ -166,7 +159,7 @@
                   <mat-cell *matCellDef="let row" (contextmenu)="onContextMenu($event, row)" [matTooltip]="row.address">
                     <span class="mobile-label">Address:</span>
                     <mat-icon class="tbl-icon material-icons-outlined col-blue">place</mat-icon>
-                    <span class="truncate-text">{{ row.address }}</span>
+                    <span class="truncate-text">{{ row.address || 'N/A' }}</span>
                   </mat-cell>
                 </ng-container>
 
@@ -178,7 +171,7 @@
                   <mat-cell *matCellDef="let row" (contextmenu)="onContextMenu($event, row)">
                     <span class="mobile-label">Date of Birth:</span>
                     <span class="truncate-text">
-                      {{ row.dateOfBirth | date: 'MM/dd/yyyy' }}
+                      {{ row.dateOfBirth ? (row.dateOfBirth | date: 'yyyy-MM-dd') : 'N/A' }}
                     </span>
                   </mat-cell>
                 </ng-container>

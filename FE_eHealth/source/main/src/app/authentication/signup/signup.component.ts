@@ -98,6 +98,7 @@ export class SignupComponent implements OnInit {
       gender: formValues.gender,
       role: Role.Patient,
       createdAt: new Date().toISOString(),
+      phoneNumber: formValues.phoneNumber,
       dateOfBirth: formValues.dateOfBirth,
       address: formValues.address,
       bloodType: formValues.bloodType

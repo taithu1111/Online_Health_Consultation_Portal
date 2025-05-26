@@ -10,6 +10,7 @@ namespace Online_Health_Consultation_Portal.Application.Commands.Users
     {
         [JsonIgnore]
         public ClaimsPrincipal? User { get; set; }
+        public int? TargetUserId { get; set; } // Optional override for admin updates
         public UpdateUserProfileDto Profile { get; set; } = new();
     }
 }

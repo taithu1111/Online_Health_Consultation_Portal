@@ -47,7 +47,7 @@ export class AllpatientsComponent implements OnInit, OnDestroy {
     { def: 'email', label: 'Email', type: 'email', visible: true },
     { def: 'gender', label: 'Gender', type: 'text', visible: true },
     { def: 'phone', label: 'Phone', type: 'phone', visible: true },
-    { def: 'bloodGroup', label: 'Blood Group', type: 'text', visible: true },
+    { def: 'bloodType', label: 'Blood Type', type: 'text', visible: true },
     { def: 'address', label: 'Address', type: 'address', visible: true },
     { def: 'dateOfBirth', label: 'Date of Birth', type: 'date', visible: true },
     { def: 'actions', label: 'Actions', type: 'actionBtn', visible: true },
@@ -82,6 +82,11 @@ export class AllpatientsComponent implements OnInit, OnDestroy {
     this.isLoading = true;
     this.patientService.getAllPatients(1, 100, '').subscribe({
       next: (patients) => {
+        patients.forEach(p => {
+          if (!p.dateOfBirth || isNaN(Date.parse(p.dateOfBirth))) {
+            p.dateOfBirth = '';
+          }
+        });
         this.dataSource.data = patients;
         this.isLoading = false;
         this.refreshTable();
@@ -124,48 +129,28 @@ export class AllpatientsComponent implements OnInit, OnDestroy {
     this.dataSource.filter = filterValue;
   }
 
-  addNew() {
-    const dialogRef = this.dialog.open(AllPatientFormDialogComponent, {
-      data: { action: 'add' },
-      width: '600px'
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.patientService.addPatient(result).subscribe({
-          next: (newPatient) => {
-            this.dataSource.data = [newPatient, ...this.dataSource.data];
-            this.showNotification('snackbar-success', 'Patient added successfully', 'bottom', 'center');
-          },
-          error: (err) => {
-            this.showNotification('snackbar-error', 'Failed to add patient', 'bottom', 'center');
-          }
-        });
-      }
-    });
-  }
-
   editCall(row: Patient) {
     const dialogRef = this.dialog.open(AllPatientFormDialogComponent, {
-      data: { patient: row, action: 'edit' },
-      width: '600px'
+      data: { 
+        user: {
+          id: row.id,
+          fullName: row.fullName,
+          email: row.email,
+          phoneNumber: row.phone,
+          gender: row.gender,
+          dateOfBirth: row.dateOfBirth,
+          bloodType: row.bloodType,
+          address: row.address,
+          role: 'Patient'
+        },
+        action: 'edit' 
+      },
+      width: '800px'
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.patientService.updatePatient(result).subscribe({
-          next: (updatedPatient) => {
-            const index = this.dataSource.data.findIndex(p => p.id === updatedPatient.id);
-            if (index !== -1) {
-              this.dataSource.data[index] = updatedPatient;
-              this.dataSource._updateChangeSubscription();
-            }
-            this.showNotification('snackbar-success', 'Patient updated successfully', 'bottom', 'center');
-          },
-          error: (err) => {
-            this.showNotification('snackbar-error', 'Failed to update patient', 'bottom', 'center');
-          }
-        });
+        this.refresh();
       }
     });
   }
@@ -240,7 +225,7 @@ export class AllpatientsComponent implements OnInit, OnDestroy {
       'Email': patient.email,
       'Phone': patient.phone,
       'Gender': patient.gender,
-      'Blood Group': patient.bloodGroup,
+      'Blood Type': patient.bloodType,
       'Address': patient.address,
       'Date of Birth': patient.dateOfBirth ? formatDate(patient.dateOfBirth, 'yyyy-MM-dd', 'en') : '',
       'Age': patient.age

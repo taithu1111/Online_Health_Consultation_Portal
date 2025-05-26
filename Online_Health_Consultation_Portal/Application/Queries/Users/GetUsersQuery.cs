@@ -3,7 +3,7 @@ using Online_Health_Consultation_Portal.Application.Dtos.Pagination;
 
 namespace Online_Health_Consultation_Portal.Application.Dtos.Users
 {
-    public sealed record GetUsersQuery : IRequest<PaginatedResponse<UserResponse>>
+    public sealed record GetUsersQuery : IRequest<PaginatedResponse<UserWithProfile>>
     {
         public int Page { get; init; } = 1;
         public int PageSize { get; init; } = 20;

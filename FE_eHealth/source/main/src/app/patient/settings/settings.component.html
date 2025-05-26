@@ -73,10 +73,7 @@
             <div class="form-group">
               <mat-form-field class="example-full-width mb-3" appearance="outline">
                 <mat-label>Email</mat-label>
-                <input matInput formControlName="email" />
-                <mat-error *ngIf="profileForm.controls['email']?.invalid && profileForm.controls['email']?.touched">
-                  Valid email is required
-                </mat-error>
+                <input matInput formControlName="email" [disabled]="true" />
               </mat-form-field>
             </div>
           </div>

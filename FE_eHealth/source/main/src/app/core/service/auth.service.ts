@@ -136,6 +136,7 @@ export class AuthService {
     confirmPassword: string;
     gender: string;
     role: Role;
+    phoneNumber: string;
     createdAt: string;
     dateOfBirth: Date;
     address: string;
