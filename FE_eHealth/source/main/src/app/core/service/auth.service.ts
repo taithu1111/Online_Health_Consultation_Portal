@@ -4,7 +4,7 @@ import { BehaviorSubject, catchError, Observable, of, tap, throwError } from 'rx
 import { User } from '../models/user';
 import { JwtPayload } from '../models/jwtPayload';
 import { jwtDecode } from 'jwt-decode';
-import { environment } from 'environments/environment';
+import { AuthEnvironment } from 'environments/environment';
 import { Role } from '@core/models/role';
 import { BloodType } from '@core/models/bloodType';
 
@@ -49,7 +49,7 @@ export class AuthService {
   }
 
   login(email: string, password: string, rememberMe: boolean = false): Observable<User> {
-    return this.http.post<User>(`${environment.apiUrl}/api/auth/login`, { email, password })
+    return this.http.post<User>(`${AuthEnvironment.apiUrl}/login`, { email, password })
       .pipe(
         tap(user => {
           if (user?.token) {
@@ -70,7 +70,7 @@ export class AuthService {
     localStorage.removeItem('currentUser');
     sessionStorage.removeItem('currentUser');
     this.currentUserSubject.next(null);
-    return this.http.post(`${environment.apiUrl}/api/auth/logout`, {});
+    return this.http.post(`${AuthEnvironment.apiUrl}/logout`, {});
   }
 
   getDecodedToken(): JwtPayload | null {
@@ -141,7 +141,9 @@ export class AuthService {
     address: string;
     bloodType: BloodType;
   }): Observable<boolean> {
-    return this.http.post<boolean>(`${environment.apiUrl}/api/auth/register`, {
+    console.log('Register URL:', `${AuthEnvironment.apiUrl}/register`);
+
+    return this.http.post<boolean>(`${AuthEnvironment.apiUrl}/register`, {
       ...registerData,
       createdAt: new Date().toISOString()
     }, {
@@ -156,6 +158,6 @@ export class AuthService {
   }
 
   forgotPassword(email: string): Observable<any> {
-    return this.http.post(`${environment.apiUrl}/api/auth/forgot-password`, { email });
+    return this.http.post(`${AuthEnvironment.apiUrl}/forgot-password`, { email });
   }
 }

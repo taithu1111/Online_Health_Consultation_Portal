@@ -60,6 +60,7 @@ export class SignupComponent implements OnInit {
           Validators.pattern(/[\W_]/)  // at least one special character
         ]
       ],
+      phoneNumber: ['', Validators.required],
       cpassword: ['', Validators.required],
       gender: ['', Validators.required],
       role: [Role.Patient, Validators.required],

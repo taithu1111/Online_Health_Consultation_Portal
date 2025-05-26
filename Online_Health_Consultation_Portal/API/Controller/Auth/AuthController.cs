@@ -72,6 +72,9 @@ namespace Online_Health_Consultation_Portal.API.Controller.Auth
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterDto dto)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState); // <-- return full error details
+
             var command = new RegisterCommand(dto);
             var result = await _mediator.Send(command);
 
