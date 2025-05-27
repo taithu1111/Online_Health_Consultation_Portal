@@ -18,7 +18,7 @@ public sealed class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand
     public async Task<Unit> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
     {
         await _userService.PermanentlyDeleteUserAsync(request.UserId);
-        _logger.LogWarning($"Admin deleted user {request.UserId}");
+        _logger.LogWarning("Admin deleted user with ID {UserId}", request.UserId);
         return Unit.Value;
     }
 }

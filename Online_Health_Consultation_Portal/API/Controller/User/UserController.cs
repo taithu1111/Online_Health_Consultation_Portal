@@ -116,6 +116,7 @@ namespace Online_Health_Consultation_Portal.API.Controllers.User
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
+        
         [HttpGet("{userId:int}")]
         public async Task<IActionResult> GetUserById(int userId)
         {

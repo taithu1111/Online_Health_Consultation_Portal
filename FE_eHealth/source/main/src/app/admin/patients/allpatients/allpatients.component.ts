@@ -163,15 +163,8 @@ export class AllpatientsComponent implements OnInit, OnDestroy {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.patientService.deletePatient(row.id).subscribe({
-          next: () => {
-            this.dataSource.data = this.dataSource.data.filter(p => p.id !== row.id);
-            this.showNotification('snackbar-success', 'Patient deleted successfully', 'bottom', 'center');
-          },
-          error: (err) => {
-            this.showNotification('snackbar-error', 'Failed to delete patient', 'bottom', 'center');
-          }
-        });
+        this.dataSource.data = this.dataSource.data.filter(p => p.id !== row.id);
+        this.showNotification('snackbar-success', 'Patient deleted successfully', 'bottom', 'center');
       }
     });
   }

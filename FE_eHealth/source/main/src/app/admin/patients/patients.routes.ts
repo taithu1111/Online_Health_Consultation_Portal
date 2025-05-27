@@ -1,6 +1,5 @@
 import { Route } from '@angular/router';
 import { PatientProfileComponent } from './patient-profile/patient-profile.component';
-import { EditPatientComponent } from './edit-patient/edit-patient.component';
 import { AddPatientComponent } from './add-patient/add-patient.component';
 import { AllpatientsComponent } from './allpatients/allpatients.component';
 import { PatientRecordsComponent } from './patient-records/patient-records.component';
@@ -14,10 +13,6 @@ export const PATIENT_ROUTE: Route[] = [
   {
     path: 'add-patient',
     component: AddPatientComponent,
-  },
-  {
-    path: 'edit-patient',
-    component: EditPatientComponent,
   },
   {
     path: 'patient-records',

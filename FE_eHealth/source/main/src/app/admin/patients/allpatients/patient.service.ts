@@ -49,10 +49,9 @@ export class PatientService {
     );
   }
 
-  deletePatient(id: number): Observable<number> {
-    // In a real implementation, you would call userService.deleteUser()
-    return of(id).pipe(
-      catchError(this.handleError)
+  deletePatient(userId: number): Observable<void> {
+    return this.userService.deleteUser(userId).pipe(
+      catchError(this.handleError)        // <- reuse the shared handler
     );
   }
 
