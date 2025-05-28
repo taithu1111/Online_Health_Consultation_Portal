@@ -1,7 +1,7 @@
 import { formatDate } from '@angular/common';
 
 export class Doctors {
-  id: string;
+  id: number;
   img: string;
   name: string;
   email: string;
@@ -15,9 +15,10 @@ export class Doctors {
   availability: string;
   rating: number;
   clinicLocation: string;
+  languages: string;
 
   constructor(doctors: Partial<Doctors> = {}) {
-    this.id = doctors.id || this.getRandomID();
+    this.id = doctors.id || -1;
     this.img = doctors.img || 'assets/images/user/user1.jpg';
     this.name = doctors.name || '';
     this.email = doctors.email || '';
@@ -31,6 +32,7 @@ export class Doctors {
     this.availability = doctors.availability || '';
     this.rating = doctors.rating || 0;
     this.clinicLocation = doctors.clinicLocation || '';
+    this.languages = doctors.languages || '';
   }
 
   public getRandomID(): string {

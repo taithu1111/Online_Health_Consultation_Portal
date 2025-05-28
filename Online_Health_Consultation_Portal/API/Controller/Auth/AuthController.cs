@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Online_Health_Consultation_Portal.Application.Commands.Auth;
 using Online_Health_Consultation_Portal.Application.Dtos.Auth.LoginDto;
 using Online_Health_Consultation_Portal.Application.Dtos.Auth;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Online_Health_Consultation_Portal.API.Controller.Auth
 {
@@ -39,9 +40,10 @@ namespace Online_Health_Consultation_Portal.API.Controller.Auth
         /// Yêu cầu reset mật khẩu và nhận token qua email.
         /// </summary>
         [HttpPost("forgot-password")]
+        [AllowAnonymous]
         public async Task<ActionResult> ForgotPassword(ForgotPasswordDto forgotPasswordDto)
         {
-            var command = new ForgotPasswordCommand { ForgotPasswordDto = forgotPasswordDto};
+            var command = new ForgotPasswordCommand { ForgotPasswordDto = forgotPasswordDto };
             var result = await _mediator.Send(command);
 
             if (!result)

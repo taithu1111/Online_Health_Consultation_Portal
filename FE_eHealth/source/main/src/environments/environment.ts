@@ -11,3 +11,6 @@ export const AuthEnvironment = {
 export const UserEnviroment = {
   apiUrl: 'http://localhost:5175/api'
 }
+export const DoctorEnvironment = {
+  apiUrl: 'http://localhost:5175/api/doctors'
+};

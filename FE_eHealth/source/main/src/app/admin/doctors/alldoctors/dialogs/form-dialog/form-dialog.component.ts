@@ -100,17 +100,17 @@ export class AllDoctorsFormComponent {
     if (this.doctorsForm.valid) {
       if (this.action === 'edit') {
         // Update existing doctor
-        this.doctorsService
-          .updateDoctors(this.doctorsForm.getRawValue())
-          .subscribe({
-            next: (response) => {
-              this.dialogRef.close(response); // Close dialog and return updated doctor data
-            },
-            error: (error) => {
-              console.error('Update Error:', error);
-              // Optionally display an error message to the user
-            },
-          });
+        // this.doctorsService
+        //   .updateDoctors(this.doctorsForm.getRawValue())
+        //   .subscribe({
+        //     next: (response) => {
+        //       this.dialogRef.close(response); // Close dialog and return updated doctor data
+        //     },
+        //     error: (error) => {
+        //       console.error('Update Error:', error);
+        //       // Optionally display an error message to the user
+        //     },
+        //   });
       } else {
         // Add new doctor
         this.doctorsService
