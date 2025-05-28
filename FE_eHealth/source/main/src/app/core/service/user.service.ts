@@ -2,15 +2,18 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { UserEnviroment } from 'environments/environment';
+import { UserWithProfile } from '@core/models/userWithProfile';
 
 export interface User {
     id: number;
+    imageUrl: string;
     email: string;
     fullName: string;
     gender: string;
     role: string;
     dateOfBirth?: string;
-    phone?: string;
+    bloodType?: string;
+    phoneNumber?: string;
     address?: string;
     bio?: string;
     specialization?: string; // doctor field
@@ -23,7 +26,8 @@ export interface UpdateUserProfileDto {
     fullName?: string;
     gender?: string;
     imageUrl?: string;
-    dateOfBirth?: Date;
+    dateOfBirth?: string;
+    bloodType?: string;
     phone?: string;
     address?: string;
     bio?: string;
@@ -67,7 +71,7 @@ export class UserService {
         pageSize: number,
         roleFilter?: string,
         searchTerm?: string
-    ): Observable<{ items: User[]; totalCount: number }> {
+    ): Observable<{ items: UserWithProfile[]; totalCount: number }> {
         const params: any = {
             page: page.toString(),
             pageSize: pageSize.toString(),
@@ -75,7 +79,7 @@ export class UserService {
         if (roleFilter) params.roleFilter = roleFilter;
         if (searchTerm) params.searchTerm = searchTerm;
 
-        return this.http.get<{ items: User[]; totalCount: number }>(this.apiUrl, { params });
+        return this.http.get<{ items: UserWithProfile[]; totalCount: number }>(this.apiUrl, { params });
     }
 
     changePassword(currentPassword: string, newPassword: string): Observable<void> {

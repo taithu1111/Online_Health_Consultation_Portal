@@ -4,6 +4,10 @@ import { BehaviorSubject, catchError, Observable, of, tap, throwError } from 'rx
 import { User } from '../models/user';
 import { JwtPayload } from '../models/jwtPayload';
 import { jwtDecode } from 'jwt-decode';
+import { environment } from 'environments/environment';
+import { Role } from '@core/models/role';
+import { BloodType } from '@core/models/bloodType';
+
 import { environment } from '../../../environments/environment';
 import { Role } from '../models/role';
 @Injectable({
@@ -140,9 +144,11 @@ export class AuthService {
     confirmPassword: string;
     gender: string;
     role: Role;
+    phoneNumber: string;
     createdAt: string;
     dateOfBirth: Date;
     address: string;
+    bloodType: BloodType;
   }): Observable<boolean> {
     return this.http.post<boolean>(`${environment.apiUrl}/api/auth/register`, {
       ...registerData,

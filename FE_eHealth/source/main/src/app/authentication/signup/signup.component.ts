@@ -64,7 +64,8 @@ export class SignupComponent implements OnInit {
       gender: ['', Validators.required],
       role: [Role.Patient, Validators.required],
       dateOfBirth: ['', Validators.required],
-      address: ['', Validators.required]
+      address: ['', Validators.required],
+      bloodType: [''] // default to '', optional field
     }, { validator: this.passwordsMatchValidator });
     // get return url from route parameters or default to '/'
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
@@ -97,8 +98,10 @@ export class SignupComponent implements OnInit {
       gender: formValues.gender,
       role: Role.Patient,
       createdAt: new Date().toISOString(),
+      phoneNumber: formValues.phoneNumber,
       dateOfBirth: formValues.dateOfBirth,
-      address: formValues.address
+      address: formValues.address,
+      bloodType: formValues.bloodType
     }).subscribe({
       next: (response) => {
         // console.log('Registration successful:', response);

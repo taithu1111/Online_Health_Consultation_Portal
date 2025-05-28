@@ -30,13 +30,25 @@ namespace Online_Health_Consultation_Portal.Application.Handlers.Users
         {
             try
             {
-                if (request.User == null)
+                User? user = null;
+
+                if (request.TargetUserId.HasValue)
                 {
-                    _logger.LogWarning("Attempted profile update without user context");
-                    throw new UnauthorizedAccessException("User context is missing.");
+                    // Optional: Check if current user is admin before allowing this
+                    var currentUser = await _userManager.GetUserAsync(request.User);
+                    var roles = await _userManager.GetRolesAsync(currentUser);
+
+                    user = await _userManager.Users
+                        .FirstOrDefaultAsync(u => u.Id == request.TargetUserId.Value, cancellationToken);
+                }
+                else
+                {
+                    if (request.User == null)
+                        throw new UnauthorizedAccessException("User context is missing.");
+
+                    user = await _userManager.GetUserAsync(request.User);
                 }
 
-                var user = await _userManager.GetUserAsync(request.User);
                 if (user == null)
                 {
                     _logger.LogWarning("User not found for profile update");
@@ -44,13 +56,13 @@ namespace Online_Health_Consultation_Portal.Application.Handlers.Users
                 }
 
                 var profile = request.Profile;
+
                 _logger.LogInformation("Updating profile for user {UserId}", user.Id);
 
-                // Update base user properties
+                // Update shared properties
                 if (!string.IsNullOrWhiteSpace(profile.FullName))
                     user.FullName = profile.FullName;
 
-                // Update phone number through proper Identity method
                 if (!string.IsNullOrWhiteSpace(profile.Phone))
                 {
                     var setPhoneResult = await _userManager.SetPhoneNumberAsync(user, profile.Phone);
@@ -62,9 +74,7 @@ namespace Online_Health_Consultation_Portal.Application.Handlers.Users
                     }
                 }
 
-                // Handle role-specific updates
-                var roles = await _userManager.GetRolesAsync(user);
-                var primaryRole = roles.FirstOrDefault();
+                var primaryRole = user.Role;
 
                 if (primaryRole == "Patient")
                 {
@@ -75,7 +85,6 @@ namespace Online_Health_Consultation_Portal.Application.Handlers.Users
                     await HandleDoctorProfile(user.Id, profile, cancellationToken);
                 }
 
-                // Save user changes
                 var updateResult = await _userManager.UpdateAsync(user);
                 if (!updateResult.Succeeded)
                 {
@@ -105,7 +114,9 @@ namespace Online_Health_Consultation_Portal.Application.Handlers.Users
                 {
                     UserId = userId,
                     Address = profile.Address,
-                    DateOfBirth = profile.DateOfBirth ?? default
+                    DateOfBirth = profile.DateOfBirth ?? default,
+                    BloodType = profile.BloodType,
+                    Gender = profile.Gender
                 };
                 _context.Patients.Add(patient);
                 _logger.LogInformation("Created new patient profile for user {UserId}", userId);
@@ -117,6 +128,9 @@ namespace Online_Health_Consultation_Portal.Application.Handlers.Users
 
                 if (profile.DateOfBirth.HasValue)
                     patient.DateOfBirth = profile.DateOfBirth.Value;
+
+                if (!string.IsNullOrWhiteSpace(profile.BloodType))
+                    patient.BloodType = profile.BloodType;
                 
                 _logger.LogInformation("Updated existing patient profile for user {UserId}", userId);
             }
@@ -135,6 +149,16 @@ namespace Online_Health_Consultation_Portal.Application.Handlers.Users
                     Bio = profile.Bio,
                     Languages = profile.Languages
                 };
+
+                if (profile.SpecializationId.HasValue)
+                    doctor.SpecializationId = profile.SpecializationId.Value;
+
+                if (profile.ExperienceYears.HasValue)
+                    doctor.ExperienceYears = profile.ExperienceYears.Value;
+
+                if (profile.ConsultationFee.HasValue)
+                    doctor.ConsultationFee = profile.ConsultationFee.Value;
+
                 _context.Doctors.Add(doctor);
                 _logger.LogInformation("Created new doctor profile for user {UserId}", userId);
             }

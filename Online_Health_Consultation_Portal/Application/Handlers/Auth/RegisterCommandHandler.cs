@@ -33,7 +33,8 @@ namespace Online_Health_Consultation_Portal.Application.Handlers.Auth
                 Gender = dto.Gender,
                 Role = dto.Role,
                 CreatedAt = dto.CreatedAt,
-                ImageUrl = null
+                ImageUrl = null,
+                PhoneNumber = dto.PhoneNumber
             };
 
             var result = await _userManager.CreateAsync(user, dto.Password);
@@ -47,7 +48,8 @@ namespace Online_Health_Consultation_Portal.Application.Handlers.Auth
                     UserId = user.Id,
                     Gender = dto.Gender,
                     DateOfBirth = dto.DateOfBirth,
-                    Address = dto.Address
+                    Address = dto.Address,
+                    BloodType = dto.BloodType
                 };
 
                 _context.Patients.Add(patient);
