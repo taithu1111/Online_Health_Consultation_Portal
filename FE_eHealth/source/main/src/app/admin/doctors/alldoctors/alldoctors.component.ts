@@ -6,7 +6,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import {
   MatSnackBar,
@@ -42,6 +42,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { FeatherIconsComponent } from '@shared/components/feather-icons/feather-icons.component';
 import { Direction } from '@angular/cdk/bidi';
+import { PaginationFilter, PaginationParams } from '@core/models/pagination.model';
 
 @Component({
     selector: 'app-viewdoctors',
@@ -75,59 +76,35 @@ import { Direction } from '@angular/cdk/bidi';
     ]
 })
 export class AlldoctorsComponent implements OnInit, OnDestroy {
-  columnDefinitions = [
+   columnDefinitions = [
     { def: 'select', label: 'Checkbox', type: 'check', visible: true },
-    { def: 'name', label: 'Name', type: 'text', visible: true },
-    { def: 'department', label: 'Department', type: 'text', visible: true },
-    {
-      def: 'specialization',
-      label: 'Specialization',
-      type: 'text',
-      visible: true,
-    },
-    { def: 'availability', label: 'Availability', type: 'text', visible: true },
-    { def: 'mobile', label: 'Mobile', type: 'phone', visible: true },
-    { def: 'degree', label: 'Degree', type: 'text', visible: true },
-    {
-      def: 'experienceYears',
-      label: 'Experience (Years)',
-      type: 'number',
-      visible: true,
-    },
-    {
-      def: 'consultationFee',
-      label: 'Consultation Fee',
-      type: 'currency',
-      visible: true,
-    },
+    { def: 'fullName', label: 'Name', type: 'text', visible: true },
     { def: 'email', label: 'Email', type: 'email', visible: true },
-    { def: 'date', label: 'Date', type: 'date', visible: false },
-
-    { def: 'rating', label: 'Rating', type: 'number', visible: true },
-    {
-      def: 'clinicLocation',
-      label: 'Clinic Location',
-      type: 'text',
-      visible: true,
-    },
-    { def: 'actions', label: 'Actions', type: 'actionBtn', visible: true },
+    { def: 'specialization', label: 'Specialization', type: 'text', visible: true },
+    { def: 'experienceYears', label: 'Experience (Years)', type: 'number', visible: true },
+    { def: 'languages', label: 'Languages', type: 'text', visible: true },
+    { def: 'consultationFee', label: 'Consultation Fee', type: 'currency', visible: true },
+    { def: 'averageRating', label: 'Rating', type: 'number', visible: true },
+    { def: 'bio', label: 'Bio', type: 'text', visible: false },
+    { def: 'actions', label: 'Actions', type: 'actionBtn', visible: true }
   ];
 
   dataSource = new MatTableDataSource<Doctors>([]);
   selection = new SelectionModel<Doctors>(true, []);
-  contextMenuPosition = { x: '0px', y: '0px' };
   isLoading = true;
   private destroy$ = new Subject<void>();
 
+  // Pagination properties
+  pagination = new PaginationParams();
+  filters: PaginationFilter = {};
+  totalItems = 0;
+
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
-  @ViewChild('filter') filter!: ElementRef;
-  @ViewChild(MatMenuTrigger) contextMenu?: MatMenuTrigger;
 
   constructor(
-    public httpClient: HttpClient,
-    public dialog: MatDialog,
-    public doctorsService: DoctorsService,
+    private doctorsService: DoctorsService,
+    private dialog: MatDialog,
     private snackBar: MatSnackBar
   ) {}
 
@@ -140,8 +117,34 @@ export class AlldoctorsComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  refresh() {
-    this.loadData();
+  loadData() {
+    this.isLoading = true;
+    this.doctorsService.getPaginatedDoctors(this.pagination, this.filters)
+      .subscribe({
+        next: (response) => {
+          this.dataSource.data = response.items.map(d => new Doctors({
+            ...d,
+            img: 'assets/images/user/user1.jpg' // Adding default image for UI
+          }));
+          this.totalItems = response.totalCount;
+          this.isLoading = false;
+          this.setupTableFeatures();
+        },
+        error: (error) => {
+          console.error('Error loading doctors:', error);
+          this.isLoading = false;
+        }
+      });
+  }
+
+  private setupTableFeatures() {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+    this.dataSource.filterPredicate = (data: Doctors, filter: string) => {
+      return Object.values(data).some(
+        (value) => value?.toString().toLowerCase().includes(filter.toLowerCase())
+      );
+    };
   }
 
   getDisplayedColumns(): string[] {
@@ -150,136 +153,95 @@ export class AlldoctorsComponent implements OnInit, OnDestroy {
       .map((cd) => cd.def);
   }
 
-  loadData() {
-    this.doctorsService.getAllDoctors().subscribe({
-      next: (data) => {
-        this.dataSource.data = data;
-        this.isLoading = false;
-        this.refreshTable();
-        this.dataSource.filterPredicate = (data: Doctors, filter: string) =>
-          Object.values(data).some((value) =>
-            value.toString().toLowerCase().includes(filter)
-          );
-      },
-      error: (err) => console.error(err),
-    });
-  }
-
-  private refreshTable() {
-    this.paginator.pageIndex = 0;
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
+  onPageChange(event: PageEvent) {
+    this.pagination.page = event.pageIndex + 1;
+    this.pagination.pageSize = event.pageSize;
+    this.loadData();
   }
 
   applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value
-      .trim()
-      .toLowerCase();
-    this.dataSource.filter = filterValue;
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
+  applyFilters() {
+    this.pagination.page = 1; // Reset to first page when filters change
+    this.loadData();
   }
 
   addNew() {
-    this.openDialog('add');
-  }
-
-  editCall(row: Doctors) {
-    this.openDialog('edit', row);
-  }
-
-  openDialog(action: 'add' | 'edit', data?: Doctors) {
-    let varDirection: Direction;
-    if (localStorage.getItem('isRtl') === 'true') {
-      varDirection = 'rtl';
-    } else {
-      varDirection = 'ltr';
-    }
     const dialogRef = this.dialog.open(AllDoctorsFormComponent, {
       width: '60vw',
-      maxWidth: '100vw',
-      data: { doctors: data, action },
-      direction: varDirection,
-      autoFocus: false,
+      data: { action: 'add' }
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe((result: Doctors) => {
       if (result) {
-        if (action === 'add') {
-          this.dataSource.data = [result, ...this.dataSource.data];
-        } else {
-          this.updateRecord(result);
-        }
-        this.refreshTable();
-        this.showNotification(
-          action === 'add' ? 'snackbar-success' : 'black',
-          `${action === 'add' ? 'Add' : 'Edit'} Record Successfully...!!!`,
-          'bottom',
-          'center'
-        );
+        this.doctorsService.addDoctors(result).subscribe({
+          next: () => {
+            this.loadData();
+            this.showNotification('Doctor added successfully', 'success');
+          },
+          error: (err) => this.showNotification('Error adding doctor', 'error')
+        });
       }
     });
   }
 
-  private updateRecord(updatedRecord: Doctors) {
-    const index = this.dataSource.data.findIndex(
-      (record) => record.id === updatedRecord.id
-    );
-    if (index !== -1) {
-      this.dataSource.data[index] = updatedRecord;
-      this.dataSource._updateChangeSubscription();
-    }
+  editCall(row: Doctors) {
+    const dialogRef = this.dialog.open(AllDoctorsFormComponent, {
+      width: '60vw',
+      data: { doctors: row, action: 'edit' }
+    });
+
+    dialogRef.afterClosed().subscribe((result: Doctors) => {
+      if (result) {
+        this.doctorsService.updateDoctors(result.id, result).subscribe({
+          next: () => {
+            this.loadData();
+            this.showNotification('Doctor updated successfully', 'success');
+          },
+          error: (err) => this.showNotification('Error updating doctor', 'error')
+        });
+      }
+    });
   }
 
   deleteItem(row: Doctors) {
     const dialogRef = this.dialog.open(AllDoctorsDeleteComponent, {
-      data: row,
+      data: row
     });
+
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.dataSource.data = this.dataSource.data.filter(
-          (record) => record.id !== row.id
-        );
-        this.refreshTable();
-        this.showNotification(
-          'snackbar-danger',
-          'Delete Record Successfully...!!!',
-          'bottom',
-          'center'
-        );
+        this.doctorsService.deleteDoctors(row.id).subscribe({
+          next: () => {
+            this.loadData();
+            this.showNotification('Doctor deleted successfully', 'success');
+          },
+          error: (err) => this.showNotification('Error deleting doctor', 'error')
+        });
       }
-    });
-  }
-
-  showNotification(
-    colorName: string,
-    text: string,
-    placementFrom: MatSnackBarVerticalPosition,
-    placementAlign: MatSnackBarHorizontalPosition
-  ) {
-    this.snackBar.open(text, '', {
-      duration: 2000,
-      verticalPosition: placementFrom,
-      horizontalPosition: placementAlign,
-      panelClass: colorName,
     });
   }
 
   exportExcel() {
     const exportData = this.dataSource.filteredData.map((x) => ({
-      Name: x.name,
-      Email: x.email,
-      Specialization: x.specialization,
-      Date: formatDate(new Date(x.date), 'yyyy-MM-dd', 'en') || '',
-      Department: x.department,
-      Mobile: x.mobile,
-      Degree: x.degree,
-      'Experience Years': x.experienceYears,
-      Fees: x.consultationFee,
-      Availability: x.availability,
-      Rating: x.rating,
-      'Clinic Location': x.clinicLocation,
+      'Name': x.name,
+      'Email': x.email,
+      'Specialization': x.specialization,
+      'Experience (Years)': x.experienceYears,
+      'Languages': x.languages,
+      'Consultation Fee': x.consultationFee,
+      'Rating': x.rating
     }));
+  }
 
-    TableExportUtil.exportToExcel(exportData, 'excel');
+  showNotification(message: string, type: 'success' | 'error') {
+    this.snackBar.open(message, 'Close', {
+      duration: 3000,
+      panelClass: type === 'success' ? 'snackbar-success' : 'snackbar-error'
+    });
   }
 
   isAllSelected() {
@@ -287,34 +249,8 @@ export class AlldoctorsComponent implements OnInit, OnDestroy {
   }
 
   masterToggle() {
-    this.isAllSelected()
-      ? this.selection.clear()
-      : this.dataSource.data.forEach((row) => this.selection.select(row));
-  }
-
-  removeSelectedRows() {
-    const totalSelect = this.selection.selected.length;
-    this.dataSource.data = this.dataSource.data.filter(
-      (item) => !this.selection.selected.includes(item)
-    );
-    this.selection.clear();
-    this.showNotification(
-      'snackbar-danger',
-      `${totalSelect} Record(s) Deleted Successfully...!!!`,
-      'bottom',
-      'center'
-    );
-  }
-  onContextMenu(event: MouseEvent, item: Doctors) {
-    event.preventDefault();
-    this.contextMenuPosition = {
-      x: `${event.clientX}px`,
-      y: `${event.clientY}px`,
-    };
-    if (this.contextMenu) {
-      this.contextMenu.menuData = { item };
-      this.contextMenu.menu?.focusFirstItem('mouse');
-      this.contextMenu.openMenu();
-    }
+    this.isAllSelected() ?
+      this.selection.clear() :
+      this.dataSource.data.forEach(row => this.selection.select(row));
   }
 }
