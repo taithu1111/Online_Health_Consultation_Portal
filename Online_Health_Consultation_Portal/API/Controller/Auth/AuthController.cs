@@ -58,6 +58,7 @@ namespace Online_Health_Consultation_Portal.API.Controller.Auth
         /// Đặt lại mật khẩu bằng token.
         /// </summary>
         [HttpPost("reset-password")]
+        [AllowAnonymous]
         public async Task<ActionResult> ResetPassword(ResetPasswordDto resetPasswordDto)
         {
             var command = new ResetPasswordCommand { ResetPasswordDto = resetPasswordDto };

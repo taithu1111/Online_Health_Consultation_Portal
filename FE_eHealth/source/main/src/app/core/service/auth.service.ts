@@ -160,4 +160,17 @@ export class AuthService {
   forgotPassword(email: string): Observable<any> {
     return this.http.post(`${AuthEnvironment.apiUrl}/forgot-password`, { email });
   }
+
+  resetPassword(email: string, token: string, newPassword: string): Observable<boolean> {
+    return this.http.post<boolean>(`${AuthEnvironment.apiUrl}/reset-password`, { 
+      email, 
+      token, 
+      newPassword 
+    }).pipe(
+      catchError(err => {
+        const errorMessage = err.error?.message || 'Password reset failed.';
+        return throwError(() => new Error(errorMessage));
+      })
+    );
+  }
 }

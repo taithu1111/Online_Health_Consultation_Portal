@@ -92,7 +92,7 @@ builder.Services.AddAuthentication(options =>
         ValidAudience = builder.Configuration["Jwt:Audience"] ?? throw new InvalidOperationException("JWT Audience is not configured"),
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey)),
         // Add these additional parameters for better stability
-        ClockSkew = TimeSpan.Zero, // Remove default 5-minute tolerance
+        ClockSkew = TimeSpan.FromMinutes(5), // 5 mins
         NameClaimType = ClaimTypes.NameIdentifier,    // Standard claim type mapping
         RoleClaimType = ClaimTypes.Role     // Standard claim type mapping
     };

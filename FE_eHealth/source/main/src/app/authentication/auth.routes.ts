@@ -7,6 +7,7 @@ import { Page404Component } from "./page404/page404.component";
 import { Page500Component } from "./page500/page500.component";
 import { AuthGuard } from "@core/guard/auth.guard";
 import { Role } from "@core";
+import { ResetPasswordComponent } from "./reset-password/reset-password.component";
 // import { ResetPasswordComponent } from "./reset-password/reset-password.component";
 export const AUTH_ROUTE: Route[] = [
   {
@@ -38,6 +39,10 @@ export const AUTH_ROUTE: Route[] = [
     path: "page500",
     component: Page500Component,
   },
+  {
+    path: "reset-password",
+    component: ResetPasswordComponent
+  }
   // {
   //   path: "reset-password",
   //   component: ResetPasswordComponent,

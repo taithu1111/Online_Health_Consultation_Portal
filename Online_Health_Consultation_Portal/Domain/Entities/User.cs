@@ -12,8 +12,5 @@ namespace Online_Health_Consultation_Portal.Domain
         public ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();
         public ICollection<Message> SentMessages { get; set; }
         public ICollection<Message> ReceivedMessages { get; set; }
-
-        public string? ResetPasswordToken { get; set; }
-        public DateTime? ResetPasswordTokenExpiry { get; set; }
     }
 }
