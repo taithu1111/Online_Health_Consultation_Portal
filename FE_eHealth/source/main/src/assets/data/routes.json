@@ -54,34 +54,6 @@
             ""
           ],
           "submenu": []
-        },
-        {
-          "path": "/admin/dashboard/doctor-dashboard",
-          "title": "MENUITEMS.DASHBOARD.LIST.DOCTOR-DASHBOARD",
-          "iconType": "",
-          "icon": "",
-          "class": "ml-menu",
-          "groupTitle": false,
-          "badge": "",
-          "badgeClass": "",
-          "role": [
-            ""
-          ],
-          "submenu": []
-        },
-        {
-          "path": "/admin/dashboard/patient-dashboard",
-          "title": "MENUITEMS.DASHBOARD.LIST.PATIENT-DASHBOARD",
-          "iconType": "",
-          "icon": "",
-          "class": "ml-menu",
-          "groupTitle": false,
-          "badge": "",
-          "badgeClass": "",
-          "role": [
-            ""
-          ],
-          "submenu": []
         }
       ]
     },
@@ -414,20 +386,6 @@
         {
           "path": "/admin/accounts/add-bill",
           "title": "MENUITEMS.ACCOUNTS.LIST.ADD-BILL",
-          "iconType": "",
-          "icon": "",
-          "class": "ml-menu",
-          "groupTitle": false,
-          "badge": "",
-          "badgeClass": "",
-          "role": [
-            ""
-          ],
-          "submenu": []
-        },
-        {
-          "path": "/admin/accounts/invoice",
-          "title": "MENUITEMS.ACCOUNTS.LIST.INVOICE",
           "iconType": "",
           "icon": "",
           "class": "ml-menu",

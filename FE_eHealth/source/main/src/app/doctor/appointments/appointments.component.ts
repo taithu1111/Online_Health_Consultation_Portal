@@ -103,7 +103,7 @@ export class AppointmentsComponent implements OnInit, OnDestroy {
   }
 
   loadData(): void {
-    // const doctorId = 2;
+
     const doctor = this.authService.getCurrentUser();
     const doctorId = doctor?.userId ?? 0;
     this.isLoading = true;

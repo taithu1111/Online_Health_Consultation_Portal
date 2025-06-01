@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
-import { BillList, PaymentDto } from './bill-list.model';
-import { environment } from '../../../../environments/environment';
+import { BillList, PaymentDto } from './payment.model';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
-export class BillListService {
+export class PaymentService {
   private readonly API_URL = `${environment.apiUrl}/api/payments`;
 
   constructor(private httpClient: HttpClient) { }
@@ -28,9 +28,22 @@ export class BillListService {
   }
 
   /** PUT: Update payment status */
-  updateBill(bill: BillList): Observable<any> {
-    const url = `${this.API_URL}/${bill.id}`;
-    return this.httpClient.put<any>(url, bill); // gửi toàn bộ object
+  // updateBill(bill: BillList): Observable<any> {
+  //   const url = `${this.API_URL}/${bill.id}`;
+  //   return this.httpClient.put<any>(url, bill); // gửi toàn bộ object
+  // }
+  updateStatus(paymentId: number, newStatus: string): Observable<PaymentDto> {
+    const url = `${this.API_URL}/${paymentId}/status`;
+    // Gửi body là một JSON string (kèm ngoặc kép) để backend hiểu đúng [FromBody]string status
+    const body = {
+      status: newStatus,
+      // initialAmount: newAmount
+    }
+    return this.httpClient.put<PaymentDto>(url, body, {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+    }).pipe(
+      catchError(this.handleError)
+    );
   }
 
   /** DELETE: Delete a payment */

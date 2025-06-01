@@ -64,6 +64,7 @@ import { ActivatedRoute } from '@angular/router';
 export class ViewappointmentComponent implements OnInit, OnDestroy {
   columnDefinitions = [
     { def: 'select', label: 'Checkbox', type: 'check', visible: true },
+    { def: 'id', label: 'ID', type: 'text', visible: true },
     { def: 'doctorName', label: 'Doctor Name', type: 'text', visible: true },
     { def: 'patientName', label: 'Patient Name', type: 'text', visible: true },
     { def: 'gender', label: 'Gender', type: 'text', visible: true },

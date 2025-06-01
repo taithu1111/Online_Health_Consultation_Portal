@@ -16,6 +16,7 @@ namespace Online_Health_Consultation_Portal.Application.Handlers.Payment
             if (payment == null) return null;
 
             payment.Status = request.Status;
+
             await _context.SaveChangesAsync(cancellationToken);
 
             return new PaymentDto

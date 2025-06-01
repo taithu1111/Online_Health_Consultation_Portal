@@ -132,7 +132,9 @@ export class CalendarComponent implements OnInit {
         description: res.description
       };
       this.calendarService.createSchedule(cmd)
-        .subscribe(() => this.loadSchedules(doctorId));
+        .subscribe(() => {
+          this.loadSchedules(this.getCurrentDoctorId());  // reload lại toàn bộ lịch
+        });
     });
   }
 

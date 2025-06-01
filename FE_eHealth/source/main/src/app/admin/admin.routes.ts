@@ -26,7 +26,7 @@ export const ADMIN_ROUTE: Route[] = [
   {
     path: 'accounts',
     loadChildren: () =>
-      import('./accounts/accounts.routes').then((m) => m.ACCOUNTS_ROUTE),
+      import('./accounts/payment.routes').then((m) => m.ACCOUNTS_ROUTE),
   },
   {
     path: 'departments',

@@ -1,126 +1,127 @@
+// src/app/admin/accounts/bill-list/dialog/form-dialog/form-dialog.component.ts
+
 import {
   MAT_DIALOG_DATA,
-  MatDialogRef,
-  MatDialogContent,
-  MatDialogClose,
+  MatDialogRef
 } from '@angular/material/dialog';
 import { Component, Inject } from '@angular/core';
-import { BillListService } from '../../bill-list.service';
+import { PaymentService } from '../../../payment.service';
 import {
-  UntypedFormControl,
-  Validators,
   UntypedFormGroup,
   UntypedFormBuilder,
-  FormsModule,
+  Validators,
   ReactiveFormsModule,
+  FormsModule
 } from '@angular/forms';
-import { BillList } from '../../bill-list.model';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatOptionModule } from '@angular/material/core';
-import { MatSelectModule } from '@angular/material/select';
-import { MatInputModule } from '@angular/material/input';
+import { BillList } from '../../../payment.model';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatOptionModule } from '@angular/material/core';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 
 export interface DialogData {
-  id: number;
-  action: string;
-  billList: BillList;
+  action: 'add' | 'edit';
+  billList?: BillList;
 }
 
 @Component({
   selector: 'app-bill-list-form',
   templateUrl: './form-dialog.component.html',
   styleUrls: ['./form-dialog.component.scss'],
+  standalone: true,
   imports: [
-    MatButtonModule,
-    MatIconModule,
-    MatDialogContent,
-    FormsModule,
     ReactiveFormsModule,
+    FormsModule,
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
     MatOptionModule,
     MatDatepickerModule,
-    MatDialogClose,
+    MatButtonModule,
+    MatIconModule
   ]
 })
-export class BillListFormComponent {
-  action: string;
+export class FormDialogComponent {
+  action: 'add' | 'edit';
   dialogTitle: string;
   billListForm: UntypedFormGroup;
   billList: BillList;
 
   constructor(
-    public dialogRef: MatDialogRef<BillListFormComponent>,
+    public dialogRef: MatDialogRef<FormDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
-    public billListService: BillListService,
-    private fb: UntypedFormBuilder
+    private fb: UntypedFormBuilder,
+    private paymentService: PaymentService
   ) {
-    // Set the defaults
     this.action = data.action;
+    this.billList = data.billList
+      ? data.billList
+      : new BillList({});
+
     this.dialogTitle =
-      this.action === 'edit' ? data.billList.patientName : 'New Bill List';
-    this.billList =
-      this.action === 'edit' ? data.billList : new BillList({} as BillList); // Create a blank object
+      this.action === 'edit'
+        ? `Edit Bill for ${this.billList.patientName}`
+        : 'New Bill';
+
     this.billListForm = this.createBillListForm();
   }
 
-  // Create form group for bill list details
-  createBillListForm(): UntypedFormGroup {
+  private createBillListForm(): UntypedFormGroup {
     return this.fb.group({
       id: [this.billList.id],
-      img: [this.billList.img],
-      patientName: [this.billList.patientName, [Validators.required]],
-      doctorName: [this.billList.doctorName, [Validators.required]],
-      status: [this.billList.status, [Validators.required]],
-      date: [this.billList.date, [Validators.required]],
+      patientName: [this.billList.patientName],
+      doctorName: [this.billList.doctorName],
+      date: [this.billList.date],
       tax: [this.billList.tax],
       discount: [this.billList.discount],
-      total: [this.billList.total, [Validators.required]],
+      initialAmount: [this.billList.initialAmount],
+      total: [this.billList.total],
+      status: [this.billList.status, [Validators.required]],
     });
   }
 
-  getErrorMessage(control: UntypedFormControl): string {
-    if (control.hasError('required')) {
-      return 'This field is required';
-    }
-    return '';
+  get statusControl() {
+    return this.billListForm.get('status')!;
+  }
+  get initialAmountControl() {
+    return this.billListForm.get('initialAmount')!;
   }
 
-  // Submit form data
-  submit() {
-    if (this.billListForm.valid) {
-      const billData = this.billListForm.getRawValue();
-      const { id, status } = billData;
-      if (this.action === 'edit') {
-        this.billListService.updateBill(billData).subscribe({
-          next: (response) => {
-            this.dialogRef.close(response);
-          },
-          error: (error) => {
-            console.error('Update Error:', error);
-            // Optionally display an error message to the user
-          },
-        });
-      } else {
-        this.billListService.createBill(billData).subscribe({
-          next: (response) => {
-            this.dialogRef.close(response);
-          },
-          error: (error) => {
-            console.error('Add Error:', error);
-            // Optionally display an error message to the user
-          },
-        });
-      }
+  submit(): void {
+    if (this.billListForm.invalid) {
+      this.billListForm.markAllAsTouched();
+      return;
+    }
+
+    if (this.action === 'edit') {
+      const updatedStatus = this.billListForm.get('status')!.value as string;
+      // const updatedAmount = this.billListForm.get('initialAmount')!.value as number;
+      const paymentId = Number(this.billList.id);
+
+      this.paymentService.updateStatus(paymentId, updatedStatus).subscribe({
+        next: () => {
+          // Khi server trả về OK, chỉ close dialog với { id, status }
+          this.dialogRef.close({
+            id: this.billList.id,         // giữ nguyên kiểu string
+            status: updatedStatus,
+            // initialAmount: updatedAmount
+          });
+        },
+        error: (err) => {
+          console.error('Update Error:', err);
+        }
+      });
+    } else {
+      // Xử lý add mới (nếu cần)
+      // ...
+      this.dialogRef.close();
     }
   }
 
-  // Close dialog without action
-  onNoClick(): void {
+  cancel(): void {
     this.dialogRef.close();
   }
 }

@@ -43,12 +43,12 @@ namespace Online_Health_Consultation_Portal.API.Controller.Payment
 
         // PUT: api/payments/{id}/status
         [HttpPut("{id}/status")]
-        public async Task<ActionResult<PaymentDto>> UpdateStatus(int id, [FromBody] string status)
+        public async Task<ActionResult<PaymentDto>> UpdateStatus(int id, [FromBody] string status, decimal amount)
         {
             var command = new UpdatePaymentStatusCommand
             {
                 PaymentId = id,
-                Status = status
+                Status = status,
             };
 
             var result = await _mediator.Send(command);

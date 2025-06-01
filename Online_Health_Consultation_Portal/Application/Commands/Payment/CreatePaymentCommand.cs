@@ -7,6 +7,7 @@ namespace Online_Health_Consultation_Portal.Application.Commands.Payment
     {
         public int AppointmentId { get; set; }
         public decimal Amount { get; set; }
+        public string Status { get; set; }
 
     }
 }

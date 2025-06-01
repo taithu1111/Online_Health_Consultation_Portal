@@ -18,7 +18,7 @@ namespace Online_Health_Consultation_Portal.Application.Handlers.Payment
             {
                 AppointmentId = request.AppointmentId,
                 Amount = request.Amount,
-                Status = "Pending",
+                Status = request.Status, // paid , unpaid, pending
                 TransactionId = Guid.NewGuid().ToString()
             };
             _context.Payments.Add(payment);
