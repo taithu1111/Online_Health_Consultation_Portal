@@ -55,13 +55,6 @@ export class PatientService {
     );
   }
 
-  updatePatientByAdmin(id: number, dto: UpdateUserProfileDto): Observable<any> {
-    return this.http.put(
-      `${UserEnviroment.apiUrl}/users/profile?userId=${id}`,  // note query parameter
-      dto
-    );
-  }
-
   private handleError(error: HttpErrorResponse) {
     console.error('An error occurred:', error.message);
     return throwError(() => new Error('Something went wrong; please try again later.'));

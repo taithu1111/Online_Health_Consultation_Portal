@@ -24,7 +24,10 @@ namespace Online_Health_Consultation_Portal.Application.Mappings
                 .ForMember(dest => dest.ExperienceYears, opt => opt.MapFrom(src => src.Doctor != null ? (int?)src.Doctor.ExperienceYears : null))
                 .ForMember(dest => dest.Languages, opt => opt.MapFrom(src => src.Doctor != null ? src.Doctor.Languages : null))
                 .ForMember(dest => dest.ConsultationFee, opt => opt.MapFrom(src => src.Doctor != null ? (decimal?)src.Doctor.ConsultationFee : null))
-                .ForMember(dest => dest.Specialization, opt => opt.MapFrom(src => src.Doctor != null && src.Doctor.Specialization != null ? src.Doctor.Specialization.Name : null))
+                .ForMember(dest => dest.Specializations, opt => opt.MapFrom(src =>
+                    src.Doctor != null && src.Doctor.Specializations != null
+                        ? string.Join(", ", src.Doctor.Specializations.Select(s => s.Name))
+                        : null))
                 .ForMember(dest => dest.Role, opt => opt.Ignore()); // Gán trong handler
 
             // Mapping cho admin xem danh sách người dùng

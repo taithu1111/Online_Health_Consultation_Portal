@@ -138,7 +138,7 @@ export class AllPatientFormDialogComponent implements OnInit {
     };
 
     if (this.action === 'edit' && this.patient?.id) {
-      this.patientService.updatePatientByAdmin(this.patient.id, payload).subscribe({
+      this.userService.updateProfileByAdmin(this.patient.id, payload).subscribe({
         next: () => {
           this.snackBar.open('Patient profile updated successfully!', 'Close', {
             duration: 3000,

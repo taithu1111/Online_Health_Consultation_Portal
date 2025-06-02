@@ -26,8 +26,9 @@ export class PaginationParams {
 }
 
 export interface PaginationFilter {
-  specializationId?: number;
-  minExperienceYears?: number;
-  language?: string;
+  specializations: number[],
+  minExperienceYears?: number,
+  language?: string,
+  strictSpecializationFilter: boolean
   // Add other filter properties as needed
 }

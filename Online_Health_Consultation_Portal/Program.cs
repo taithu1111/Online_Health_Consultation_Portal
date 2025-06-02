@@ -46,6 +46,7 @@ using Online_Health_Consultation_Portal.Infrastructure.Repositories;
 using Online_Health_Consultation_Portal.Application.Commands.Payment;
 using Online_Health_Consultation_Portal.Application.Dtos.Payment;
 using Online_Health_Consultation_Portal.Application.Queries.Payment;
+using Online_Health_Consultation_Portal.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -226,6 +227,7 @@ builder.Services.AddScoped<ILogService, LogService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<ILogRepository, LogRepository>();
 builder.Services.AddScoped<IJwtService, JwtService>();
+builder.Services.AddScoped<ISpecializationService, SpecializationService>();
 //builder.Services.AddScoped(typeof(IApplogger<>), typeof(SeriLoggerAdapter<>));
 
 // Command Handlers

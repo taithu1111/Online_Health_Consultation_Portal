@@ -42,7 +42,7 @@ namespace Online_Health_Consultation_Portal.Application.Handlers.Users
             if (role == "Doctor")
             {
                 doctor = await _context.Doctors
-                    .Include(d => d.Specialization)
+                    .Include(d => d.Specializations)
                     .FirstOrDefaultAsync(d => d.UserId == user.Id, cancellationToken);
             }
             else if (role == "Patient")

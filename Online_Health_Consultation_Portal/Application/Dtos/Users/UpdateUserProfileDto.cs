@@ -15,7 +15,7 @@ namespace Online_Health_Consultation_Portal.Application.Dtos.Users
         // Doctor specific fields
         public string? Bio { get; set; }
         public string? Languages { get; set; }
-        public int? SpecializationId { get; set; }
+        public List<string>? Specializations { get; set; }
         public int? ExperienceYears { get; set; }
         public decimal? ConsultationFee { get; set; }
     }

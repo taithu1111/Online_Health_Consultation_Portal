@@ -24,13 +24,30 @@ namespace Online_Health_Consultation_Portal.Application.Handlers.Doctors
             var request = query.Request;
             var dbQuery = _context.Doctors
                 .Include(d => d.User)
-                .Include(d => d.Specialization)
+                .Include(d => d.Specializations)
                 .AsQueryable();
 
             // Apply filters
-            if (request.SpecializationId.HasValue)
+            if (request.Specializations != null && request.Specializations.Any())
             {
-                dbQuery = dbQuery.Where(d => d.SpecializationId == request.SpecializationId);
+                if (request.StrictSpecializationFilter)
+                {
+                    // Strict mode: doctor must have all the specializations in the filter list
+
+                    // For EF Core to translate, one common way is:
+                    // For each specialization ID in the filter list,
+                    // doctor.Specializations must contain it.
+
+                    foreach (var specId in request.Specializations)
+                    {
+                        dbQuery = dbQuery.Where(d => d.Specializations.Any(s => s.Id == specId));
+                    }
+                }
+                else
+                {
+                    // Normal mode: doctor must have at least one specialization in the filter list
+                    dbQuery = dbQuery.Where(d => d.Specializations.Any(s => request.Specializations.Contains(s.Id)));
+                }
             }
 
             if (request.MinExperienceYears.HasValue)

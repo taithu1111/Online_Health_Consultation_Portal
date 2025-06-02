@@ -52,7 +52,8 @@ namespace Online_Health_Consultation_Portal.Infrastructure
 
             // Doctor - Specialization
             modelBuilder.Entity<Doctor>()
-                .HasOne(d => d.Specialization);
+                .HasMany(d => d.Specializations)
+                .WithMany(s => s.Doctors);  // <-- assuming Specialization has ICollection<Doctor> Doctors { get; set; }
             //.WithMany(s => s.Doctors)
             //.HasForeignKey(d => d.SpecializationId)
             //.OnDelete(DeleteBehavior.Cascade);

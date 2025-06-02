@@ -40,7 +40,7 @@ public sealed class GetUsersQueryHandler : IRequestHandler<GetUsersQuery, Pagina
             if (user.Role == "Doctor")
             {
                 doctor = await _context.Doctors
-                    .Include(d => d.Specialization)
+                    .Include(d => d.Specializations)
                     .FirstOrDefaultAsync(d => d.UserId == user.Id);
             }
             else if (user.Role == "Patient")

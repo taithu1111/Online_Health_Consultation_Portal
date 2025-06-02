@@ -7,7 +7,7 @@ namespace Online_Health_Consultation_Portal.Infrastructure.Repositories
     {
         public async Task<List<Doctor>> GetFilteredDoctorsAsync(int? specializationId, int? minExperience, string? language)
         {
-            var query = context.Doctors.Include(d => d.User).Include(d => d.Specialization).AsQueryable();
+            var query = context.Doctors.Include(d => d.User).Include(d => d.Specializations).AsQueryable();
             
             //if (specializationId.HasValue)
             //    query = query.Where(d => d.SpecializationId == specializationId);
@@ -24,7 +24,7 @@ namespace Online_Health_Consultation_Portal.Infrastructure.Repositories
         public async Task<Doctor?> GetByIdAsync(int userId) 
             => await context.Doctors
                 .Include(d => d.User)
-                .Include(d => d.Specialization)
+                .Include(d => d.Specializations)
                 .FirstOrDefaultAsync(d => d.Id == userId);
     }
 }

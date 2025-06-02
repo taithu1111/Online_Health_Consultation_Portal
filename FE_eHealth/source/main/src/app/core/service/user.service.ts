@@ -9,7 +9,7 @@ export interface User {
     imageUrl: string;
     email: string;
     fullName: string;
-    gender: string;
+    gender?: string;
     role: string;
     dateOfBirth?: string;
     bloodType?: string;
@@ -31,7 +31,7 @@ export interface UpdateUserProfileDto {
     phone?: string;
     address?: string;
     bio?: string;
-    specialization?: string; // doctor field
+    specialization?: number[]; // doctor field
     experienceYears?: number; // doctor field
     languages?: string;
     consultationFee?: number; // doctor field
@@ -48,6 +48,13 @@ export class UserService {
     // Lấy profile user hiện tại
     getProfile(): Observable<User> {
         return this.http.get<User>(`${this.apiUrl}/profile`);
+    }
+
+    updateProfileByAdmin(id: number, dto: UpdateUserProfileDto): Observable<any> {
+        return this.http.put(
+        `${UserEnviroment.apiUrl}/users/profile?userId=${id}`,  // note query parameter
+        dto
+        );
     }
 
     // Cập nhật profile user hiện tại

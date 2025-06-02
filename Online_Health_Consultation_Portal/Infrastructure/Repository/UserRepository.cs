@@ -17,7 +17,7 @@ namespace Online_Health_Consultation_Portal.Infrastructure.Repositories
             if (user.Role == "Doctor")
             {
                 var doctor = await context.Doctors
-                    .Include(d => d.Specialization)
+                    .Include(d => d.Specializations)
                     .FirstOrDefaultAsync(d => d.UserId == userId);
             }
             else if (user.Role == "Patient")

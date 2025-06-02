@@ -61,18 +61,24 @@ namespace Online_Health_Consultation_Portal.Application.Handlers.Users
 
                 // Update shared properties
                 if (!string.IsNullOrWhiteSpace(profile.FullName))
+                {
                     user.FullName = profile.FullName;
+                }
 
                 if (!string.IsNullOrWhiteSpace(profile.Phone))
-                {
-                    var setPhoneResult = await _userManager.SetPhoneNumberAsync(user, profile.Phone);
-                    if (!setPhoneResult.Succeeded)
                     {
-                        _logger.LogWarning("Phone number update failed for user {UserId}: {Errors}", 
-                            user.Id, string.Join(", ", setPhoneResult.Errors.Select(e => e.Description)));
-                        return false;
+                        // var setPhoneResult = await _userManager.SetPhoneNumberAsync(user, profile.Phone);
+                        // if (!setPhoneResult.Succeeded)
+                        // {
+                        //     _logger.LogWarning("Phone number update failed for user {UserId}: {Errors}", 
+                        //         user.Id, string.Join(", ", setPhoneResult.Errors.Select(e => e.Description)));
+                        //     return false;
+                        // }
+
+                        user.PhoneNumber = profile.Phone;
+                        user.PhoneNumberConfirmed = true;
+                        _logger.LogInformation("Phone after update for user {UserId}: {Phone}", user.Id, user.PhoneNumber);
                     }
-                }
 
                 var primaryRole = user.Role;
 
@@ -93,7 +99,18 @@ namespace Online_Health_Consultation_Portal.Application.Handlers.Users
                     return false;
                 }
 
-                await _context.SaveChangesAsync(cancellationToken);
+                try
+                {
+                    await _context.SaveChangesAsync(cancellationToken);
+                }
+                catch (DbUpdateConcurrencyException ex)
+                {
+                    foreach (var entry in ex.Entries)
+                    {
+                        await entry.ReloadAsync(cancellationToken);
+                    }
+                    await _context.SaveChangesAsync(cancellationToken);
+                }
                 return true;
             }
             catch (Exception ex)
@@ -139,6 +156,7 @@ namespace Online_Health_Consultation_Portal.Application.Handlers.Users
         private async Task HandleDoctorProfile(int userId, UpdateUserProfileDto profile, CancellationToken cancellationToken)
         {
             var doctor = await _context.Doctors
+                .Include(d => d.Specializations) // Include Specializations to manage them
                 .FirstOrDefaultAsync(d => d.UserId == userId, cancellationToken);
 
             if (doctor == null)
@@ -150,8 +168,24 @@ namespace Online_Health_Consultation_Portal.Application.Handlers.Users
                     Languages = profile.Languages
                 };
 
-                if (profile.SpecializationId.HasValue)
-                    doctor.SpecializationId = profile.SpecializationId.Value;
+                if (profile.Specializations != null && profile.Specializations.Any())
+                {
+                    var specializationEntities = await _context.Specializations
+                        .Where(s => profile.Specializations.Contains(s.Name))
+                        .ToListAsync(cancellationToken);
+
+                    doctor.Specializations = specializationEntities;
+
+                    // Add doctor to each specialization's Doctors list
+                    foreach (var spec in specializationEntities)
+                    {
+                        if (spec.Doctors == null)
+                            spec.Doctors = new List<Doctor>();
+
+                        if (!spec.Doctors.Contains(doctor))
+                            spec.Doctors.Add(doctor);
+                    }
+                }
 
                 if (profile.ExperienceYears.HasValue)
                     doctor.ExperienceYears = profile.ExperienceYears.Value;
@@ -164,11 +198,50 @@ namespace Online_Health_Consultation_Portal.Application.Handlers.Users
             }
             else
             {
+                if (profile.Specializations != null && profile.Specializations.Any())
+                {
+                    // Load old specializations
+                    var oldSpecializations = doctor.Specializations.ToList();
+
+                    // Get new specialization entities
+                    var newSpecializations = await _context.Specializations
+                        .Where(s => profile.Specializations.Contains(s.Name))
+                        .ToListAsync(cancellationToken);
+
+                    // Clear old specializations and update their Doctors list
+                    foreach (var oldSpec in oldSpecializations)
+                    {
+                        oldSpec.Doctors?.Remove(doctor);
+                    }
+
+                    doctor.Specializations.Clear();
+
+                    // Assign new specializations
+                    foreach (var newSpec in newSpecializations)
+                    {
+                        doctor.Specializations.Add(newSpec);
+
+                        if (newSpec.Doctors == null)
+                            newSpec.Doctors = new List<Doctor>();
+
+                        if (!newSpec.Doctors.Contains(doctor))
+                            newSpec.Doctors.Add(doctor);
+                    }
+                }
+
                 if (!string.IsNullOrWhiteSpace(profile.Bio))
                     doctor.Bio = profile.Bio;
 
                 if (!string.IsNullOrWhiteSpace(profile.Languages))
                     doctor.Languages = profile.Languages;
+
+                if (profile.ExperienceYears.HasValue)
+                    doctor.ExperienceYears = profile.ExperienceYears.Value;
+
+                if (profile.ConsultationFee.HasValue)
+                    doctor.ConsultationFee = profile.ConsultationFee.Value;
+
+                _logger.LogInformation("Updated existing doctor profile for user {UserId}", userId);
             }
         }
     }

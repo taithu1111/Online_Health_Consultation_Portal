@@ -8,7 +8,6 @@ namespace Online_Health_Consultation_Portal.Domain
         public int Id { get; set; } // FK to User
         
         public int UserId { get; set; }
-        public int SpecializationId { get; set; }
         public int ExperienceYears { get; set; }
         public string Languages { get; set; }
         public string Bio { get; set; }
@@ -16,7 +15,7 @@ namespace Online_Health_Consultation_Portal.Domain
         public double AverageRating { get; set; }
 
         public User User { get; set; }
-        public Specialization Specialization { get; set; }
+        public ICollection<Specialization> Specializations { get; set; } = new List<Specialization>();
         public ICollection<Appointment> Appointments { get; set; }
         public ICollection<Rating> Ratings { get; set; }
         public ICollection<Schedule> Schedules { get; set; }

@@ -14,3 +14,6 @@ export const UserEnviroment = {
 export const DoctorEnvironment = {
   apiUrl: 'http://localhost:5175/api/doctors'
 };
+export const SpecializationEnvironment = {
+  apiUrl: 'http://localhost:5175/api/specializations'
+}

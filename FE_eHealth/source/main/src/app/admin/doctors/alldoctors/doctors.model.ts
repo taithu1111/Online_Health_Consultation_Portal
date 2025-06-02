@@ -2,37 +2,31 @@ import { formatDate } from '@angular/common';
 
 export class Doctors {
   id: number;
+  userId: number;
   img: string;
-  name: string;
+  fullName: string;
   email: string;
-  date: string;
-  specialization: string;
-  mobile: string;
-  department: string;
-  degree: string;
+  bio: string;
+  specialization: number[];
+  phone: string;
   experienceYears: number;
   consultationFee: number;
-  availability: string;
   rating: number;
-  clinicLocation: string;
   languages: string;
 
   constructor(doctors: Partial<Doctors> = {}) {
     this.id = doctors.id || -1;
+    this.userId = doctors.userId || -1;
     this.img = doctors.img || 'assets/images/user/user1.jpg';
-    this.name = doctors.name || '';
+    this.fullName = doctors.fullName || '';
     this.email = doctors.email || '';
-    this.date = doctors.date || formatDate(new Date(), 'yyyy-MM-dd', 'en');
-    this.specialization = doctors.specialization || '';
-    this.mobile = doctors.mobile || '';
-    this.department = doctors.department || '';
-    this.degree = doctors.degree || '';
+    this.specialization = doctors.specialization || [];
+    this.phone = doctors.phone || '';
     this.experienceYears = doctors.experienceYears || 0;
     this.consultationFee = doctors.consultationFee || 0;
-    this.availability = doctors.availability || '';
     this.rating = doctors.rating || 0;
-    this.clinicLocation = doctors.clinicLocation || '';
     this.languages = doctors.languages || '';
+    this.bio = doctors.bio || '';
   }
 
   public getRandomID(): string {

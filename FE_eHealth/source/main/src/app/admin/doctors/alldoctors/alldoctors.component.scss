@@ -7,3 +7,47 @@
 :host ::ng-deep .mat-column-name {
   min-width: 150px;
 }
+/* Add to your component's SCSS file */
+.specialization-field {
+  min-width: 250px; /* Adjust width as needed */
+  
+  .mat-form-field-wrapper {
+    padding-bottom: 0;
+  }
+  
+  .mat-form-field-outline {
+    background-color: #f5f5f5;
+    border-radius: 4px;
+  }
+  
+  .mat-select-trigger {
+    min-height: 48px;
+  }
+}
+
+.specialization-option {
+  display: flex;
+  flex-direction: column;
+  padding: 8px 0;
+  
+  .spec-description {
+    font-size: 12px;
+    color: #666;
+    margin-top: 4px;
+  }
+}
+
+/* Chip styling for selected items */
+.mat-select-value-text {
+  .mat-chip {
+    background-color: #e3f2fd;
+    color: #1976d2;
+    margin: 2px 4px 2px 0;
+    font-size: 12px;
+    
+    .mat-chip-remove {
+      color: #1976d2;
+      opacity: 0.7;
+    }
+  }
+}
