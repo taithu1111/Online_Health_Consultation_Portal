@@ -38,6 +38,7 @@ export class DoctorsService {
     if (filters?.strictSpecializationFilter) {
       params = params.set('strictSpecializationFilter', filters.strictSpecializationFilter.toString());
     }
+    console.log("Sending request " + JSON.stringify(params) + " to " + this.apiUrl);
     return this.httpClient
       .get<PaginatedResponse<Doctors>>(`${this.apiUrl}`, { params })
       .pipe(catchError(this.handleError));

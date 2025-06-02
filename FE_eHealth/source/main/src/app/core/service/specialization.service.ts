@@ -1,7 +1,7 @@
 // specialization.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { SpecializationEnvironment } from 'environments/environment';
 
@@ -19,6 +19,8 @@ export class SpecializationService {
   }
 
   searchSpecializations(term: string): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/search`, { params: { term } });
+    return this.http.get<any[]>(`${this.apiUrl}/search`, {
+      params: { term }
+    });
   }
 }

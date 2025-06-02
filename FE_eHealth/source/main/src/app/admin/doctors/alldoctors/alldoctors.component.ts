@@ -113,7 +113,12 @@ export class AllDoctorsComponent implements OnInit, OnDestroy {
       .pipe(
         debounceTime(300),
         distinctUntilChanged(),
-        switchMap(value => this.specializationService.searchSpecializations(value))
+        switchMap(value => {
+          const isEmpty = !value || value.trim().length === 0;
+          return isEmpty
+            ? this.specializationService.getAllSpecializations()
+            : this.specializationService.searchSpecializations(value);
+        })
       )
       .subscribe(specializations => {
         this.filteredSpecializations = specializations;
@@ -155,6 +160,7 @@ export class AllDoctorsComponent implements OnInit, OnDestroy {
     const pagination = new PaginationParams(this.paginator?.pageIndex ?? 0, this.paginator?.pageSize ?? 10);
     const filters = this.getFilters();
     this.isLoading = true;
+    // console.log("applyfilter working uhh: " + JSON.stringify(filters));
     
     this.doctorService.getPaginatedDoctors(pagination, filters).subscribe({
       next: (res) => {
