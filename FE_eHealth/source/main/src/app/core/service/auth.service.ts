@@ -170,4 +170,10 @@ export class AuthService {
     return this.getUserFromStorage();
   }
 
+  public getCurrentUserId(): number | null {
+    const userId = this.getUserFromStorage();
+    if (!userId) return null;
+    return (userId as any).id ?? null;
+  }
+
 }

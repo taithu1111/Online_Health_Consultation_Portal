@@ -19,8 +19,7 @@ import { AuthService } from '@core';
 
 @Component({
   selector: 'app-calendar',
-  standalone: true,
-  imports: [
+  standalone: true, imports: [
     CommonModule,
     FullCalendarModule,
     MatCardModule,
