@@ -44,8 +44,7 @@
       "TEXT": "Invoice management",
       "LIST": {
         "BILL-LIST": "Bill List",
-        "ADD-BILL": "Add Bill",
-        "INVOICE": "Invoice"
+        "ADD-BILL": "Add Bill"
       }
     },
     "RECORDS": {

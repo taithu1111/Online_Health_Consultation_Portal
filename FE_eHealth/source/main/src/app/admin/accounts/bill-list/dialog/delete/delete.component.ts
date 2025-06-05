@@ -1,50 +1,70 @@
-import {
-  MAT_DIALOG_DATA,
-  MatDialogRef,
-  MatDialogTitle,
-  MatDialogContent,
-  MatDialogActions,
-  MatDialogClose,
-} from '@angular/material/dialog';
-import { Component, Inject } from '@angular/core';
-import { BillListService } from '../../bill-list.service';
-import { MatButtonModule } from '@angular/material/button';
+// src/app/admin/accounts/bill-list/dialog/delete/delete.component.ts
 
-export interface DialogData {
-  id: number;
+import { Component, Inject } from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
+import { PaymentService } from '../../../payment.service';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { BillList } from '../../../payment.model';
+
+// Import các module của Material mà template đang sử dụng
+import { MatListModule } from '@angular/material/list';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatButtonModule } from '@angular/material/button';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+
+export interface BillListDeleteData {
+  id: string;
   patientName: string;
   doctorName: string;
   total: string;
 }
+
 @Component({
   selector: 'app-bill-list-delete',
   templateUrl: './delete.component.html',
   styleUrls: ['./delete.component.scss'],
+  standalone: true,
   imports: [
-    MatDialogTitle,
-    MatDialogContent,
-    MatDialogActions,
-    MatButtonModule,
-    MatDialogClose,
+    CommonModule,
+    FormsModule,
+    MatDialogModule,
+    MatSnackBarModule,
+    MatListModule,
+    MatDividerModule,
+    MatButtonModule
   ]
 })
 export class BillListDeleteComponent {
   constructor(
     public dialogRef: MatDialogRef<BillListDeleteComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: DialogData,
-    public billListService: BillListService
+    @Inject(MAT_DIALOG_DATA) public data: BillListDeleteData,
+    private paymentService: PaymentService,
+    private snackBar: MatSnackBar
   ) { }
+
   confirmDelete(): void {
-    this.billListService.deleteBill(this.data.id).subscribe({
-      next: (response) => {
-        // console.log('Delete Response:', response);
-        this.dialogRef.close(response); // Close with the response data
-        // Handle successful deletion, e.g., refresh the table or show a notification
+    const paymentId = Number(this.data.id);
+    this.paymentService.deleteBill(paymentId).subscribe({
+      next: () => {
+        this.snackBar.open('Delete Record Successfully!', '', {
+          duration: 2000,
+          panelClass: 'snackbar-success'
+        });
+        this.dialogRef.close(true);
       },
       error: (error) => {
-        console.error('Delete Error:', error);
-        // Handle the error appropriately
-      },
+        console.error('Delete failed:', error);
+        this.snackBar.open('Failed to delete record. Please try again.', '', {
+          duration: 3000,
+          panelClass: 'snackbar-danger'
+        });
+        this.dialogRef.close(false);
+      }
     });
+  }
+
+  onCancel(): void {
+    this.dialogRef.close(false);
   }
 }

@@ -1,0 +1,129 @@
+.chat-history {
+    background-color: transparent;
+    /* Không nền xám chung */
+    padding: 0;
+
+    ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+
+        li {
+            margin-bottom: 24px;
+            /* Khoảng cách giữa 2 tin nhắn */
+            position: relative;
+
+            /* Clear float */
+            &::after {
+                content: "";
+                display: block;
+                clear: both;
+            }
+        }
+    }
+}
+
+/* --- 2. Tên người gửi (“Tôi” hoặc tên đối phương) --- */
+.message-sender-name {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 4px;
+    line-height: 1.2;
+
+    &.left {
+        text-align: left;
+        margin-left: 12px;
+    }
+
+    &.right {
+        text-align: right;
+        margin-right: 12px;
+    }
+}
+
+/* --- 3. Bubble chứa tin nhắn (wrapper) --- */
+.message-bubble {
+    display: inline-block;
+    position: relative;
+    max-width: 65%;
+    /* Bubble tối đa 65% độ rộng khung cha */
+    padding: 0;
+    /* Padding bên trong chuyển hẳn vào .message-text */
+    margin: 0;
+    /* Xóa margin nếu có */
+}
+
+/* --- 4. Các tuy chỉnh chung cho .message-text (bên trong bubble) --- */
+.message-text {
+    margin: 0;
+    word-break: break-word;
+    font-size: 0.95rem;
+    line-height: 1.4rem;
+    color: inherit;
+    /* Thừa hưởng màu từ cha */
+    background-color: transparent;
+    /* Mặc định trong suốt, override ở below */
+    padding: 12px 20px;
+    /* Padding “rộng” hơn giúp text không quá sát viền */
+    border-radius: 20px;
+    /* Bo góc mềm mại hơn */
+    position: relative;
+}
+
+/* --- 5. Thời gian (bên trong bubble, dưới text) --- */
+.message-time {
+    display: block;
+    font-size: 0.75rem;
+    color: #666;
+    margin-top: 6px;
+    opacity: 0.75;
+}
+
+/* --- 6. Định nghĩa cho bubble của đối phương (căn trái) --- */
+.other-message {
+    float: left;
+    margin-left: 8px;
+    /* Giãn nhẹ so với mép */
+
+    /* Phần thực sự có nền và viền */
+    .message-text {
+        background-color: #f1f2f5;
+        /* Xám nhạt dịu mắt */
+        border: 1px solid #e0e0e0;
+        /* Viền nhẹ */
+        color: #222;
+    }
+
+    /* Căn lề cho thời gian sát đáy bubble */
+    .message-time {
+        text-align: left;
+        padding-left: 4px;
+        /* Cách left 4px để hơi giật vào bên trong bubble */
+    }
+}
+
+/* --- 7. Định nghĩa cho bubble của tôi (căn phải) --- */
+.my-message {
+    float: right;
+    margin-right: 8px;
+
+    .message-text {
+        background-color: #d0f0db;
+        /* Xanh pastel nhẹ */
+        border: 1px solid #c1e1c6;
+        /* Viền xanh nhạt */
+        color: #111;
+    }
+
+    .message-time {
+        text-align: right;
+        padding-right: 4px;
+        /* Cách right 4px để hơi giật vào */
+    }
+}
+
+/* --- 8. Giữ khoảng padding đủ, không che mất tin cuối --- */
+.chat-history {
+    padding-bottom: 12px;
+}

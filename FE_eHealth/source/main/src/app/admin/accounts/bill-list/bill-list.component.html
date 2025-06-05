@@ -130,7 +130,10 @@
                         <span class="badge" style="background-color: #28a745; color: white;">{{ row.status }}</span>
                       </div>
                       <div *ngSwitchCase="'Unpaid'">
-                        <span class="badge" style="background-color: #d32d2d; color: black;">{{ row.status }}</span>
+                        <span class="badge" style="background-color: #1948e2; color: white;">{{ row.status }}</span>
+                      </div>
+                      <div *ngSwitchCase="'Cancelled'">
+                        <span class="badge" style="background-color: #d32d2d; color: white;">{{ row.status }}</span>
                       </div>
                       <div *ngSwitchCase="'Pending'">
                         <span class="badge" style="background-color: #d9e443; color: white;">{{ row.status }}</span>

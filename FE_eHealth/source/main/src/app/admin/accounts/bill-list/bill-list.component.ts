@@ -21,8 +21,8 @@ import {
   MatOptionModule,
   MatRippleModule,
 } from '@angular/material/core';
-import { BillListService } from './bill-list.service';
-import { BillList, PaymentDto } from './bill-list.model';
+import { PaymentService } from '../payment.service';
+import { BillList, PaymentDto } from '../payment.model';
 import { formatDate, DatePipe, CommonModule, NgClass } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { BreadcrumbComponent } from '@shared/components/breadcrumb/breadcrumb.component';
@@ -39,7 +39,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { rowsAnimation, TableExportUtil } from '@shared';
 import { FeatherIconsComponent } from '@shared/components/feather-icons/feather-icons.component';
-import { BillListFormComponent } from './dialog/form-dialog/form-dialog.component';
+import { FormDialogComponent } from './dialog/form-dialog/form-dialog.component';
 import { BillListDeleteComponent } from './dialog/delete/delete.component';
 import { Direction } from '@angular/cdk/bidi';
 import { AppointmentService } from '../../appointment/bookappointment/appointment.service';
@@ -112,7 +112,7 @@ export class BillListComponent implements OnInit, OnDestroy {
   constructor(
     public httpClient: HttpClient,
     public dialog: MatDialog,
-    public billListService: BillListService,
+    public billListService: PaymentService,
     private snackBar: MatSnackBar,
     private appointmentService: AppointmentService,
     private authService: AuthService
@@ -193,22 +193,17 @@ export class BillListComponent implements OnInit, OnDestroy {
     this.dataSource.filter = filterValue;
   }
 
-  addNew() {
-    this.openDialog('add');
-  }
-
   editCall(row: BillList) {
     this.openDialog('edit', row);
   }
 
   openDialog(action: 'add' | 'edit', data?: BillList) {
-    let varDirection: Direction;
+    let varDirection: Direction = 'ltr';
     if (localStorage.getItem('isRtl') === 'true') {
       varDirection = 'rtl';
-    } else {
-      varDirection = 'ltr';
     }
-    const dialogRef = this.dialog.open(BillListFormComponent, {
+
+    const dialogRef = this.dialog.open(FormDialogComponent, {
       width: '60vw',
       maxWidth: '100vw',
       data: { billList: data, action },
@@ -217,50 +212,76 @@ export class BillListComponent implements OnInit, OnDestroy {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        if (action === 'add') {
-          this.dataSource.data = [result, ...this.dataSource.data];
-        } else {
-          this.updateRecord(result);
-        }
-        this.refreshTable();
-        this.showNotification(
-          action === 'add' ? 'snackbar-success' : 'black',
-          `${action === 'add' ? 'Add' : 'Edit'} Record Successfully...!!!`,
-          'bottom',
-          'center'
-        );
+      if (!result) {
+        return; // Người dùng hủy dialog, không làm gì cả
       }
+      this.updateRecordStatus(result);
+      this.refreshTable();
+      this.showNotification(
+        'black',
+        'Edit Record Successfully...!!!',
+        'bottom',
+        'center'
+      );
     });
   }
 
-  private updateRecord(updatedRecord: BillList) {
+  private updateRecordStatus(updatedRecord: { id: string; status: string }) {
     const index = this.dataSource.data.findIndex(
       (record) => record.id === updatedRecord.id
     );
-    if (index !== -1) {
-      this.dataSource.data[index] = updatedRecord;
-      this.dataSource._updateChangeSubscription();
-    }
+    if (index === -1) return;
+
+    // Lấy bản ghi cũ (instance của BillList)
+    const existing = this.dataSource.data[index];
+
+    // Tạo một object dạng Partial<BillList>, dùng constructor để khởi tạo đầy đủ
+    const partial: Partial<BillList> = {
+      id: existing.id,
+      img: existing.img,
+      patientName: existing.patientName,
+      doctorName: existing.doctorName,
+      // Trường status mới:
+      status: updatedRecord.status,
+      initialAmount: existing.initialAmount,
+      tax: existing.tax,
+      date: existing.date,
+      discount: existing.discount,
+      total: existing.total
+    };
+
+    // Tạo instance mới của BillList, đảm bảo có đủ getRandomID() và logic trong constructor
+    const merged = new BillList(partial);
+
+    // Gán lại vào dataSource
+    this.dataSource.data[index] = merged;
+
+    // Cho table refresh
+    this.dataSource._updateChangeSubscription();
   }
 
+
   deleteItem(row: BillList) {
+    // Mở dialog, truyền vào data cần hiển thị (id, patientName, doctorName, total)
     const dialogRef = this.dialog.open(BillListDeleteComponent, {
-      data: row,
+      data: {
+        id: row.id,
+        patientName: row.patientName,
+        doctorName: row.doctorName,
+        total: row.total
+      }
     });
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
+
+    dialogRef.afterClosed().subscribe((result: boolean) => {
+      // result === true nghĩa là xóa thành công
+      if (result === true) {
+        // Loại bỏ dòng đó khỏi dataSource
         this.dataSource.data = this.dataSource.data.filter(
           (record) => record.id !== row.id
         );
         this.refreshTable();
-        this.showNotification(
-          'snackbar-danger',
-          'Delete Record Successfully...!!!',
-          'bottom',
-          'center'
-        );
       }
+      // Nếu result === false hoặc undefined, không làm gì (user hủy hoặc xóa thất bại)
     });
   }
 

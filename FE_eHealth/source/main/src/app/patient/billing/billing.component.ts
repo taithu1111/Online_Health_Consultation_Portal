@@ -58,14 +58,24 @@ export class BillingComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    const patient = this.auth.getCurrentUser();
-    this.patientId = patient?.userId ?? 0;
-    console.log('Loaded patientId from AuthService:', this.patientId);
-    if (!this.patientId) {
+    const userId = this.auth.getCurrentUser()?.userId;
+    if (!userId) {
+      console.error('No user ID found from auth service');
       return;
     }
-    this.loadAll();
+
+    this.auth.getPatientIdByUserId(userId).subscribe({
+      next: (patientId: number) => {
+        this.patientId = patientId;
+        console.log('Mapped userId to patientId:', this.patientId);
+        this.loadAll();
+      },
+      error: err => {
+        console.error('Failed to get patientId from userId', err);
+      }
+    });
   }
+
 
   private loadAll() {
     this.paySvc.getPaymentsByPatientId(this.patientId).subscribe({

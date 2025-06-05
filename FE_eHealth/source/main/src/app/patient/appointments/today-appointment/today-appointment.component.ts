@@ -57,26 +57,36 @@ export class TodayAppointmentComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    const patientId = Number(this.authService.getCurrentUser()?.userId); // hoặc lấy dynamic từ context
-    this.svc.getAppointmentsByPatientId(patientId).subscribe(arr => {
-      // Map dữ liệu trả về về UiAppointment
-      this.allAppointments = arr.map((item: any) => {
-        const dt = new Date(item.appointmentDateTime);
-        return {
-          id: item.id,
-          doctorName: item.doctorName,
-          appointmentDate: this.datePipe.transform(dt, 'yyyy-MM-dd')!,
-          appointmentTime: this.datePipe.transform(dt, 'HH:mm:ss')!,
-          status: item.status ?? 'Pending',
-          type: item.type,
-          notes: item.notes ?? '',
-          diagnosis: item.diagnosis ?? 'No Diagnosis'
-        };
-      });
-      // Chạy filter mặc định là ngày hôm nay
-      this.onFilterDate(new Date());
+    const userId = Number(this.authService.getCurrentUser()?.userId);
+
+    this.authService.getPatientIdByUserId(userId).subscribe({
+      next: (patientId: number) => {
+        this.svc.getAppointmentsByPatientId(patientId).subscribe(arr => {
+          // Map dữ liệu trả về
+          this.allAppointments = arr.map((item: any) => {
+            const dt = new Date(item.appointmentDateTime);
+            return {
+              id: item.id,
+              doctorName: item.doctorName,
+              appointmentDate: this.datePipe.transform(dt, 'yyyy-MM-dd')!,
+              appointmentTime: this.datePipe.transform(dt, 'HH:mm:ss')!,
+              status: item.status ?? 'Pending',
+              type: item.type,
+              notes: item.notes ?? '',
+              diagnosis: item.diagnosis ?? 'No Diagnosis'
+            };
+          });
+
+          // Chạy filter mặc định là ngày hôm nay
+          this.onFilterDate(new Date());
+        });
+      },
+      error: err => {
+        console.error('Failed to get patientId from userId', err);
+      }
     });
   }
+
 
   onFilterDate(d: Date | null) {
     this.filterDate = d;

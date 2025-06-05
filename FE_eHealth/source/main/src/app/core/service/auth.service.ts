@@ -185,4 +185,18 @@ export class AuthService {
     return this.getUserFromStorage();
   }
 
+  public getCurrentUserId(): number | null {
+    const userId = this.getUserFromStorage();
+    if (!userId) return null;
+    return (userId as any).id ?? null;
+  }
+
+  getPatientIdByUserId(userId: number): Observable<number> {
+    return this.http.get<number>(`http://localhost:5175/api/getById/getPatientIdByUserId/${userId}`);
+  }
+
+  getDoctorIdByUserId(userId: number): Observable<number> {
+    return this.http.get<number>(`http://localhost:5175/api/getById/getDoctorIdByUserId/${userId}`);
+  }
+
 }
