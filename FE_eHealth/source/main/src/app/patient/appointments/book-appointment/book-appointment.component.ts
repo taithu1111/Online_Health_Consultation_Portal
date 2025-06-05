@@ -40,22 +40,32 @@ export class BookAppointmentComponent {
   isSubmitting = false;
 
   constructor(
-    private authService: AuthService, // inject AuthService to get patientId
+    private authService: AuthService,
     private fb: UntypedFormBuilder,
     private appointmentService: AppointmentService,
-    private calendarService: CalendarService   //  inject CalendarService
+    private calendarService: CalendarService
   ) {
-    const patientId = Number(this.authService.getCurrentUser()?.userId); // get id auth/user context
     this.bookingForm = this.fb.group({
-      patientId: [patientId, [Validators.required]],   // lấy từ auth/user context
+      patientId: [null, [Validators.required]], // gán sau khi có dữ liệu từ API
       doctorId: ['', [Validators.required]],
-      doa: ['', [Validators.required]],        // Date
-      timeSlot: ['', [Validators.required]],   // "08:00:00"
-      type: ['', [Validators.required]],       // "online" or "in-person"
+      doa: ['', [Validators.required]],
+      timeSlot: ['', [Validators.required]],
+      type: ['', [Validators.required]],
       notes: [''],
       uploadFile: ['']
     });
+
+    const userId = Number(this.authService.getCurrentUser()?.userId);
+    this.authService.getPatientIdByUserId(userId).subscribe({
+      next: (patientId: number) => {
+        this.bookingForm.patchValue({ patientId });
+      },
+      error: err => {
+        console.error('Failed to load patientId from userId', err);
+      }
+    });
   }
+
 
   get f() {
     return this.bookingForm.controls;

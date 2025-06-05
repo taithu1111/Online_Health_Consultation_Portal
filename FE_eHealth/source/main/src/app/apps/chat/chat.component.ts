@@ -103,7 +103,7 @@ export class ChatComponent implements OnInit {
    */
   getSelectedContactAvatar(): string {
     const user = this.contacts.find(u => u.id === this.selectedContactId!);
-    return user ? (user.avatarUrl || 'assets/images/user/default-avatar.png') : 'assets/images/user/default-avatar.png';
+    return user ? (user.avatarUrl || 'assets/images/user/doctor.jpg') : 'assets/images/user/doctor.jpg';
   }
 
   // Khi user click vào 1 contact trong cột trái

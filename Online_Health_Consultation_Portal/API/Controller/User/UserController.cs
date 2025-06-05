@@ -20,6 +20,7 @@ namespace Online_Health_Consultation_Portal.API.Controllers.User
             _mediator = mediator;
         }
 
+
         [HttpGet("profile")]
         public async Task<IActionResult> GetProfile()
         {

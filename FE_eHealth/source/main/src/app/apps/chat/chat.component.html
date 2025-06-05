@@ -23,7 +23,7 @@
                       <!-- Lặp contacts -->
                       <li class="clearfix" *ngFor="let user of contacts"
                         [ngClass]="user.id === selectedContactId ? 'active' : ''" (click)="selectContact(user)">
-                        <img [src]="user.avatarUrl || 'assets/images/user/default-avatar.png'" alt="avatar" />
+                        <img [src]="user.avatarUrl || 'assets/images/user/doctor.jpg'" alt="avatar" />
                         <div class="about">
                           <div class="name">{{ user.fullName }}</div>
                           <div class="status">

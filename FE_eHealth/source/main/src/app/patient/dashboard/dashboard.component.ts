@@ -130,66 +130,82 @@ export class DashboardComponent implements OnInit {
   }
 
   loadUpcomingAppointments() {
-    // const patientId = Number(this.authService.getDecodedToken()?.nameid || 0);
-    const patient = this.authService.getCurrentUser();
-    const patientId = patient?.userId ?? 0;
-    if (!patientId) {
+    const userId = this.authService.getCurrentUser()?.userId;
+    if (!userId) {
       this.upcomingAppointments = [];
       return;
     }
-    this.appointmentService.getAppointmentsByPatientId(patientId).subscribe({
-      next: (apiData) => {
-        this.upcomingAppointments = apiData.map((item: any) => {
-          const dt = new Date(item.appointmentDateTime);
-          return {
-            id: item.id,
-            doctorName: item.doctorName,
-            appointmentDate: this.datePipe.transform(dt, 'dd MMM yyyy'),
-            appointmentTime: this.datePipe.transform(dt, 'HH:mm'),
-            status: item.status ?? 'Pending',
-            type: item.type,
-            notes: item.notes,
-            diagnosis: item.diagnosis ?? 'No Diagnosis',
-            contactNumber: item.doctor?.contactNumber ?? 'N/A',
-          };
-        });
-      },
-      error: (err) => {
-        console.error('Failed to load appointments:', err);
-        this.upcomingAppointments = [];
-      },
-    });
-  }
 
-  loadBilling() {
-    const patientId = this.authService.getCurrentUser()?.userId ?? 0;
-    if (!patientId) return;
-
-    this.paymentService.getPaymentsByPatientId(patientId).subscribe({
-      next: payments => {
-        const appointmentCalls = payments.map(p =>
-          this.appointmentService.getAppointmentById(p.appointmentId)
-        );
-
-        forkJoin(appointmentCalls).subscribe(appointments => {
-          this.billingData = payments.map((p, idx) => {
-            const appt = appointments[idx];
-            const tax = p.amount * 0.1;
-            const discount = 5;
-            const total = +(p.amount + tax - discount).toFixed(2);
-
-            return {
-              invoiceNo: `P${p.id}`,
-              date: new Date(appt?.appointmentDateTime ?? new Date()),
-              total
-            };
-          });
+    this.authService.getPatientIdByUserId(userId).subscribe({
+      next: (patientId: number) => {
+        this.appointmentService.getAppointmentsByPatientId(patientId).subscribe({
+          next: (apiData) => {
+            this.upcomingAppointments = apiData.map((item: any) => {
+              const dt = new Date(item.appointmentDateTime);
+              return {
+                id: item.id,
+                doctorName: item.doctorName,
+                appointmentDate: this.datePipe.transform(dt, 'dd MMM yyyy'),
+                appointmentTime: this.datePipe.transform(dt, 'HH:mm'),
+                status: item.status ?? 'Pending',
+                type: item.type,
+                notes: item.notes,
+                diagnosis: item.diagnosis ?? 'No Diagnosis',
+                contactNumber: item.doctor?.contactNumber ?? 'N/A',
+              };
+            });
+          },
+          error: err => {
+            console.error('Failed to load appointments by patientId', err);
+            this.upcomingAppointments = [];
+          }
         });
       },
       error: err => {
-        console.error('Failed to load billing data', err);
+        console.error('Failed to map userId to patientId', err);
+        this.upcomingAppointments = [];
       }
     });
   }
+
+
+  loadBilling() {
+    const userId = this.authService.getCurrentUser()?.userId;
+    if (!userId) return;
+
+    this.authService.getPatientIdByUserId(userId).subscribe({
+      next: (patientId: number) => {
+        this.paymentService.getPaymentsByPatientId(patientId).subscribe({
+          next: payments => {
+            const appointmentCalls = payments.map(p =>
+              this.appointmentService.getAppointmentById(p.appointmentId)
+            );
+
+            forkJoin(appointmentCalls).subscribe(appointments => {
+              this.billingData = payments.map((p, idx) => {
+                const appt = appointments[idx];
+                const tax = p.amount * 0.1;
+                const discount = 5;
+                const total = +(p.amount + tax - discount).toFixed(2);
+
+                return {
+                  invoiceNo: `P${p.id}`,
+                  date: new Date(appt?.appointmentDateTime ?? new Date()),
+                  total
+                };
+              });
+            });
+          },
+          error: err => {
+            console.error('Failed to load payments by patientId', err);
+          }
+        });
+      },
+      error: err => {
+        console.error('Failed to get patientId from userId', err);
+      }
+    });
+  }
+
 
 }

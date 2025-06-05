@@ -129,37 +129,46 @@ export class UpcomingAppointmentComponent implements OnInit, OnDestroy {
   }
 
   loadData() {
-    const patientId = Number(this.authService.getCurrentUser()?.userId); // Get current user ID from decoded token
+    const userId = Number(this.authService.getCurrentUser()?.userId);
     this.isLoading = true;
-    this.appointmentService.getAppointmentsByPatientId(patientId).subscribe({
-      next: apiData => {
-        // map API fields → UI model
-        this.dataSource.data = apiData.map((item: any) => {
-          const dt = new Date(item.appointmentDateTime);
-          return {
-            id: item.id,
-            doctorName: item.doctorName,
-            appointmentDate: this.datePipe.transform(dt, 'yyyy-MM-dd')!,
-            appointmentTime: this.datePipe.transform(dt, 'HH:mm:ss')!,
-            status: item.status ?? 'Pending',
-            type: item.type,
-            notes: item.notes,
-            diagnosis: item.diagnosis ?? 'No Diagnosis',
-            doctor: item.doctor || null,
-            date: this.datePipe.transform(dt, 'yyyy-MM-dd')!,
-            time: this.datePipe.transform(dt, 'HH:mm:ss')!,
-            injury: item.injury || null,
-          } as unknown as UpcomingAppointment;
+
+    this.authService.getPatientIdByUserId(userId).subscribe({
+      next: (patientId: number) => {
+        this.appointmentService.getAppointmentsByPatientId(patientId).subscribe({
+          next: (apiData) => {
+            this.dataSource.data = apiData.map((item: any) => {
+              const dt = new Date(item.appointmentDateTime);
+              return {
+                id: item.id,
+                doctorName: item.doctorName,
+                appointmentDate: this.datePipe.transform(dt, 'yyyy-MM-dd')!,
+                appointmentTime: this.datePipe.transform(dt, 'HH:mm:ss')!,
+                status: item.status ?? 'Pending',
+                type: item.type,
+                notes: item.notes,
+                diagnosis: item.diagnosis ?? 'No Diagnosis',
+                doctor: item.doctor || null,
+                date: this.datePipe.transform(dt, 'yyyy-MM-dd')!,
+                time: this.datePipe.transform(dt, 'HH:mm:ss')!,
+                injury: item.injury || null,
+              } as unknown as UpcomingAppointment;
+            });
+            this.isLoading = false;
+            this.refreshTable();
+          },
+          error: err => {
+            console.error('Failed to load appointments', err);
+            this.isLoading = false;
+          }
         });
-        this.isLoading = false;
-        this.refreshTable();
       },
       error: err => {
-        console.error(err);
+        console.error('Failed to get patientId from userId', err);
         this.isLoading = false;
       }
     });
   }
+
 
   private refreshTable() {
     this.paginator.pageIndex = 0;

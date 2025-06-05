@@ -69,6 +69,7 @@ export class CalendarComponent implements OnInit {
     { value: 'Unavailable', checked: true }
   ];
   private rawSchedules: ScheduleDto[] = [];
+  private doctorId!: number;
 
   constructor(
     private calendarService: CalendarService,
@@ -77,7 +78,18 @@ export class CalendarComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.loadSchedules(this.getCurrentDoctorId());
+    const userId = this.authService.currentUserValue?.userId;
+    if (!userId) return;
+
+    this.authService.getDoctorIdByUserId(userId).subscribe({
+      next: (doctorId: number) => {
+        this.doctorId = doctorId;
+        this.loadSchedules(this.doctorId);
+      },
+      error: err => {
+        console.error('Failed to get doctorId from userId', err);
+      }
+    });
   }
 
   private loadSchedules(doctorId: number) {
@@ -88,18 +100,60 @@ export class CalendarComponent implements OnInit {
       });
   }
 
+  // private renderEvents() {
+  //   this.calendarOptions.events = this.rawSchedules
+  //     .filter(s => this.filterEvent(s))
+  //     .map(s => ({
+  //       id: s.id.toString(),
+  //       title: `${s.startTime.slice(0, 5)} - ${s.endTime.slice(0, 5)}`,
+  //       start: `${s.date}T${s.startTime}`,
+  //       end: `${s.date}T${s.endTime}`,
+  //       backgroundColor: s.isAvailable ? undefined : 'lightgray',
+  //       description: s.description // hiện thông tin mô tả khi hover
+  //     } as EventInput));
+  // }
   private renderEvents() {
     this.calendarOptions.events = this.rawSchedules
       .filter(s => this.filterEvent(s))
-      .map(s => ({
-        id: s.id.toString(),
-        title: `${s.startTime.slice(0, 5)} - ${s.endTime.slice(0, 5)}`,
-        start: `${s.date}T${s.startTime}`,
-        end: `${s.date}T${s.endTime}`,
-        backgroundColor: s.isAvailable ? undefined : 'lightgray',
-        description: s.description // hiện thông tin mô tả khi hover
-      } as EventInput));
+      .map(s => {
+        const isAllDayMultiDay =
+          s.startTime === "00:00:00" &&
+          s.endTime === "00:00:00";
+
+        const start = `${s.date}T${s.startTime}`;
+        const end = `${s.date}T${s.endTime}`;
+
+        // Nếu là lịch kéo dài cả ngày (off), tạo 1 block nguyên ngày
+        if (isAllDayMultiDay) {
+          const startDate = new Date(s.date);
+          const endDate = new Date(startDate);
+          endDate.setDate(endDate.getDate() + 1); // +1 để bao trọn ngày
+
+          return {
+            id: s.id.toString(),
+            title: s.description || "Unavailable",
+            start: startDate.toISOString().split("T")[0],
+            end: endDate.toISOString().split("T")[0],
+            allDay: true,
+            backgroundColor: "#3b82f6", // xanh
+            borderColor: "transparent",
+            textColor: "white",
+            description: s.description
+          } as EventInput;
+        }
+
+        // Còn lại là sự kiện có giờ trong cùng ngày
+        return {
+          id: s.id.toString(),
+          title: `${s.startTime.slice(0, 5)} - ${s.endTime.slice(0, 5)}`,
+          start: start,
+          end: end,
+          backgroundColor: s.isAvailable ? undefined : 'lightgray',
+          description: s.description
+        } as EventInput;
+      });
   }
+
 
   private filterEvent(s: ScheduleDto) {
     return (s.isAvailable && this.filters[0].checked)
@@ -116,35 +170,53 @@ export class CalendarComponent implements OnInit {
   trackByFilter(i: number, f: any) { return f.value; }
 
   addNewEvent() {
-    const doctorId = this.getCurrentDoctorId();
-    const dialogRef = this.dialog.open(FormDialogComponent, {
-      data: { date: new Date(), slots: [] as AvailableSlotDto[] }
-    });
-    dialogRef.afterClosed().subscribe((res: any) => {
-      if (!res) return;
-      const cmd: CreateScheduleCommand = {
-        doctorId,
-        date: res.date.toISOString().split('T')[0],
-        startTime: res.startTime + ':00',
-        endTime: res.endTime + ':00',
-        location: res.location,
-        description: res.description
-      };
-      this.calendarService.createSchedule(cmd)
-        .subscribe(() => {
-          this.loadSchedules(this.getCurrentDoctorId());  // reload lại toàn bộ lịch
+    const userId = this.authService.currentUserValue?.userId;
+
+    if (!userId) {
+      alert('Không tìm thấy userId, vui lòng đăng nhập lại!');
+      return;
+    }
+
+    this.authService.getDoctorIdByUserId(userId)
+      .subscribe((doctorId) => {
+        this.doctorId = doctorId;
+
+        const dialogRef = this.dialog.open(FormDialogComponent, {
+          data: {
+            action: 'create',
+            date: new Date(),
+            slots: [] as AvailableSlotDto[],
+            doctorId: doctorId
+          }
         });
-    });
+
+        dialogRef.afterClosed().subscribe((res: any) => {
+          if (!res) return;
+
+          const cmd: CreateScheduleCommand = {
+            doctorId: doctorId,
+            date: res.date.toISOString().split('T')[0],
+            startTime: res.startTime + ':00',
+            endTime: res.endTime + ':00',
+            location: res.location,
+            description: res.description
+          };
+
+          this.calendarService.createSchedule(cmd).subscribe(() => {
+            this.loadSchedules(doctorId);
+          });
+        });
+      });
   }
 
   private handleDateSelect(selectInfo: DateSelectArg) {
-    const doctorId = this.getCurrentDoctorId();
+    const doctorId = this.doctorId;
     const date = new Date(selectInfo.start);
     const isoDate = date.toISOString().split('T')[0];
     this.calendarService.getAvailableSlots(doctorId, isoDate)
       .subscribe(slots => {
         const dialogRef = this.dialog.open(FormDialogComponent, {
-          data: { date, slots }
+          data: { date, slots, doctorId }
         });
         dialogRef.afterClosed().subscribe((res: any) => {
           if (!res) return;
@@ -165,9 +237,9 @@ export class CalendarComponent implements OnInit {
   private handleEventClick(clickInfo: EventClickArg) {
     const id = +clickInfo.event.id;
     const date = clickInfo.event.start as Date;
-    const doctorId = this.getCurrentDoctorId();
+    const doctorId = this.doctorId;
     const dialogRef = this.dialog.open(FormDialogComponent, {
-      data: { scheduleId: id }
+      data: { scheduleId: id, date, doctorId }
     });
     dialogRef.afterClosed().subscribe((res: any) => {
       if (!res) return;
@@ -187,9 +259,5 @@ export class CalendarComponent implements OnInit {
           .subscribe(() => this.loadSchedules(doctorId));
       }
     });
-  }
-
-  private getCurrentDoctorId(): number {
-    return this.authService.currentUserValue?.userId || 0;
   }
 }

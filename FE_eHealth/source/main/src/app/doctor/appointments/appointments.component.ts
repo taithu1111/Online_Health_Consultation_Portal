@@ -103,30 +103,38 @@ export class AppointmentsComponent implements OnInit, OnDestroy {
   }
 
   loadData(): void {
+    const currentUser = this.authService.getCurrentUser();
+    const userId = currentUser?.userId ?? 0;
 
-    const doctor = this.authService.getCurrentUser();
-    const doctorId = doctor?.userId ?? 0;
-    this.isLoading = true;
-    this.appointmentService.getAppointmentsByDoctorId(doctorId)
-      .subscribe({
-        next: (list) => {
-          const mapped = list.map(a => ({
-            ...a,
-            phoneNumber: a.phone || '',
-            appointmentDate: formatDate(a.appointmentDateTime, 'yyyy-MM-dd', 'en-GB'),
-            appointmentTime: formatDate(a.appointmentDateTime, 'HH:mm', 'en-GB'),
-          }));
-          this.dataSource.data = mapped;
-          this.dataSource.paginator = this.paginator;
-          this.dataSource.sort = this.sort;
-          this.isLoading = false;
-        },
-        error: err => {
-          console.error(err);
-          this.snackBar.open('Không tải được lịch hẹn', '', { duration: 2000 });
-          this.isLoading = false;
-        }
-      });
+    this.authService.getDoctorIdByUserId(userId).subscribe({
+      next: (doctorId: number) => {
+        console.log('Doctor ID:', doctorId);
+        this.isLoading = true;
+
+        this.appointmentService.getAppointmentsByDoctorId(doctorId)
+          .subscribe({
+            next: (list) => {
+              const mapped = list.map(a => ({
+                ...a,
+                phoneNumber: a.phone || '',
+                appointmentDate: formatDate(a.appointmentDateTime, 'yyyy-MM-dd', 'en-GB'),
+                appointmentTime: formatDate(a.appointmentDateTime, 'HH:mm', 'en-GB'),
+              }));
+              this.dataSource.data = mapped;
+              this.dataSource.paginator = this.paginator;
+              this.dataSource.sort = this.sort;
+              this.isLoading = false;
+            },
+            error: err => {
+              console.error('Failed to load appointments', err);
+              this.isLoading = false;
+            }
+          });
+      },
+      error: err => {
+        console.error('Failed to get doctorId from userId', err);
+      }
+    });
   }
 
   applyFilter(event: Event): void {

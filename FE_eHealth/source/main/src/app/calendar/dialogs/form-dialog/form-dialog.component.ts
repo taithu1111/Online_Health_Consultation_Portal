@@ -19,6 +19,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { forkJoin } from 'rxjs';
 import {
   OwlDateTimeModule,
   OwlNativeDateTimeModule
@@ -34,6 +35,7 @@ import {
 export interface DialogData {
   action: 'create' | 'edit';
   calendar?: ScheduleDto;
+  doctorId: number;
 }
 
 @Component({
@@ -72,6 +74,7 @@ export class FormDialogComponent {
     this.calendar = data.calendar ?? ({} as ScheduleDto);
     this.dialogTitle = this.action === 'edit' ? 'Edit Event' : 'New Event';
     this.showDeleteBtn = this.action === 'edit';
+    console.log('FormDialogComponent received data:', data);
 
     // Khởi tạo form, map các field theo template
     this.calendarForm = this.fb.group({
@@ -93,13 +96,7 @@ export class FormDialogComponent {
       details: ['']
     });
   }
-  // getErrorMessage(ctrl: UntypedFormControl): string {
-  //   if (!ctrl) return '';
-  //   if (ctrl.hasError('required')) {
-  //     return 'This field is required';
-  //   }
-  //   return '';
-  // }
+
   getErrorMessage(ctrl: AbstractControl | null): string {
     if (!ctrl) return '';
     if (ctrl.hasError('required')) {
@@ -112,13 +109,23 @@ export class FormDialogComponent {
     if (this.calendarForm.invalid) {
       return;
     }
+
+    if (!this.data.doctorId) {
+      console.error('Missing doctorId in dialog data');
+      alert('Không có doctorId! Vui lòng kiểm tra lại.');
+      return;
+    }
+
     const f = this.calendarForm.value;
+    const start = new Date(f.startDate);
+    const end = new Date(f.endDate);
+
     if (this.action === 'edit') {
       const cmd: UpdateScheduleCommand = {
         id: f.id,
-        date: f.startDate.toISOString().split('T')[0],
-        startTime: f.startDate.toTimeString().slice(0, 8),
-        endTime: f.endDate.toTimeString().slice(0, 8),
+        date: start.toISOString().split('T')[0],
+        startTime: start.toTimeString().slice(0, 8),
+        endTime: end.toTimeString().slice(0, 8),
         location: f.title,
         description: f.details
       };
@@ -126,18 +133,43 @@ export class FormDialogComponent {
         .updateSchedule(cmd.id, cmd)
         .subscribe(() => this.dialogRef.close({ action: 'edit', data: cmd }));
     } else {
-      const date: Date = f.startDate;
-      const cmd: CreateScheduleCommand = {
-        doctorId: this.calendar.doctorId || 2,  // hoặc truyền doctorId qua data
-        date: f.startDate.toISOString().split('T')[0],
-        startTime: f.startDate.toTimeString().slice(0, 8),
-        endTime: f.endDate.toTimeString().slice(0, 8),
-        location: f.title,
-        description: f.details
-      };
-      this.calendarService
-        .createSchedule(cmd)
-        .subscribe((newId) => this.dialogRef.close({ action: 'create', data: { ...cmd, id: newId } }));
+      // Nếu cùng ngày thì tạo 1 lịch như cũ
+      if (start.toDateString() === end.toDateString()) {
+        const cmd: CreateScheduleCommand = {
+          doctorId: this.data.doctorId,
+          date: start.toISOString().split('T')[0],
+          startTime: start.toTimeString().slice(0, 8),
+          endTime: end.toTimeString().slice(0, 8),
+          location: f.title,
+          description: f.details
+        };
+        this.calendarService
+          .createSchedule(cmd)
+          .subscribe((newId) => this.dialogRef.close({ action: 'create', data: { ...cmd, id: newId } }));
+      } else {
+        // Nếu khác ngày => tạo nhiều lịch
+        const requests = [];
+        const loopDate = new Date(start);
+        while (loopDate <= end) {
+          const cmd: CreateScheduleCommand = {
+            doctorId: this.data.doctorId,
+            date: loopDate.toISOString().split('T')[0],
+            startTime: start.toTimeString().slice(0, 8),
+            endTime: end.toTimeString().slice(0, 8),
+            location: f.title,
+            description: f.details
+          };
+          requests.push(this.calendarService.createSchedule(cmd));
+          loopDate.setDate(loopDate.getDate() + 1);
+        }
+
+        forkJoin(requests).subscribe(() => {
+          this.dialogRef.close({ action: 'create-multiple' });
+        });
+      }
+
+      console.log('FormDialog received data:', this.data);
+      console.log('DoctorId passed to dialog:', this.data.doctorId);
     }
   }
 
