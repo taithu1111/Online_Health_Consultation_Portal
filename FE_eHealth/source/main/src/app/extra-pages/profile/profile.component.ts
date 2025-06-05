@@ -8,6 +8,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule } from '@angular/material/tabs';
 import { BreadcrumbComponent } from '@shared/components/breadcrumb/breadcrumb.component';
+import { BackendEnvironment, environment } from 'environments/environment';
 
 @Component({
   selector: 'app-profile',
@@ -35,7 +36,9 @@ export class ProfileComponent implements OnInit {
   ngOnInit(): void {
     this.userService.getProfile().subscribe({
       next: (data) => {
+        // console.log("data: " + data);
         this.profile = data;
+        // console.log("Profile:" + this.profile);
         this.loading = false;
       },
       error: (err) => {
@@ -44,5 +47,14 @@ export class ProfileComponent implements OnInit {
         this.loading = false;
       }
     });
+
+    console.log(this.profile.ImageUrl)
+  }
+  
+  get profileImageUrl(): string {
+    if (this.profile?.imageUrl) {
+      return `${BackendEnvironment.apiUrl}${this.profile.imageUrl}`;
+    }
+    return 'assets/images/user/default-user.jpg'; // Replace with your default image path
   }
 }

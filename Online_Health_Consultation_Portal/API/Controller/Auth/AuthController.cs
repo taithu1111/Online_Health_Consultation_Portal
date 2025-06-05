@@ -72,6 +72,7 @@ namespace Online_Health_Consultation_Portal.API.Controller.Auth
             return Ok(new { message = "Password reset successful." });
         }
 
+        [AllowAnonymous]
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterDto dto)
         {

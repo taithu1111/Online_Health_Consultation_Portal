@@ -33,21 +33,21 @@ export class PatientService {
     );
   }
 
-  updatePatient(patient: Patient): Observable<Patient> {
-    const profileData: UpdateUserProfileDto = {
-      fullName: patient.fullName,
-      gender: patient.gender,
-      dateOfBirth: patient.dateOfBirth,
-      bloodType: patient.bloodType,
-      phone: patient.phone,
-      address: patient.address
-    };
+  // updatePatient(patient: Patient): Observable<Patient> {
+  //   const profileData: UpdateUserProfileDto = {
+  //     fullName: patient.fullName,
+  //     gender: patient.gender,
+  //     dateOfBirth: patient.dateOfBirth,
+  //     bloodType: patient.bloodType,
+  //     phone: patient.phone,
+  //     address: patient.address
+  //   };
 
-    return this.userService.updateProfile(profileData).pipe(
-      map(() => patient),
-      catchError(this.handleError)
-    );
-  }
+  //   return this.userService.updateProfile(profileData).pipe(
+  //     map(() => patient),
+  //     catchError(this.handleError)
+  //   );
+  // }
 
   deletePatient(userId: number): Observable<void> {
     return this.userService.deleteUser(userId).pipe(

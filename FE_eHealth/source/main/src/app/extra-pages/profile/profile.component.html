@@ -1,4 +1,3 @@
-<p>profile works!</p>
 <section class="content">
     <div class="content-block">
         <div class="block-header">
@@ -13,7 +12,7 @@
                                 <div class="name-center">{{ profile?.role }}</div>
                                 <div class="user-name">{{ profile?.fullName }}</div>
                             </div>
-                            <img src="assets/images/user/usrbig3.jpg" class="user-img" alt="">
+                            <img [src]="profileImageUrl" class="user-img" alt="User profile image">
                             <p *ngIf="profile?.address">{{ profile?.address }}</p>
                             <div *ngIf="profile?.phone">
                                 <span class="phone">

@@ -42,7 +42,8 @@ namespace Online_Health_Consultation_Portal.API.Controllers.User
         }
 
         [HttpPut("profile")]
-        public async Task<IActionResult> UpdateProfile([FromBody] UpdateUserProfileDto profile, [FromQuery] int? userId = null)
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> UpdateProfile([FromForm] UpdateUserProfileDto profile, [FromQuery] int? userId = null)
         {
             try
             {

@@ -45,22 +45,22 @@ export class DoctorsService {
   }
 
   /** PUT: Update a doctor using the user profile update endpoint */
-  updateDoctor(doctor: Doctors): Observable<Doctors> {
-    const profileData: UpdateUserProfileDto = {
-      fullName: doctor.fullName,
-      phone: doctor.phone,
-      specialization: doctor.specialization,
-      experienceYears: doctor.experienceYears,
-      consultationFee: doctor.consultationFee,
-      languages: doctor.languages,
-      bio: doctor.bio
-    };
+  // updateDoctor(doctor: Doctors): Observable<Doctors> {
+  //   const profileData: UpdateUserProfileDto = {
+  //     fullName: doctor.fullName,
+  //     phone: doctor.phone,
+  //     specialization: doctor.specialization,
+  //     experienceYears: doctor.experienceYears,
+  //     consultationFee: doctor.consultationFee,
+  //     languages: doctor.languages,
+  //     bio: doctor.bio
+  //   };
 
-    return this.userService.updateProfile(profileData).pipe(
-      map(() => doctor),
-      catchError(this.handleError)
-    );
-  }
+  //   return this.userService.updateProfile(profileData).pipe(
+  //     map(() => doctor),
+  //     catchError(this.handleError)
+  //   );
+  // }
 
   /** DELETE: Remove one or more doctors by IDs */
   deleteDoctors(id: number | number[]): Observable<void> {

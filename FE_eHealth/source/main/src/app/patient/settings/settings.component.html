@@ -77,7 +77,10 @@
             <div class="form-group">
               <mat-form-field class="example-full-width mb-3" appearance="outline">
                 <mat-label>Email</mat-label>
-                <input matInput formControlName="email" [disabled]="true" />
+                <input
+                  matInput
+                  formControlName="email"
+                  readonly/>
               </mat-form-field>
             </div>
           </div>
@@ -106,6 +109,15 @@
                 <mat-label>Address</mat-label>
                 <textarea matInput formControlName="address"></textarea>
               </mat-form-field>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="form-group">
+              <label for="profileImage">Profile Image</label><br>
+              <input type="file" (change)="onImageSelected($event)" accept="image/*" />
+              <div *ngIf="imagePreviewUrl" style="margin-top: 10px;">
+                <img [src]="imagePreviewUrl" alt="Image preview" style="max-height: 120px; border-radius: 6px;" />
+              </div>
             </div>
           </div>
           <div class="col-md-12">

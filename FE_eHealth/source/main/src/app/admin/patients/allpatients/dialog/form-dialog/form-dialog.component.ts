@@ -128,17 +128,16 @@ export class AllPatientFormDialogComponent implements OnInit {
     if (!this.patientForm.valid) return;
 
     const formValue = this.patientForm.value;
-    const payload: UpdateUserProfileDto = {
-      fullName: `${formValue.first} ${formValue.last}`.trim(),
-      gender: formValue.gender,
-      phone: formValue.mobile,
-      dateOfBirth: formValue.dob ? formatDate(formValue.dob, 'yyyy-MM-dd', 'en') : undefined,
-      bloodType: formValue.bType,
-      address: formValue.address
-    };
+    const formData = new FormData();
+    formData.append('fullName', `${formValue.first} ${formValue.last}`.trim());
+    formData.append('gender', formValue.gender);
+    if (formValue.mobile) formData.append('phone', formValue.mobile);
+    if (formValue.dob) formData.append('dateOfBirth', formValue.dob.toISOString());
+    if (formValue.bType) formData.append('bloodType', formValue.bType);
+    if (formValue.address) formData.append('address', formValue.address);
 
     if (this.action === 'edit' && this.patient?.id) {
-      this.userService.updateProfileByAdmin(this.patient.id, payload).subscribe({
+      this.userService.updateProfileByAdmin(this.patient.id, formData).subscribe({
         next: () => {
           this.snackBar.open('Patient profile updated successfully!', 'Close', {
             duration: 3000,

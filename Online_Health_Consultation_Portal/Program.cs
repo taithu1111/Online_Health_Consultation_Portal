@@ -47,6 +47,7 @@ using Online_Health_Consultation_Portal.Application.Commands.Payment;
 using Online_Health_Consultation_Portal.Application.Dtos.Payment;
 using Online_Health_Consultation_Portal.Application.Queries.Payment;
 using Online_Health_Consultation_Portal.Services;
+using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -280,6 +281,12 @@ try
     app.UseAuthentication();
     app.UseAuthorization();
     app.MapControllers();
+    app.UseStaticFiles(new StaticFileOptions
+    {
+        FileProvider = new PhysicalFileProvider(
+            Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads")),
+        RequestPath = "/uploads"
+    });
 
     Log.Logger.Information("Application is running...");
     app.Run();

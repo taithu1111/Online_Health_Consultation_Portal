@@ -7,6 +7,7 @@ using Online_Health_Consultation_Portal.Infrastructure;
 using Microsoft.Extensions.Logging;
 using System.Security.Claims;
 using Online_Health_Consultation_Portal.Application.Dtos.Users;
+using Online_Health_Consultation_Portal.Infrastructure.Helpers;
 
 namespace Online_Health_Consultation_Portal.Application.Handlers.Users
 {
@@ -66,19 +67,25 @@ namespace Online_Health_Consultation_Portal.Application.Handlers.Users
                 }
 
                 if (!string.IsNullOrWhiteSpace(profile.Phone))
-                    {
-                        // var setPhoneResult = await _userManager.SetPhoneNumberAsync(user, profile.Phone);
-                        // if (!setPhoneResult.Succeeded)
-                        // {
-                        //     _logger.LogWarning("Phone number update failed for user {UserId}: {Errors}", 
-                        //         user.Id, string.Join(", ", setPhoneResult.Errors.Select(e => e.Description)));
-                        //     return false;
-                        // }
+                {
+                    // var setPhoneResult = await _userManager.SetPhoneNumberAsync(user, profile.Phone);
+                    // if (!setPhoneResult.Succeeded)
+                    // {
+                    //     _logger.LogWarning("Phone number update failed for user {UserId}: {Errors}", 
+                    //         user.Id, string.Join(", ", setPhoneResult.Errors.Select(e => e.Description)));
+                    //     return false;
+                    // }
 
-                        user.PhoneNumber = profile.Phone;
-                        user.PhoneNumberConfirmed = true;
-                        _logger.LogInformation("Phone after update for user {UserId}: {Phone}", user.Id, user.PhoneNumber);
-                    }
+                    user.PhoneNumber = profile.Phone;
+                    user.PhoneNumberConfirmed = true;
+                    _logger.LogInformation("Phone after update for user {UserId}: {Phone}", user.Id, user.PhoneNumber);
+                }
+                if (profile.ProfileImage != null)
+                {
+                    var imageUrl = await FileHelper.SaveImageAsync(profile.ProfileImage, "uploads/profile_images");
+                    user.ImageUrl = imageUrl;
+                    _logger.LogInformation("Updated profile image for user {UserId}: {ImageUrl}", user.Id, imageUrl);
+                }
 
                 var primaryRole = user.Role;
 

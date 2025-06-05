@@ -5,7 +5,7 @@ namespace Online_Health_Consultation_Portal.Application.Dtos.Users
         public string? FullName { get; set; }
         public string? Gender { get; set; } // Đề phòng, chỉ cho admin quyền sửa
         public string? Phone { get; set; }
-        public string? ImageUrl { get; set; }
+        public IFormFile? ProfileImage { get; set; }
         
         // Patient specific fields
         public DateTime? DateOfBirth { get; set; }

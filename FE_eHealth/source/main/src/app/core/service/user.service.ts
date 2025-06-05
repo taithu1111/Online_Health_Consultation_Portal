@@ -41,7 +41,7 @@ export interface UpdateUserProfileDto {
     providedIn: 'root'
 })
 export class UserService {
-    private apiUrl = `${UserEnviroment.apiUrl}/users`; // Thay bằng URL backend thật nhé
+    private apiUrl = UserEnviroment.apiUrl; // Thay bằng URL backend thật nhé
 
     constructor(private http: HttpClient) { }
 
@@ -50,15 +50,12 @@ export class UserService {
         return this.http.get<User>(`${this.apiUrl}/profile`);
     }
 
-    updateProfileByAdmin(id: number, dto: UpdateUserProfileDto): Observable<any> {
-        return this.http.put(
-        `${UserEnviroment.apiUrl}/users/profile?userId=${id}`,  // note query parameter
-        dto
-        );
-    }
+    updateProfileByAdmin(id: number, formData: FormData): Observable<any> {
+        return this.http.put(`${this.apiUrl}/profile?userId=${id}`, formData);
+        }
 
     // Cập nhật profile user hiện tại
-    updateProfile(profile: UpdateUserProfileDto): Observable<void> {
+    updateProfile(profile: FormData): Observable<void> {
         return this.http.put<void>(`${this.apiUrl}/profile`, profile);
     }
 

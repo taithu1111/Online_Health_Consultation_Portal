@@ -8,6 +8,7 @@ namespace Online_Health_Consultation_Portal.Application.Dtos.Auth.LoginDto
         public string FullName { get; set; } // hoặc FirstName + LastName nếu bạn tách
         [Required]
         public string Email { get; set; }
+        public IFormFile? ProfileImage { get; set; }
         [Required]
         public string Password { get; set; }
         [Required]

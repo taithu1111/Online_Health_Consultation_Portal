@@ -129,23 +129,21 @@ export class AllDoctorFormDialogComponent implements OnInit {
 
 
     const formValue = this.doctorForm.value;
-    const payload: UpdateUserProfileDto = {
-      fullName: formValue.name,
-      phone: formValue.phone,
-      specialization: formValue.specialization,
-      experienceYears: formValue.experience,
-      consultationFee: formValue.fee,
-      languages: formValue.languages,
-      bio: formValue.bio
-    };
-
-    
-    console.log('Action:', this.action);
-    console.log('Patient ID:', this.doctor.id);
-    console.log('Payload:', payload);
+    const formData = new FormData();
+    formData.append('fullName', formValue.name);
+    if (formValue.phone) formData.append('phone', formValue.phone);
+    if (formValue.specialization && formValue.specialization.length) {
+      for (const spec of formValue.specialization) {
+        formData.append('specializations', spec); // key matches backend DTO: List<string> Specializations
+      }
+    }
+    if (formValue.experience) formData.append('experienceYears', formValue.experience.toString());
+    if (formValue.fee) formData.append('consultationFee', formValue.fee.toString());
+    if (formValue.languages) formData.append('languages', formValue.languages);
+    if (formValue.bio) formData.append('bio', formValue.bio);
 
     if (this.action === 'edit' && this.doctor?.id) {
-      this.userService.updateProfileByAdmin(this.doctor.id, payload).subscribe({
+      this.userService.updateProfileByAdmin(this.doctor.id, formData).subscribe({
         next: () => {
           this.snackBar.open('Doctor profile updated successfully!', 'Close', {
             duration: 3000,

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Online_Health_Consultation_Portal.Application.Commands.Auth;
 using Online_Health_Consultation_Portal.Domain;
 using Online_Health_Consultation_Portal.Infrastructure;
+using Online_Health_Consultation_Portal.Infrastructure.Helpers;
 
 namespace Online_Health_Consultation_Portal.Application.Handlers.Auth
 {
@@ -25,6 +26,13 @@ namespace Online_Health_Consultation_Portal.Application.Handlers.Auth
             if (dto.Password != dto.ConfirmPassword)
                 throw new Exception("Passwords do not match.");
 
+            string? imagePath = null;
+
+            if (dto.ProfileImage != null)
+            {
+                imagePath = await FileHelper.SaveImageAsync(dto.ProfileImage, "profile_images");
+            }
+
             var user = new User
             {
                 UserName = dto.Email,
@@ -33,7 +41,7 @@ namespace Online_Health_Consultation_Portal.Application.Handlers.Auth
                 Gender = dto.Gender,
                 Role = dto.Role,
                 CreatedAt = dto.CreatedAt,
-                ImageUrl = null,
+                ImageUrl = imagePath,
                 PhoneNumber = dto.PhoneNumber
             };
 
