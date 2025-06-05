@@ -13,6 +13,7 @@ import { CalendarService } from '../../../calendar/calendar.service';
 import { AvailableSlotDto } from '../../../calendar/calendar.model';
 import { CommonModule } from '@angular/common';
 import { distinctUntilChanged } from 'rxjs/operators';
+import { AuthService } from '../../../core/service/auth.service';
 
 @Component({
   selector: 'app-book-appointment',
@@ -39,12 +40,14 @@ export class BookAppointmentComponent {
   isSubmitting = false;
 
   constructor(
+    private authService: AuthService, // inject AuthService to get patientId
     private fb: UntypedFormBuilder,
     private appointmentService: AppointmentService,
     private calendarService: CalendarService   //  inject CalendarService
   ) {
+    const patientId = Number(this.authService.getCurrentUser()?.userId); // get id auth/user context
     this.bookingForm = this.fb.group({
-      patientId: [1, [Validators.required]],   // lấy từ auth/user context
+      patientId: [patientId, [Validators.required]],   // lấy từ auth/user context
       doctorId: ['', [Validators.required]],
       doa: ['', [Validators.required]],        // Date
       timeSlot: ['', [Validators.required]],   // "08:00:00"

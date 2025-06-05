@@ -66,13 +66,31 @@
       <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
         <mat-card>
           <mat-card-header class="header-style">
-            <mat-card-title>Reports/Documents</mat-card-title>
+            <mat-card-title>Reports/Bills</mat-card-title>
             <a mat-button color="primary" href="#" (click)="$event.preventDefault();">View All</a>
           </mat-card-header>
           <mat-card-content>
-            <ng-scrollbar style="height: 400px" visibility="hover">
-              <app-report-list [reports]="reports"></app-report-list>
-            </ng-scrollbar>
+            <div *ngIf="billingData.length > 0; else noBilling">
+              <table class="table small-table">
+                <thead>
+                  <tr>
+                    <th>Invoice</th>
+                    <th>Date</th>
+                    <th>Total</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of billingData">
+                    <td>#{{ item.invoiceNo }}</td>
+                    <td>{{ item.date | date: 'dd/MM/yyyy' }}</td>
+                    <td>{{ item.total | currency }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <ng-template #noBilling>
+              <p class="text-center">No billing records found.</p>
+            </ng-template>
           </mat-card-content>
         </mat-card>
       </div>

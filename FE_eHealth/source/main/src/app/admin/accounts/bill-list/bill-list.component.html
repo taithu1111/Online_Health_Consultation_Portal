@@ -44,13 +44,6 @@
                 </li>
                 <li class="tbl-header-btn">
                   <div class="m-l-10">
-                    <button mat-icon-button (click)="addNew()" class="col-green" matTooltip="Add">
-                      <mat-icon>add_circle_outline</mat-icon>
-                    </button>
-                  </div>
-                </li>
-                <li class="tbl-header-btn">
-                  <div class="m-l-10">
                     <button mat-icon-button (click)="refresh()" matTooltip="Refresh">
                       <mat-icon>refresh</mat-icon>
                     </button>
@@ -125,23 +118,26 @@
                 } @else {
                 @if (column.def === 'status') {
                 <ng-container [matColumnDef]="column.def">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header> <span class="truncate-text">{{ column.label
-                      }}</span></mat-header-cell>
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>
+                    <span class="truncate-text">
+                      {{ column.label }}
+                    </span>
+                  </mat-header-cell>
                   <mat-cell *matCellDef="let row" (contextmenu)="onContextMenu($event, row)">
                     <span class="mobile-label">{{ column.label }}:</span>
-                    <div>
-                      @switch (row.status) {
-                      @case ('Paid') {
-                      <div>
-                        <span class="badge badge-solid-green">{{ row.status }}</span>
+                    <div [ngSwitch]="row.status">
+                      <div *ngSwitchCase="'Paid'">
+                        <span class="badge" style="background-color: #28a745; color: white;">{{ row.status }}</span>
                       </div>
-                      }
-                      @case ('Unpaid') {
-                      <div>
-                        <span class="badge badge-solid-orange">{{ row.status }}</span>
+                      <div *ngSwitchCase="'Unpaid'">
+                        <span class="badge" style="background-color: #d32d2d; color: black;">{{ row.status }}</span>
                       </div>
-                      }
-                      }
+                      <div *ngSwitchCase="'Pending'">
+                        <span class="badge" style="background-color: #d9e443; color: white;">{{ row.status }}</span>
+                      </div>
+                      <div *ngSwitchDefault>
+                        <span class="badge" style="background-color: #6c757d; color: white;">{{ row.status }}</span>
+                      </div>
                     </div>
                   </mat-cell>
                 </ng-container>
@@ -152,7 +148,15 @@
                   </mat-header-cell>
                   <mat-cell *matCellDef="let row" (contextmenu)="onContextMenu($event, row)">
                     <span class="mobile-label">{{ column.label }}:</span>
-                    <span class="truncate-text">{{ row[column.def] }}</span>
+                    <span class="truncate-text">
+                      @if (['initialAmount', 'discount', 'total'].includes(column.def)) {
+                      {{ row[column.def] | currency }}
+                      } @else if (column.def === 'tax') {
+                      {{ row[column.def] }}
+                      } @else {
+                      {{ row[column.def] }}
+                      }
+                    </span>
                   </mat-cell>
                 </ng-container>
                 }
@@ -197,10 +201,10 @@
               </div>
               <mat-menu #contextMenu="matMenu">
                 <ng-template matMenuContent let-item="item">
-                  <button mat-menu-item (click)="addNew()">
+                  <!-- <button mat-menu-item (click)="addNew()">
                     <mat-icon>add_box</mat-icon>
                     <span>Add Record</span>
-                  </button>
+                  </button> -->
                   <button mat-menu-item (click)="editCall(item)">
                     <mat-icon>create</mat-icon>
                     <span>Edit Record</span>

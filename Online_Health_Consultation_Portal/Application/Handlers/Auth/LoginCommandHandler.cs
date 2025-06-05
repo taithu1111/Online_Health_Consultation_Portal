@@ -44,6 +44,7 @@ namespace Online_Health_Consultation_Portal.Application.Handlers.Auth
 
             return new LoginResponseDto
             {
+                UserId = user.Id,
                 Token = token,
                 Expires = DateTime.UtcNow.AddHours(1),
                 Roles = roles

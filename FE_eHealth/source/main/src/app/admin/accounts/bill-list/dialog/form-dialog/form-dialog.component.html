@@ -17,24 +17,19 @@
       <div class="row">
         <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
           <mat-form-field class="example-full-width" appearance="outline">
-            <mat-label>Patient Name</mat-label>
-            <input matInput formControlName="patientName" required>
-            <mat-icon class="material-icons-outlined color-icon p-3" matSuffix>face</mat-icon>
-            @if (billListForm.get('patientName')?.hasError('required')) {
-            <mat-error>
-              Patient Name is required
-            </mat-error>
-            }
+            <mat-label>ID</mat-label>
+            <input matInput formControlName="id" readonly>
+            <mat-icon class="material-icons-outlined color-icon p-3" matSuffix>fingerprint</mat-icon>
           </mat-form-field>
         </div>
         <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
           <mat-form-field class="example-full-width" appearance="outline">
-            <mat-label>Admission ID</mat-label>
-            <input matInput formControlName="admissionID" required>
-            <mat-icon class="material-icons-outlined color-icon p-3" matSuffix>tag</mat-icon>
-            @if (billListForm.get('admissionID')?.hasError('required')) {
+            <mat-label>Patient Name</mat-label>
+            <input matInput formControlName="patientName" readonly>
+            <mat-icon class="material-icons-outlined color-icon p-3" matSuffix>face</mat-icon>
+            @if (billListForm.get('patientName')?.hasError('required')) {
             <mat-error>
-              Admission ID is required
+              Patient Name is required
             </mat-error>
             }
           </mat-form-field>
@@ -44,7 +39,7 @@
         <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
           <mat-form-field class="example-full-width" appearance="outline">
             <mat-label>Doctor Name</mat-label>
-            <input matInput formControlName="doctorName" required>
+            <input matInput formControlName="doctorName" readonly>
             <mat-icon class="material-icons-outlined color-icon p-3" matSuffix>perm_identity</mat-icon>
             @if (billListForm.get('doctorName')?.hasError('required')) {
             <mat-error>
@@ -62,6 +57,9 @@
               </mat-option>
               <mat-option [value]="'Unpaid'">
                 Unpaid
+              </mat-option>
+              <mat-option [value]="'Pending'">
+                Pending
               </mat-option>
             </mat-select>
             @if (billListForm.get('status')?.hasError('required')) {

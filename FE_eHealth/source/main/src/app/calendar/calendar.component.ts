@@ -15,6 +15,7 @@ import { FormDialogComponent } from './dialogs/form-dialog/form-dialog.component
 import { DateSelectArg, EventClickArg, EventInput, CalendarOptions } from '@fullcalendar/core';
 import { BreadcrumbComponent } from '../shared/components/breadcrumb/breadcrumb.component';
 import { FullCalendarComponent } from '@fullcalendar/angular';
+import { AuthService } from '@core';
 
 @Component({
   selector: 'app-calendar',
@@ -72,7 +73,8 @@ export class CalendarComponent implements OnInit {
 
   constructor(
     private calendarService: CalendarService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private authService: AuthService
   ) { }
 
   ngOnInit() {
@@ -187,6 +189,6 @@ export class CalendarComponent implements OnInit {
   }
 
   private getCurrentDoctorId(): number {
-    return 2;  // TODO: lấy từ auth/route
+    return this.authService.currentUserValue?.userId || 0;
   }
 }

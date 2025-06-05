@@ -109,7 +109,7 @@ export class Dashboard2Component implements OnInit {
 
   // Doughnut chart end
 
-  constructor() {}
+  constructor() { }
   ngOnInit() {
     this.chart1();
   }
@@ -127,12 +127,12 @@ export class Dashboard2Component implements OnInit {
       patientCount: 14,
       colorClass: 'bg-purple',
     },
-    {
-      label: 'L',
-      title: 'Low Blood Pressure',
-      patientCount: 10,
-      colorClass: 'bg-green',
-    },
+    // {
+    //   label: 'L',
+    //   title: 'Low Blood Pressure',
+    //   patientCount: 10,
+    //   colorClass: 'bg-green',
+    // },
     {
       label: 'H',
       title: 'Hypertension',

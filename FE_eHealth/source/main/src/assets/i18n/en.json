@@ -41,7 +41,7 @@
       }
     },
     "ACCOUNTS": {
-      "TEXT": "Accounts",
+      "TEXT": "Invoice management",
       "LIST": {
         "BILL-LIST": "Bill List",
         "ADD-BILL": "Add Bill",

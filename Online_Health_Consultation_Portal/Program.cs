@@ -1,6 +1,5 @@
 using System.Security.Claims;
 using System.Text;
-using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -38,16 +37,12 @@ using Online_Health_Consultation_Portal.Infrastructure.Services;
 using Online_Health_Consultation_Portal.Mappers.AutoMapping;
 using Serilog;
 using Log = Serilog.Log;
-using Online_Health_Consultation_Portal.Application.Queries.Doctors;
-using Online_Health_Consultation_Portal.Application.Dtos.Doctors;
-using Online_Health_Consultation_Portal.Infrastructure.Services;
-using Online_Health_Consultation_Portal.Application.Dtos.Users;
-using Online_Health_Consultation_Portal.Infrastructure.Repositories;
 using Online_Health_Consultation_Portal.Application.Commands.Payment;
 using Online_Health_Consultation_Portal.Application.Dtos.Payment;
 using Online_Health_Consultation_Portal.Application.Queries.Payment;
 using Online_Health_Consultation_Portal.Services;
 using Microsoft.Extensions.FileProviders;
+using Online_Health_Consultation_Portal.Application.Handlers.Payment;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -249,7 +244,11 @@ builder.Services.AddScoped<IRequestHandler<ForgotPasswordCommand, bool>, ForgotP
 builder.Services.AddScoped<IRequestHandler<ResetPasswordCommand, bool>, ResetPasswordCommandHandler>();
 builder.Services.AddScoped<IRequestHandler<RegisterCommand, bool>, RegisterCommandHandler>();
 //Payment
-builder.Services.AddScoped<IRequestHandler<CreatePaymentCommand, PaymentDto>, Online_Health_Consultation_Portal.Application.Handlers.Payment.CreatePaymentHandler>();
+builder.Services.AddScoped<IRequestHandler<CreatePaymentCommand, PaymentDto>, CreatePaymentHandler>();
+builder.Services.AddScoped<IRequestHandler<UpdatePaymentStatusCommand, PaymentDto>, UpdatePaymentStatusHandler>();
+builder.Services.AddScoped<IRequestHandler<DeletePaymentCommand, bool>, DeletePaymentHandler>();
+
+
 
 // Query Handlers
 builder.Services.AddScoped<IRequestHandler<GetAppointmentDetailQuery, AppointmentDto>, GetAppointmentDetailHandler>();
@@ -261,6 +260,10 @@ builder.Services.AddScoped<IRequestHandler<GetConsultationsByDoctorQuery, List<C
 builder.Services.AddScoped<IRequestHandler<GetConsultationsByPatientQuery, List<ConsultationSessionDto>>, GetConsultationsByPatientHandler>();
 builder.Services.AddScoped<IRequestHandler<GetDoctorSchedulesQuery, List<ScheduleDto>>, GetDoctorSchedulesQueryHandler>();
 builder.Services.AddScoped<IRequestHandler<GetAvailableSlotsQuery, List<AvailableSlotDto>>, GetAvailableSlotsQueryHandler>();
+//payment
+builder.Services.AddScoped<IRequestHandler<GetPaymentByIdQuery, PaymentDto>, GetPaymentByIdHandler>();
+builder.Services.AddScoped<IRequestHandler<GetPaymentsByPatientQuery, IEnumerable<PaymentDto>>, GetPaymentsByPatientHandler>();
+
 
 builder.Services.AddHttpContextAccessor();
 

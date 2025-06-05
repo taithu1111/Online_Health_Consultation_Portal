@@ -129,7 +129,7 @@ export class UpcomingAppointmentComponent implements OnInit, OnDestroy {
   }
 
   loadData() {
-    const patientId = Number(this.authService.getDecodedToken()?.id); // Get current user ID from decoded token
+    const patientId = Number(this.authService.getCurrentUser()?.userId); // Get current user ID from decoded token
     this.isLoading = true;
     this.appointmentService.getAppointmentsByPatientId(patientId).subscribe({
       next: apiData => {

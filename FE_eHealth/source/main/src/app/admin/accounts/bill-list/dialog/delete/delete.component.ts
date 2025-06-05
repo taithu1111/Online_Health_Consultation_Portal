@@ -17,25 +17,25 @@ export interface DialogData {
   total: string;
 }
 @Component({
-    selector: 'app-bill-list-delete',
-    templateUrl: './delete.component.html',
-    styleUrls: ['./delete.component.scss'],
-    imports: [
-        MatDialogTitle,
-        MatDialogContent,
-        MatDialogActions,
-        MatButtonModule,
-        MatDialogClose,
-    ]
+  selector: 'app-bill-list-delete',
+  templateUrl: './delete.component.html',
+  styleUrls: ['./delete.component.scss'],
+  imports: [
+    MatDialogTitle,
+    MatDialogContent,
+    MatDialogActions,
+    MatButtonModule,
+    MatDialogClose,
+  ]
 })
 export class BillListDeleteComponent {
   constructor(
     public dialogRef: MatDialogRef<BillListDeleteComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
     public billListService: BillListService
-  ) {}
+  ) { }
   confirmDelete(): void {
-    this.billListService.deleteBillList(this.data.id).subscribe({
+    this.billListService.deleteBill(this.data.id).subscribe({
       next: (response) => {
         // console.log('Delete Response:', response);
         this.dialogRef.close(response); // Close with the response data

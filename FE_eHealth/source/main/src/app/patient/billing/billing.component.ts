@@ -11,6 +11,8 @@ import { forkJoin } from 'rxjs';
 import { PaymentService } from '../billing/billing.servide';
 import { PaymentDto } from '../billing/billing.model';
 import { AppointmentService, } from '../appointments/appointment-v1.service';
+import { AuthService } from '../../core/service/auth.service';
+import { O } from '@angular/cdk/overlay-module.d-B3qEQtts';
 
 interface BillingRow {
   invoiceNo: string;
@@ -39,7 +41,7 @@ interface BillingRow {
   styleUrls: ['./billing.component.scss']
 })
 export class BillingComponent implements OnInit {
-  appointmentId!: number;
+  patientId!: number;
   displayedColumns = [
     'invoiceNo', 'doctorName', 'date', 'amount', 'taxPct', 'discountAmt', 'total', 'actions'
   ];
@@ -50,43 +52,57 @@ export class BillingComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
+    private auth: AuthService,
     private paySvc: PaymentService,
     private apptSvc: AppointmentService
   ) { }
 
   ngOnInit(): void {
-    this.route.paramMap.subscribe(mp => {
-      const raw = mp.get('appointmentId');
-      if (!raw) return;
-      this.appointmentId = +raw;
-      this.loadAll();
-    });
+    const patient = this.auth.getCurrentUser();
+    this.patientId = patient?.userId ?? 0;
+    console.log('Loaded patientId from AuthService:', this.patientId);
+    if (!this.patientId) {
+      return;
+    }
+    this.loadAll();
   }
 
   private loadAll() {
-    forkJoin({
-      appt: this.apptSvc.getAppointmentById(this.appointmentId),
-      payments: this.paySvc.getPaymentsByAppointmentId(this.appointmentId)
-    }).subscribe(({ appt, payments }) => {
-      this.dataSource = payments.map(p => {
-        const taxAmt = parseFloat((p.amount * this.TAX_RATE).toFixed(2));
-        const discountAmt = this.DISCOUNT_AMT;
-        const total = parseFloat((p.amount + taxAmt - discountAmt).toFixed(2));
-        return {
-          invoiceNo: `A${p.id}`,
-          doctorName: appt.doctorName,
-          doctorEmail: appt.email ?? undefined,
-          date: new Date(appt.appointmentDateTime),
-          amount: p.amount,
-          taxPct: this.TAX_RATE * 100,
-          taxAmt,
-          discountAmt,
-          total,
-          transactionId: p.transactionId
-        };
-      });
-    }, err => {
-      console.error('Load billing data failed', err);
+    this.paySvc.getPaymentsByPatientId(this.patientId).subscribe({
+      next: payments => {
+        console.log('Payments:', payments); //kiểm tra xem payments đã được lấy chưa
+        const appointmentCalls = payments.map(p =>
+          this.apptSvc.getAppointmentById(p.appointmentId)
+        );
+
+        forkJoin(appointmentCalls).subscribe({
+          next: appointments => {
+            console.log('Appointments:', appointments); //kiểm tra xem appointments đã được lấy chưa
+            this.dataSource = payments.map((p, idx) => {
+              const appt = appointments[idx];
+              const taxAmt = parseFloat((p.amount * this.TAX_RATE).toFixed(2));
+              const discountAmt = this.DISCOUNT_AMT ?? 0;
+              const total = parseFloat((p.amount + taxAmt - discountAmt).toFixed(2));
+
+              return {
+                invoiceNo: `P${p.id}`,
+                doctorName: appt?.doctorName ?? 'N/A',
+                doctorEmail: appt?.email ?? '',
+                date: new Date(appt?.appointmentDateTime ?? new Date()),
+                amount: p.amount,
+                taxPct: this.TAX_RATE * 100,
+                taxAmt,
+                discountAmt,
+                total,
+                transactionId: p.transactionId
+              };
+            });
+            console.log('DataSource:', this.dataSource); //kiểm tra xem dataSource đã được cập nhật chưa
+          },
+          error: err => console.error('Failed to load appointments', err)
+        });
+      },
+      error: err => console.error('Failed to load payments', err)
     });
   }
 
