@@ -77,6 +77,23 @@ export class DoctorsService {
       .pipe(catchError(this.handleError));
   }
 
+  
+  addDoctor(formData: FormData): Observable<{ success: boolean, message: string }> {
+    return this.httpClient.post<{ success: boolean, message: string }>(
+      `${this.apiUrl}`, 
+      formData
+    ).pipe(
+      catchError(error => {
+        // Handle HTTP errors (network issues, etc.)
+        console.error('API Error:', error);
+        return throwError(() => ({
+          success: false,
+          message: error.error?.message || 'Network error occurred'
+        }));
+      })
+    );
+  }
+
   /** Handle Http operation that failed */
   private handleError(error: HttpErrorResponse) {
     console.error('An error occurred:', error.message);

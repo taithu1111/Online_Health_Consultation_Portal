@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Online_Health_Consultation_Portal.Application.Commands.Doctors;
 using Online_Health_Consultation_Portal.Application.Dtos.Doctors;
 using Online_Health_Consultation_Portal.Application.Queries.Doctors;
 using Online_Health_Consultation_Portal.Infrastructure;
@@ -39,6 +40,28 @@ namespace Online_Health_Consultation_Portal.API.Controllers.Doctor
             return Ok(result);
         }
         
+        [HttpPost]
+        public async Task<IActionResult> AddDoctor([FromForm] AddDoctorDto dto)
+        {
+            try
+            {
+                var command = new AddDoctorCommand(dto);
+                var result = await _mediator.Send(command);
+                
+                return result 
+                    ? Ok(new { success = true, message = "Doctor created successfully" })
+                    : BadRequest(new { success = false, message = "Failed to create doctor" });
+            }
+            catch (Exception ex)
+            {
+                // Log the exception here if needed
+                return StatusCode(500, new { 
+                    success = false, 
+                    message = "An unexpected error occurred",
+                    error = ex.Message 
+                });
+            }
+        }
     }
 
 
