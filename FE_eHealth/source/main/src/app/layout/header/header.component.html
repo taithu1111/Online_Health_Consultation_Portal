@@ -76,7 +76,7 @@
           <button mat-button [matMenuTriggerFor]="profilemenu">
             <div class="chip dropdown-toggle" ngbDropdownToggle class="">
               <span>{{ userName }}</span>
-              <img src="{{userImg}}" class="user_img" width="32" height="32" alt="User">
+              <img src={{userImg}} class="user_img" width="32" height="32" alt="User">
             </div>
           </button>
           <mat-menu #profilemenu="matMenu" class="profile-menu">

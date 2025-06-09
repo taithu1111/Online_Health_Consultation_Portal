@@ -6,6 +6,7 @@ using Online_Health_Consultation_Portal.Infrastructure;
 using Online_Health_Consultation_Portal.Application.Dtos.Pagination;
 using Online_Health_Consultation_Portal.Domain;
 using Microsoft.EntityFrameworkCore;
+using Online_Health_Consultation_Portal.Application.Queries.Users;
 
 public sealed class GetUsersQueryHandler : IRequestHandler<GetUsersQuery, PaginatedResponse<UserWithProfile>>
 {

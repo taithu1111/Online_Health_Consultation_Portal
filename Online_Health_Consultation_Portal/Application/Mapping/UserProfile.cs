@@ -14,6 +14,7 @@ namespace Online_Health_Consultation_Portal.Application.Mappings
                 .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.User.FullName))
                 .ForMember(dest => dest.Gender, opt => opt.MapFrom(src => src.User.Gender))
                 .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.User.ImageUrl ?? null))
+                .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.User.PhoneNumber))
 
                 // Patient
                 .ForMember(dest => dest.DateOfBirth, opt => opt.MapFrom(src => src.Patient != null ? (DateTime?)src.Patient.DateOfBirth : null))

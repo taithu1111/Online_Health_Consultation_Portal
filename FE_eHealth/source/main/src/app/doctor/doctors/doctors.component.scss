@@ -1,0 +1,29 @@
+.card {
+    min-height: 100%;
+    border-radius: 12px;
+}
+
+label {
+    font-size: 20px;
+    color: #888;
+    font-weight: 500;
+}
+
+p {
+    font-size: 24px;
+    font-weight: 600;
+    margin-top: 8px;
+}
+
+button mat-icon {
+    vertical-align: middle;
+}
+
+.row>.col-md-6 {
+    margin-bottom: 24px;
+}
+
+h3 {
+    font-size: 28px;
+    font-weight: 700;
+}

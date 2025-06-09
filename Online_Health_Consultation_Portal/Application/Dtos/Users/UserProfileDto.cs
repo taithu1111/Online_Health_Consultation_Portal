@@ -6,6 +6,7 @@ namespace Online_Health_Consultation_Portal.Application.Dtos.Users
         public string FullName { get; set; }
         public string Gender { get; set; }
         public string Role { get; set; }
+        public string PhoneNumber { get; set; }
 
         // Patient specific fields
         public string ImageUrl { get; set; }

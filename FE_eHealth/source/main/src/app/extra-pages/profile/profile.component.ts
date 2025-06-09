@@ -8,6 +8,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule } from '@angular/material/tabs';
 import { BreadcrumbComponent } from '@shared/components/breadcrumb/breadcrumb.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
@@ -30,8 +31,13 @@ export class ProfileComponent implements OnInit {
   loading = true;
   error: string | null = null;
 
-  constructor(private userService: UserService) { }
+  constructor(
+    private userService: UserService,
+    private router: Router) { }
 
+  goToSettings() {
+    this.router.navigate(['patient/settings']);
+  }
   ngOnInit(): void {
     this.userService.getProfile().subscribe({
       next: (data) => {

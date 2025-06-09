@@ -49,6 +49,9 @@ export class UserService {
     getProfile(): Observable<User> {
         return this.http.get<User>(`${this.apiUrl}/profile`);
     }
+    updateProfileByAdmin(id: number, formData: FormData): Observable<any> {
+        return this.http.put(`${this.apiUrl}/profile?userId=${id}`, formData);
+    }
 
     // Cập nhật profile user hiện tại
     updateProfile(profile: UpdateUserProfileDto): Observable<void> {

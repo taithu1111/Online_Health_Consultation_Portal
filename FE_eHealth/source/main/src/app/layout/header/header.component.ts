@@ -100,11 +100,14 @@ export class HeaderComponent extends UnsubscribeOnDestroyAdapter implements OnIn
   private setHomePageAndSettingLink(userRole: string) {
     if (userRole === 'Admin') {
       this.homePage = 'admin/dashboard/main';
+      this.userImg = 'assets/images/user/admin.jpg';
     } else if (userRole === 'Patient') {
       this.homePage = 'patient/dashboard';
+      this.userImg = 'assets/images/user/patient.jjpg';
       this.settingLink = 'patient/settings';
     } else if (userRole === 'Doctor') {
       this.homePage = 'doctor/dashboard';
+      this.userImg = 'assets/images/user/doctor.jpg';
       this.settingLink = 'doctor/settings';
     } else {
       this.homePage = 'admin/dashboard/main';

@@ -35,7 +35,6 @@
       "LIST": {
         "ALL-PATIENT": "All Patients",
         "ADD-PATIENT": "Add Patient",
-        "EDIT-PATIENT": "Edit Patient",
         "PATIENT-RECORDS": "Patient Records",
         "PROFILE": "Patient Profile"
       }

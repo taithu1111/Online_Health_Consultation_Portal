@@ -4,6 +4,85 @@
       <!-- breadcrumb -->
       <app-breadcrumb [title]="'Doctors'" [items]="[]" [active_item]="'Doctors'"></app-breadcrumb>
     </div>
+    <div class="row clearfix">
+      <!-- BÊN TRÁI -->
+      <div class="col-lg-4 col-md-12">
+        <div class="card">
+          <div class="m-b-20">
+            <div class="contact-grid">
+              <div class="profile-header bg-dark text-white text-center p-3">
+                <!-- <div class="name-center">{{ profile?.role }}</div> -->
+                <!-- <div class="user-name h5">{{ profile?.fullName }}</div> -->
+                <div class="user-name h5">{{ profile?.role }}</div>
+              </div>
+              <img src="assets/images/user/doctor.jpg" class="user-img" alt="">
+              <p *ngIf="profile?.fullName" class="text-center mt-2">{{ profile?.fullName }}</p>
+              <div *ngIf="profile?.phoneNumber" class="text-center">
+                <i class="material-icons">phone</i> {{ profile?.phoneNumber }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
+      <!-- BÊN PHẢI -->
+      <div class="col-lg-8 col-md-12">
+        <div class="card p-5 d-flex flex-column justify-content-between" style="min-height: 100%;">
+          <h4 class="mb-4 ps-2" style="font-size: 24px; font-weight: 600;">About Me</h4>
+
+          <div class="row g-4 ps-2 pe-2">
+            <div class="col-md-6" *ngIf="profile?.email">
+              <label class="text-muted" style="font-size: 18px;">Email:</label>
+              <p class="fw-bold" style="font-size: 20px;">{{ profile.email }}</p>
+            </div>
+            <div class="col-md-6" *ngIf="profile?.fullName">
+              <label class="text-muted" style="font-size: 18px;">Full Name:</label>
+              <p class="fw-bold" style="font-size: 20px;">{{ profile.fullName }}</p>
+            </div>
+            <div class="col-md-6" *ngIf="profile?.gender">
+              <label class="text-muted" style="font-size: 18px;">Gender:</label>
+              <p class="fw-bold" style="font-size: 20px;">{{ profile.gender }}</p>
+            </div>
+            <div class="col-md-6" *ngIf="profile?.dateOfBirth">
+              <label class="text-muted" style="font-size: 18px;">Date of Birth:</label>
+              <p class="fw-bold" style="font-size: 20px;">{{ profile.dateOfBirth | date:'longDate' }}</p>
+            </div>
+            <div class="col-md-6" *ngIf="profile?.address">
+              <label class="text-muted" style="font-size: 18px;">Address:</label>
+              <p class="fw-bold" style="font-size: 20px;">{{ profile.address }}</p>
+            </div>
+            <div class="col-md-6" *ngIf="profile?.phoneNumber">
+              <label class="text-muted" style="font-size: 18px;">Phone:</label>
+              <p class="fw-bold" style="font-size: 20px;">{{ profile.phoneNumber }}</p>
+            </div>
+            <div class="col-md-6" *ngIf="profile?.specialization">
+              <label class="text-muted" style="font-size: 18px;">Specialization:</label>
+              <p class="fw-bold" style="font-size: 20px;">{{ profile.specialization }}</p>
+            </div>
+            <div class="col-md-6" *ngIf="profile?.experienceYears">
+              <label class="text-muted" style="font-size: 18px;">ExperienceYears:</label>
+              <p class="fw-bold" style="font-size: 20px;">{{ profile.experienceYears }}</p>
+            </div>
+            <div class="col-md-6" *ngIf="profile?.languages">
+              <label class="text-muted" style="font-size: 18px;">Languages:</label>
+              <p class="fw-bold" style="font-size: 20px;">{{ profile.languages }}</p>
+            </div>
+            <div class="col-md-6" *ngIf="profile?.consultationFee">
+              <label class="text-muted" style="font-size: 18px;">ConsultationFee:</label>
+              <p class="fw-bold" style="font-size: 20px;">{{ profile.consultationFee }}</p>
+            </div>
+          </div>
+
+          <!-- Nút settings phía dưới bên phải -->
+          <div class="d-flex justify-content-end mt-5 pe-2">
+            <button mat-flat-button color="primary" (click)="goToSettings()">
+              <mat-icon>settings</mat-icon>
+              <span class="ms-1">Edit Settings</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
   </div>
 </section>

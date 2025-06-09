@@ -2,7 +2,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Online_Health_Consultation_Portal.Application.Commands.Notifications;
 using Online_Health_Consultation_Portal.Application.Dtos.Notifications;
-using Online_Health_Consultation_Portal.Application.Queries.Notifications;
+using Online_Health_Consultation_Portal.Application.Queries.Notification;
 
 namespace Online_Health_Consultation_Portal.Controllers.Notification
 {

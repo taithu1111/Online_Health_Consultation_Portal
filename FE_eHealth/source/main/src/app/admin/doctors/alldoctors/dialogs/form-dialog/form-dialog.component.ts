@@ -4,8 +4,7 @@ import {
   MatDialogContent,
   MatDialogClose,
 } from '@angular/material/dialog';
-import { Component, Inject } from '@angular/core';
-import { DoctorsService } from '../../doctors.service';
+import { Component, Inject, OnInit } from '@angular/core';
 import {
   UntypedFormControl,
   Validators,
@@ -14,121 +13,161 @@ import {
   FormsModule,
   ReactiveFormsModule,
 } from '@angular/forms';
-import { Doctors } from '../../doctors.model';
-import { formatDate } from '@angular/common';
+import { CommonModule, formatDate } from '@angular/common';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
+import { MatRadioModule } from '@angular/material/radio';
+import { UserService, UpdateUserProfileDto, User } from '@core/service/user.service';
+import { DoctorsService } from '../../doctors.service';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
-export interface DialogData {
-  id: number;
-  action: string;
-  doctors: Doctors;
+interface DialogData {
+  user?: User;
+  doctor?: User;
+  action: 'edit' | 'add';
 }
 
 @Component({
-    selector: 'app-all-doctors-form-dialog',
-    templateUrl: './form-dialog.component.html',
-    styleUrls: ['./form-dialog.component.scss'],
-    imports: [
-        MatButtonModule,
-        MatIconModule,
-        MatDialogContent,
-        FormsModule,
-        ReactiveFormsModule,
-        MatFormFieldModule,
-        MatInputModule,
-        MatSelectModule,
-        MatDatepickerModule,
-        MatDialogClose,
-    ]
+  selector: 'app-all-doctors-form-dialog',
+  templateUrl: './form-dialog.component.html',
+  styleUrls: ['./form-dialog.component.scss'],
+  imports: [
+    CommonModule,
+    MatButtonModule,
+    MatIconModule,
+    MatDialogContent,
+    FormsModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatRadioModule,
+    MatDatepickerModule,
+    MatDialogClose,
+    MatSnackBarModule
+  ]
 })
-export class AllDoctorsFormComponent {
+export class AllDoctorFormDialogComponent implements OnInit {
   action: string;
   dialogTitle: string;
-  doctorsForm: UntypedFormGroup;
-  doctors: Doctors;
+  doctorForm: UntypedFormGroup;
+  doctor: User = {
+    id: 0,
+    imageUrl: 'assets/images/user/user1.jpg',
+    email: '',
+    fullName: '',
+    gender: '',
+    role: 'Doctor',
+    phoneNumber: '',
+    specialization: '',
+    experienceYears: 0,
+    consultationFee: 0,
+    languages: '',
+    bio: ''
+  };
 
   constructor(
-    public dialogRef: MatDialogRef<AllDoctorsFormComponent>,
+    public dialogRef: MatDialogRef<AllDoctorFormDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
-    public doctorsService: DoctorsService,
-    private fb: UntypedFormBuilder
+    private fb: UntypedFormBuilder,
+    private userService: UserService,
+    private doctorService: DoctorsService,
+    private snackBar: MatSnackBar
   ) {
     this.action = data.action;
-    this.dialogTitle =
-      this.action === 'edit' ? data.doctors.name : 'New Doctor';
-    this.doctors = this.action === 'edit' ? data.doctors : new Doctors({}); // Create a blank object
-    this.doctorsForm = this.createContactForm();
+
+    if (data.user) {
+      this.doctor = { ...this.doctor, ...data.user };
+    } else if (data.doctor) {
+      this.doctor = { ...this.doctor, ...data.doctor };
+    }
+
+    this.dialogTitle = this.action === 'edit'
+      ? `Edit ${this.doctor.fullName || 'Doctor'}`
+      : 'New Doctor';
+
+    this.doctorForm = this.createDoctorForm();
   }
 
-  createContactForm(): UntypedFormGroup {
-    return this.fb.group({
-      id: [this.doctors.id],
-      img: [this.doctors.img],
-      name: [this.doctors.name, [Validators.required]],
-      email: [this.doctors.email, [Validators.required, Validators.email]],
-      date: [
-        formatDate(this.doctors.date, 'yyyy-MM-dd', 'en'),
-        [Validators.required],
-      ],
-      specialization: [this.doctors.specialization],
-      mobile: [this.doctors.mobile, [Validators.required]],
-      department: [this.doctors.department],
-      degree: [this.doctors.degree],
-      experienceYears: [this.doctors.experienceYears],
-      consultationFee: [this.doctors.consultationFee, [Validators.required]],
-      availability: [this.doctors.availability],
-      rating: [this.doctors.rating],
-      clinicLocation: [this.doctors.clinicLocation],
+  ngOnInit(): void {
+    console.log(this.doctor.fullName + this.doctor.phoneNumber + this.doctor.specialization);
+    this.initializeForm();
+  }
+
+  private initializeForm(): void {
+    this.doctorForm = this.fb.group({
+      name: [this.doctor.fullName || '', Validators.required],
+      phone: [this.doctor.phoneNumber || '', [Validators.required, Validators.pattern('^[0-9]*$')]],
+      email: [this.doctor.email || '', [Validators.required, Validators.email]],
+      specialization: [this.doctor.specialization || '', Validators.required],
+      experience: [this.doctor.experienceYears || 0, Validators.required],
+      fee: [this.doctor.consultationFee || 0, Validators.required],
+      languages: [this.doctor.languages || ''],
+      bio: [this.doctor.bio || '']
     });
   }
 
-  getErrorMessage(control: UntypedFormControl): string {
-    if (control.hasError('required')) {
-      return 'This field is required';
-    } else if (control.hasError('email')) {
-      return 'Please enter a valid email';
-    }
-    return '';
+  createDoctorForm(): UntypedFormGroup {
+    return this.fb.group({
+      name: ['', Validators.required],
+      phone: ['', [Validators.required, Validators.pattern('^[0-9]*$')]],
+      email: ['', [Validators.email, Validators.required]],
+      specialization: ['', Validators.required],
+      experience: [0, Validators.required],
+      fee: [0, Validators.required],
+      languages: [''],
+      bio: ['']
+    });
   }
 
   submit() {
-    if (this.doctorsForm.valid) {
-      if (this.action === 'edit') {
-        // Update existing doctor
-        this.doctorsService
-          .updateDoctors(this.doctorsForm.getRawValue())
-          .subscribe({
-            next: (response) => {
-              this.dialogRef.close(response); // Close dialog and return updated doctor data
-            },
-            error: (error) => {
-              console.error('Update Error:', error);
-              // Optionally display an error message to the user
-            },
-          });
-      } else {
-        // Add new doctor
-        this.doctorsService
-          .addDoctors(this.doctorsForm.getRawValue())
-          .subscribe({
-            next: (response) => {
-              this.dialogRef.close(response); // Close dialog and return newly added doctor data
-            },
-            error: (error) => {
-              console.error('Add Error:', error);
-              // Optionally display an error message to the user
-            },
-          });
+    if (!this.doctorForm.valid) return;
+    console.log('SUBMIT BUTTON CLICKED');
+
+
+    const formValue = this.doctorForm.value;
+    const formData = new FormData();
+    formData.append('fullName', formValue.name);
+    if (formValue.phone) formData.append('phone', formValue.phone);
+    if (formValue.specialization && formValue.specialization.length) {
+      for (const spec of formValue.specialization) {
+        formData.append('specializations', spec); // key matches backend DTO: List<string> Specializations
       }
+    }
+    if (formValue.experience) formData.append('experienceYears', formValue.experience.toString());
+    if (formValue.fee) formData.append('consultationFee', formValue.fee.toString());
+    if (formValue.languages) formData.append('languages', formValue.languages);
+    if (formValue.bio) formData.append('bio', formValue.bio);
+
+    if (this.action === 'edit' && this.doctor?.id) {
+      this.userService.updateProfileByAdmin(this.doctor.id, formData).subscribe({
+        next: () => {
+          this.snackBar.open('Doctor profile updated successfully!', 'Close', {
+            duration: 3000,
+            verticalPosition: 'top',
+            panelClass: ['snackbar-success']
+          });
+          this.dialogRef.close(true);
+        },
+        error: (error) => {
+          console.error('Admin Update Error:', error);
+          this.snackBar.open('Failed to update doctor profile.', 'Close', {
+            duration: 3000,
+            verticalPosition: 'top',
+            panelClass: ['snackbar-error']
+          });
+        }
+      });
+    } else {
+      console.warn('Unhandled form action:', this.action);
     }
   }
 
   onNoClick(): void {
-    this.dialogRef.close(); // Close dialog without any action
+    this.dialogRef.close();
   }
 }

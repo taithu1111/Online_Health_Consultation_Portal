@@ -33,6 +33,24 @@
                   </mat-form-field>
                 </div>
 
+                <!-- Chọn bệnh nhân -->
+                <div class="col-md-6 mb-3">
+                  <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label>Consulting Patient</mat-label>
+                    <mat-select formControlName="patientId" required>
+                      <mat-option [value]="1">Dang Van Truong</mat-option>
+                      <mat-option [value]="2">Dinh Van Trong</mat-option>
+                      <mat-option value="other">Other</mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="f['doctorId'].invalid && f['doctorId'].touched">
+                      Please select a patient
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+
+              <!-- Chọn khung giờ -->
+              <div class="row mb-3">
                 <!-- Chọn ngày -->
                 <div class="col-md-6 mb-3">
                   <mat-form-field class="example-full-width" appearance="outline">
@@ -45,10 +63,6 @@
                     </mat-error>
                   </mat-form-field>
                 </div>
-              </div>
-
-              <!-- Chọn khung giờ -->
-              <div class="row mb-3">
                 <div class="col-md-6 mb-3">
                   <mat-form-field class="example-full-width" appearance="outline">
                     <mat-label>Time Of Appointment*</mat-label>
@@ -69,7 +83,8 @@
                     </mat-error>
                   </mat-form-field>
                 </div>
-
+              </div>
+              <div class="row mb-3">
                 <!-- Chọn loại appointment -->
                 <div class="col-md-6">
                   <mat-form-field class="example-full-width" appearance="outline">
@@ -84,7 +99,6 @@
                   </mat-form-field>
                 </div>
               </div>
-
               <!-- Ghi chú -->
               <div class="row mb-4">
                 <div class="col-12">
@@ -94,14 +108,6 @@
                   </mat-form-field>
                 </div>
               </div>
-
-              <!-- Tải file
-              <div class="row mb-4">
-                <div class="col-12">
-                  <label>Upload Reports</label>
-                  <app-file-upload formControlName="uploadFile"></app-file-upload>
-                </div>
-              </div> -->
 
               <!-- Nút submit/ cancel -->
               <div class="row">

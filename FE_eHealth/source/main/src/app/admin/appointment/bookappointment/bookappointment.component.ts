@@ -42,7 +42,7 @@ export class BookAppointmentComponent {
     private appointmentService: AppointmentService
   ) {
     this.bookingForm = this.fb.group({
-      patientId: [1, [Validators.required]],   // lấy từ auth/user context
+      patientId: [, [Validators.required]],   // lấy từ auth/user context
       doctorId: ['', [Validators.required]],
       doa: ['', [Validators.required]],        // Date
       timeSlot: ['', [Validators.required]],   // "08:00:00"

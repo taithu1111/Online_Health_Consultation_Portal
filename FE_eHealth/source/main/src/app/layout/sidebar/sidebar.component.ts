@@ -109,10 +109,13 @@ export class SidebarComponent
     // set userType
     if (userRole === 'Admin') {
       this.userType = 'Admin';
+      this.userImg = 'assets/images/user/admin.jpg';
     } else if (userRole === 'Patient') {
       this.userType = 'Patient';
+      this.userImg = 'assets/images/user/patient.jpg';
     } else if (userRole === 'Doctor') {
       this.userType = 'Doctor';
+      this.userImg = 'assets/images/user/doctor.jpg';
     } else {
       this.userType = 'Admin';
     }

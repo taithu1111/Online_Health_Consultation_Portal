@@ -1,7 +1,7 @@
 using AutoMapper;
 using MediatR;
 using Online_Health_Consultation_Portal.Application.Dtos.Notifications;
-using Online_Health_Consultation_Portal.Application.Queries.Notifications;
+using Online_Health_Consultation_Portal.Application.Queries.Notification;
 using Online_Health_Consultation_Portal.Infrastructure.Repositories;
 
 namespace Online_Health_Consultation_Portal.Application.Handlers.Notifications
