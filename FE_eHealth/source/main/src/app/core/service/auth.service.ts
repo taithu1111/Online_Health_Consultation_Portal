@@ -199,4 +199,12 @@ export class AuthService {
     return this.http.get<number>(`http://localhost:5175/api/getById/getDoctorIdByUserId/${userId}`);
   }
 
+
+  changePassword(currentPassword: string, newPassword: string, confirmPassword: string) {
+    return this.http.post(`${AuthEnvironment.apiUrl}/change-password`, {
+      currentPassword,
+      newPassword,
+      confirmPassword
+    });
+  }
 }

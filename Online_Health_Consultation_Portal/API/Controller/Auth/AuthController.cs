@@ -72,6 +72,31 @@ namespace Online_Health_Consultation_Portal.API.Controller.Auth
             return Ok(new { message = "Password reset successful." });
         }
 
+        [Authorize]
+        [HttpPost("change-password")]
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDto dto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out var userId))
+                return Unauthorized("Invalid user token.");
+
+            var command = new ChangePasswordCommand
+            {
+                ChangePasswordDto = dto,
+                UserId = userId
+            };
+
+            var result = await _mediator.Send(command);
+
+            if (!result)
+                return BadRequest(new { message = "Current password is incorrect or new password is invalid." });
+
+            return Ok(new { message = "Password changed successfully." });
+        }
+
         [AllowAnonymous]
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterDto dto)

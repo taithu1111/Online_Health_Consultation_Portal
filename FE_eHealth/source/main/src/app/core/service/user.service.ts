@@ -85,11 +85,4 @@ export class UserService {
 
         return this.http.get<{ items: UserWithProfile[]; totalCount: number }>(this.apiUrl, { params });
     }
-
-    changePassword(currentPassword: string, newPassword: string): Observable<void> {
-        return this.http.post<void>(`${this.apiUrl}/change-password`, {
-            currentPassword,
-            newPassword
-        });
-    }
 }

@@ -26,7 +26,7 @@ namespace Online_Health_Consultation_Portal.Application.Mappings
                 .ForMember(dest => dest.ConsultationFee, opt => opt.MapFrom(src => src.Doctor != null ? (decimal?)src.Doctor.ConsultationFee : null))
                 .ForMember(dest => dest.Specializations, opt => opt.MapFrom(src =>
                     src.Doctor != null && src.Doctor.Specializations != null
-                        ? string.Join(", ", src.Doctor.Specializations.Select(s => s.Name))
+                        ? src.Doctor.Specializations.Select(s => s.Name).ToList()
                         : null))
                 .ForMember(dest => dest.Role, opt => opt.Ignore()); // Gán trong handler
 

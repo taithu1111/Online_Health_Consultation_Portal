@@ -6,34 +6,59 @@
     </div>
 
     <!-- Security Settings Form -->
-    <form [formGroup]="passwordForm" class="card" (ngSubmit)="changePassword()">
+    <form [formGroup]="passwordForm" class="card" (ngSubmit)="onChangePassword()">
       <div class="header">
         <h2>Security Settings</h2>
       </div>
       <div class="body">
         <div class="example-container">
+          <!-- Current Password Field -->
           <mat-form-field class="example-full-width mb-3" appearance="outline">
             <mat-label>Current Password</mat-label>
-            <input matInput type="password" formControlName="currentPassword" />
-            <mat-error
-              *ngIf="passwordForm.controls['currentPassword']?.invalid && passwordForm.controls['currentPassword']?.touched">
+            <input matInput 
+                  [type]="hideCurrentPassword ? 'password' : 'text'" 
+                  formControlName="currentPassword" 
+                  required />
+            <button mat-icon-button matSuffix 
+                    (click)="hideCurrentPassword = !hideCurrentPassword"
+                    [attr.aria-label]="hideCurrentPassword ? 'Show password' : 'Hide password'">
+              <mat-icon>{{ hideCurrentPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+            </button>
+            <mat-error *ngIf="passwordForm.get('currentPassword')?.hasError('required')">
               Current password is required
             </mat-error>
           </mat-form-field>
 
+          <!-- New Password Field -->
           <mat-form-field class="example-full-width mb-3" appearance="outline">
             <mat-label>New Password</mat-label>
-            <input matInput type="password" formControlName="newPassword" />
-            <mat-error
-              *ngIf="passwordForm.controls['newPassword']?.invalid && passwordForm.controls['newPassword']?.touched">
-              New password is required (min 6 characters)
+            <input matInput 
+                  [type]="hideNewPassword ? 'password' : 'text'" 
+                  formControlName="newPassword" 
+                  required />
+            <button mat-icon-button matSuffix 
+                    (click)="hideNewPassword = !hideNewPassword"
+                    [attr.aria-label]="hideNewPassword ? 'Show password' : 'Hide password'">
+              <mat-icon>{{ hideNewPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+            </button>
+            <mat-error *ngIf="passwordForm.get('newPassword')?.hasError('required')">
+              New password is required
             </mat-error>
           </mat-form-field>
 
+          <!-- Confirm Password Field -->
           <mat-form-field class="example-full-width mb-3" appearance="outline">
             <mat-label>Confirm Password</mat-label>
-            <input matInput type="password" formControlName="confirmPassword" />
-            <mat-error *ngIf="passwordForm.hasError('mismatch') && passwordForm.controls['confirmPassword']?.touched">
+            <input matInput 
+                  [type]="hideConfirmPassword ? 'password' : 'text'" 
+                  formControlName="confirmPassword" 
+                  required />
+            <button mat-icon-button matSuffix 
+                    (click)="hideConfirmPassword = !hideConfirmPassword"
+                    [attr.aria-label]="hideConfirmPassword ? 'Show password' : 'Hide password'">
+              <mat-icon>{{ hideConfirmPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+            </button>
+            <mat-error *ngIf="passwordForm.get('confirmPassword')?.hasError('mismatch')">
               Passwords do not match
             </mat-error>
           </mat-form-field>

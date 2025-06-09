@@ -10,6 +10,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { BreadcrumbComponent } from '@shared/components/breadcrumb/breadcrumb.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { AuthService } from '@core';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-settings',
@@ -23,13 +26,20 @@ import { BreadcrumbComponent } from '@shared/components/breadcrumb/breadcrumb.co
       MatSelectModule,
       MatOptionModule,
       ReactiveFormsModule,
-      CommonModule
+      CommonModule,
+      MatIconModule
   ],
   standalone: true
 })
 export class SettingsComponent implements OnInit {
   profileForm!: FormGroup;
   passwordForm!: FormGroup;
+  changePasswordForm!: FormGroup;
+  changePasswordMessage: string = '';
+  
+  hideCurrentPassword: boolean = true;
+  hideNewPassword: boolean = true;
+  hideConfirmPassword: boolean = true;
 
   selectedImageFile: File | null = null;
   imagePreviewUrl: any = null;
@@ -37,7 +47,9 @@ export class SettingsComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private userService: UserService,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private snackBar: MatSnackBar,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -131,12 +143,19 @@ export class SettingsComponent implements OnInit {
     });
   }
 
-  changePassword(): void {
-    const { currentPassword, newPassword } = this.passwordForm.value;
+  onChangePassword(): void {
+    if (this.passwordForm.invalid) return;
 
-    this.userService.changePassword(currentPassword, newPassword).subscribe({
-      next: () => alert('Password changed successfully.'),
-      error: err => alert('Password change failed: ' + err.message)
+    const { currentPassword, newPassword, confirmPassword } = this.passwordForm.value;
+
+    this.authService.changePassword(currentPassword, newPassword, confirmPassword).subscribe({
+      next: () => {
+        this.snackBar.open('Password changed successfully', 'Close', { duration: 3000 });
+        this.passwordForm.reset();
+      },
+      error: err => {
+        this.snackBar.open(err.error?.message || 'Failed to change password', 'Close', { duration: 3000 });
+      }
     });
   }
 }
