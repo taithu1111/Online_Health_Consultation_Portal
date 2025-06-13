@@ -23,18 +23,6 @@ namespace Online_Health_Consultation_Portal.Application.Handlers.Appointment
                     .ToListAsync(cancellationToken);
             return list.Select(a => new AppointmentDto
             {
-                //Id = a.Id, 
-                //DoctorName = a.Doctor.User.FullName,
-                //PatientName = a.Patient.User.FullName,
-                //AppointmentDateTime = a.AppointmentDateTime,
-                //Gender = a.Patient.Gender,
-                //Email = a.Patient.User.Email,
-                //PhoneNumber = a.Patient.User.PhoneNumber,
-                //Address = a.Patient.Address,
-                //Type = a.Type,
-                //Notes = a.Notes,
-                //Status = a.Status,
-                //Diagnosis = a.Diagnosis
                 Id = a.Id,
                 DoctorName = a.Doctor?.User?.FullName ?? "Unknown Doctor",
                 PatientName = a.Patient?.User?.FullName ?? "Unknown Patient",

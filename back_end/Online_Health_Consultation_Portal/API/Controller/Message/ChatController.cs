@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Online_Health_Consultation_Portal.API.Controller
+namespace Online_Health_Consultation_Portal.API.Controller.Message
 {
     [ApiController]
     [Route("api/[controller]")]
@@ -63,8 +63,8 @@ namespace Online_Health_Consultation_Portal.API.Controller
             // Lấy tất cả message giữa user1 và user2
             var messages = await _context.Messages
                 .Where(m =>
-                    (m.SenderId == user1 && m.ReceiverId == user2) ||
-                    (m.SenderId == user2 && m.ReceiverId == user1))
+                    m.SenderId == user1 && m.ReceiverId == user2 ||
+                    m.SenderId == user2 && m.ReceiverId == user1)
                 .OrderBy(m => m.SentAt)
                 .Select(m => new MessageDto
                 {
